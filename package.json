@@ -1,0 +1,17 @@
+{
+  "name": "generator-symphony",
+  "version": "0.0.1",
+  "description": "Generator to create Symphony BOT and Applications",
+  "files": [
+    "generators"
+  ],
+  "keywords": [
+    "yeoman-generator",
+    "symphony",
+    "symphony-chat"
+  ],
+  "dependencies": {
+    "colors": "^1.2.1",
+    "yeoman-generator": "^1.1.1"
+  }
+}
