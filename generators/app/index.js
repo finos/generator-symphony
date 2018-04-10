@@ -31,12 +31,19 @@ module.exports = class extends Generator {
         default : this.appname
       },
       {
+        type    : 'input',
+        name    : 'subdomain',
+        message : 'What is your POD subdomain',
+        default : this.subdomain
+      },
+      {
         type    : 'list',
         name    : 'application_lang',
         message : 'What is your preferred programming language',
         choices : ['Java', '.Net', 'Node.js']
       }
     ]).then((answers) => {
+      answers.dirname = process.cwd();
       if (answers.application_type=='bot' && answers.application_lang=='Node.js') {
         this.composeWith(require.resolve('../node-bots'), {initPrompts: answers});
       }

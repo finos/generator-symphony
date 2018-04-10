@@ -12,6 +12,8 @@ module.exports = class extends Generator {
       }
     ]).then((answers) => {
       answers.application_name = this.options.initPrompts.application_name;
+      answers.subdomain = this.options.initPrompts.subdomain;
+      answers.dirname = this.options.initPrompts.dirname;
       let log_text = ('* Generating ' +
                      this.options.initPrompts.application_type.italic +
                      ' ' +
@@ -53,6 +55,16 @@ module.exports = class extends Generator {
         this.fs.copyTpl(
           this.templatePath('node/bots/nlp-based/config.json'),
           this.destinationPath('config.json'),
+          answers
+        );
+        this.fs.copy(
+          this.templatePath('node/bots/nlp-based/README.md'),
+          this.destinationPath('README.md'),
+          answers
+        );
+        this.fs.copy(
+          this.templatePath('node/bots/nlp-based/LICENSE'),
+          this.destinationPath('LICENSE'),
           answers
         );
         this.fs.copy(
