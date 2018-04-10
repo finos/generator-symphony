@@ -1,0 +1,17 @@
+{
+  "name": "<%= application_name %>",
+  "version": "1.0.0",
+  "description": "nlp based symphony bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "compromise": "^11.5.3",
+    "kew": "^0.7.0",
+    "symphony-api-client-node": "file:../../symphony-api-client-node"
+  }
+}
