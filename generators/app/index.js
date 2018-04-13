@@ -46,6 +46,8 @@ module.exports = class extends Generator {
       answers.dirname = process.cwd();
       if (answers.application_type=='bot' && answers.application_lang=='Node.js') {
         this.composeWith(require.resolve('../node-bots'), {initPrompts: answers});
+      } else if (answers.application_type=='bot' && answers.application_lang=='Java') {
+        this.composeWith(require.resolve('../java-bots'), {initPrompts: answers});
       }
     });
   }
