@@ -6,7 +6,7 @@ var CertificateCreator = {};
 
 CertificateCreator.attrs = [{
     name: 'commonName',
-    value: 'megabot'
+    value: 'to_be_replace_with_appname'
 }, {
     name: 'countryName',
     value: 'GB'
@@ -49,7 +49,7 @@ CertificateCreator.create = function(answers, path) {
         }], // certificate extensions array
         pkcs7: true, // include PKCS#7 as part of the output (default: false)
         clientCertificate: true, // generate client cert signed by the original key (default: false)
-        clientCertificateCN: 'megabot' // client certificate's common name
+        clientCertificateCN: answers.application_name // client certificate's common name
     }, function(err, pems) {
         let log_text = ('* Generating certificate...').bold;
         console.log(log_text.bgRed.white);
