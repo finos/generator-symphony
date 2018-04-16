@@ -1,6 +1,6 @@
 const Generator = require('yeoman-generator');
 const colors = require('colors');
-const certificate = require('../certificate-creator');
+const certificateCreator = require('../certificate-creator');
 var mkdirp = require('mkdirp'); // In your generator mkdirp.sync('/some/path/to/dir/');
 
 module.exports = class extends Generator {
@@ -41,7 +41,7 @@ module.exports = class extends Generator {
         );
 
         mkdirp.sync('certificates');
-        certificate(answers,"certificates")
+        certificateCreator.create(answers,"certificates");
 
       } else if (answers.node_bot_tpl=='NLP Based Trade Order') {
         this.fs.copyTpl(
@@ -71,7 +71,7 @@ module.exports = class extends Generator {
         );
 
         mkdirp.sync('certificates');
-        certificate(answers,"certificates")
+        certificateCreator.create(answers,"certificates");
 
         this.fs.copy(
           this.templatePath('node/bots/nlp-based/lib'),

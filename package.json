@@ -12,6 +12,8 @@
   ],
   "dependencies": {
     "colors": "^1.2.1",
+    "mkdirp": "^0.5.1",
+    "selfsigned": "^1.10.2",
     "yeoman-generator": "^1.1.1"
   }
 }

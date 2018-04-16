@@ -1,7 +1,10 @@
 const colors = require('colors');
 const certificate = require('selfsigned');
 const fs = require('fs');
-var attrs = [{
+
+var CertificateCreator = {};
+
+CertificateCreator.attrs = [{
     name: 'commonName',
     value: 'megabot'
 }, {
@@ -21,8 +24,15 @@ var attrs = [{
     value: 'FOR TEST USE ONLY'
 }]
 
-var create = function(answers, path) {
-    certificate.generate(attrs, {
+CertificateCreator.create = function(answers, path) {
+
+    /* Change the CName with the application Name */
+    var attrs = CertificateCreator.attrs.slice(0);
+    attrs[0].value = answers.application_name;
+
+    console.log(attrs);
+
+    certificate.generate( attrs, {
         keySize: 2048, // the size for the private key in bits (default: 1024)
         days: 365, // how long till expiry of the signed certificate (default: 365)
         algorithm: 'sha256', // sign the certificate with specified algorithm (default: 'sha1')
@@ -41,6 +51,8 @@ var create = function(answers, path) {
         clientCertificate: true, // generate client cert signed by the original key (default: false)
         clientCertificateCN: 'megabot' // client certificate's common name
     }, function(err, pems) {
+        let log_text = ('* Generating certificate...').bold;
+        console.log(log_text.bgRed.white);
         fs.writeFile(path + "/" + answers.application_name + ".pem", pems.clientcert + "\n" +
           pems.clientprivate + "\n" + pems.clientpublic + "\n" + pems.clientpkcs7 + "\n" +
             pems.cert + "\n" + pems.fingerprint + "\n" + pems.private + "\n" + pems.public, function(err) {
@@ -53,10 +65,11 @@ var create = function(answers, path) {
             if (err) {
                 return console.log(err);
             }
-
-            console.log("Your Bot certificate has been created and saved in the certificates folder!");
+            let log_text = ('* Generation completed successfully').bold;
+            console.log(log_text.bgGreen.white);
         });
     });
 
 };
-module.exports = create
+
+module.exports = CertificateCreator;
