@@ -48,6 +48,8 @@ module.exports = class extends Generator {
         this.composeWith(require.resolve('../node-bots'), {initPrompts: answers});
       } else if (answers.application_type=='bot' && answers.application_lang=='Java') {
         this.composeWith(require.resolve('../java-bots'), {initPrompts: answers});
+      } else if (answers.application_type=='bot' && answers.application_lang=='.Net') {
+        this.composeWith(require.resolve('../dotnet-bots'), {initPrompts: answers});
       }
     });
   }
