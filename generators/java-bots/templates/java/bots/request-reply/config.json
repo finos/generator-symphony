@@ -10,7 +10,7 @@
     "botCertPath": "<%= dirname %>/certificates/",
     "botCertName": "bot.user30",
     "botCertPassword": "changeit",
-    "botEmailAddress": "bot.user30@symphony.com",
+    "botEmailAddress": "bot.user30@example.com",
     "appCertPath": "",
     "appCertName": "",
     "appCertPassword": "",

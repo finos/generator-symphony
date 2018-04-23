@@ -1,0 +1,12 @@
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\bin\Debug\netcoreapp2.0\RequestResponse.deps.json
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\bin\Debug\netcoreapp2.0\RequestResponse.runtimeconfig.json
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\bin\Debug\netcoreapp2.0\RequestResponse.runtimeconfig.dev.json
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\bin\Debug\netcoreapp2.0\RequestResponse.dll
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\bin\Debug\netcoreapp2.0\RequestResponse.pdb
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\obj\Debug\netcoreapp2.0\RequestResponse.csprojResolveAssemblyReference.cache
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\obj\Debug\netcoreapp2.0\RequestResponse.csproj.CoreCompileInputs.cache
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\obj\Debug\netcoreapp2.0\RequestResponse.AssemblyInfoInputs.cache
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\obj\Debug\netcoreapp2.0\RequestResponse.AssemblyInfo.cs
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\obj\Debug\netcoreapp2.0\RequestResponse.dll
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\obj\Debug\netcoreapp2.0\RequestResponse.pdb
+c:\users\michael\documents\visual studio 2017\Projects\RequestResponse\RequestResponse\bin\Debug\netcoreapp2.0\config.json

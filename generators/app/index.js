@@ -1,5 +1,6 @@
 const colors = require('colors');
 const Generator = require('yeoman-generator');
+const upath = require('upath');
 
 module.exports = class extends Generator {
 
@@ -43,11 +44,13 @@ module.exports = class extends Generator {
         choices : ['Java', '.Net', 'Node.js']
       }
     ]).then((answers) => {
-      answers.dirname = process.cwd();
+      answers.dirname = upath.normalize(process.cwd());
       if (answers.application_type=='bot' && answers.application_lang=='Node.js') {
         this.composeWith(require.resolve('../node-bots'), {initPrompts: answers});
       } else if (answers.application_type=='bot' && answers.application_lang=='Java') {
         this.composeWith(require.resolve('../java-bots'), {initPrompts: answers});
+      } else if (answers.application_type=='bot' && answers.application_lang=='.Net') {
+        this.composeWith(require.resolve('../dotnet-bots'), {initPrompts: answers});
       }
     });
   }
