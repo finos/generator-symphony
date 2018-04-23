@@ -19,7 +19,7 @@ public class RoomListenerTestImpl implements RoomListener {
 
     public void onRoomMessage(InboundMessage inboundMessage) {
         OutboundMessage messageOut = new OutboundMessage();
-        messageOut.setMessage("<messageML>Hi "+inboundMessage.getUser().getFirstName()+"!</messageML>");
+        messageOut.setMessage("Hi "+inboundMessage.getUser().getFirstName()+"!");
         try {
             this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), messageOut);
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class RoomListenerTestImpl implements RoomListener {
 
     public void onUserJoinedRoom(UserJoinedRoom userJoinedRoom) {
         OutboundMessage messageOut = new OutboundMessage();
-        messageOut.setMessage("<messageML>Welcome "+userJoinedRoom.getAffectedUser().getFirstName()+"!</messageML>");
+        messageOut.setMessage("Welcome "+userJoinedRoom.getAffectedUser().getFirstName()+"!");
         try {
             this.botClient.getMessagesClient().sendMessage(userJoinedRoom.getStream().getStreamId(), messageOut);
         } catch (Exception e) {
