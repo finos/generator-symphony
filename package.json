@@ -12,6 +12,7 @@
   ],
   "dependencies": {
     "colors": "^1.2.1",
+    "upath": "^1.0.4",
     "yeoman-generator": "^1.1.1"
   }
 }
