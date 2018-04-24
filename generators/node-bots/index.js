@@ -16,6 +16,8 @@ module.exports = class extends Generator {
       answers.application_name = this.options.initPrompts.application_name;
       answers.subdomain = this.options.initPrompts.subdomain;
       answers.dirname = this.options.initPrompts.dirname;
+      answers.botusername = this.options.initPrompts.botusername;
+      answers.botemail = this.options.initPrompts.botemail;
       let log_text = ('* Generating ' +
                      this.options.initPrompts.application_type.italic +
                      ' ' +

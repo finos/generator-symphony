@@ -3,7 +3,7 @@ Yeoman based generator for Symphony Bots and Applications
 
 ## Installation
 
-``npm install -g generator-symphony``
+``npm install generator-symphony --cli``
 
 ## Usage
 
