@@ -1,0 +1,24 @@
+﻿{
+  "sessionAuthHost": "<%= subdomain %>-api.symphony.com",
+  "sessionAuthPort": 443,
+  "keyAuthHost": "<%= subdomain %>-keyauth.symphony.com",
+  "keyAuthPort": 443,
+  "podHost": "<%= subdomain %>.symphony.com",
+  "podPort": 443,
+  "agentHost": "<%= subdomain %>-agent.symphony.com",
+  "agentPort": 443,
+  "botCertPath": "<%= dirname %>/certificates/",
+  "botCertName": "bot.user30",
+  "botCertPassword": "changeit",
+  "botEmailAddress": "bot.user30@symphony.com",
+  "appCertPath": "",
+  "appCertName": "",
+  "appCertPassword": "",
+  "proxyURL": "",
+  "proxyUsername": "",
+  "proxyPassword": "",
+  "authTokenRefreshPeriod": "30",
+  "truststorePath": "<%= dirname %>/certificates/all_symphony_certs_truststore",
+  "truststorePassword": "changeit"
+}
+

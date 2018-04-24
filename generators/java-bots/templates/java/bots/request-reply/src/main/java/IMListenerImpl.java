@@ -14,7 +14,7 @@ public class IMListenerImpl implements IMListener {
 
     public void onIMMessage(InboundMessage inboundMessage) {
         OutboundMessage messageOut = new OutboundMessage();
-        messageOut.setMessage("<messageML>Hi "+inboundMessage.getUser().getFirstName()+"!</messageML>");
+        messageOut.setMessage("Hi "+inboundMessage.getUser().getFirstName()+"!");
         try {
             this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), messageOut);
         } catch (Exception e) {
