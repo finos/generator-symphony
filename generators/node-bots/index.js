@@ -1,6 +1,6 @@
 const Generator = require('yeoman-generator');
 const colors = require('colors');
-const certificateCreator = require('../certificate-creator');
+const certificateCreator = require('../lib/certificate-creator');
 var mkdirp = require('mkdirp'); // In your generator mkdirp.sync('/some/path/to/dir/');
 
 module.exports = class extends Generator {
@@ -10,7 +10,7 @@ module.exports = class extends Generator {
         type    : 'list',
         name    : 'node_bot_tpl',
         message : 'Which template do you want to start with',
-        choices : ['Request/Reply', 'NLP Based Trade Order', 'Indication Of Interest', 'Trade Alert']
+        choices : ['Request/Reply', 'NLP Based Trade Order']
       }
     ]).then((answers) => {
       answers.application_name = this.options.initPrompts.application_name;
@@ -40,9 +40,6 @@ module.exports = class extends Generator {
           answers
         );
 
-        mkdirp.sync('certificates');
-        certificateCreator.create(answers,"certificates");
-
       } else if (answers.node_bot_tpl=='NLP Based Trade Order') {
         this.fs.copyTpl(
           this.templatePath('node/bots/nlp-based/index.js'),
@@ -70,14 +67,30 @@ module.exports = class extends Generator {
           answers
         );
 
-        mkdirp.sync('certificates');
-        certificateCreator.create(answers,"certificates");
-
         this.fs.copy(
           this.templatePath('node/bots/nlp-based/lib'),
           this.destinationPath('lib')
         );
       }
+
+      /* Install certificate */
+      if (this.options.initPrompts.selfsigned_certificate=='Yes') {
+        let log_text_cert = ('* Generating certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
+        console.log(log_text_cert.bgRed.white);
+        mkdirp.sync( 'certificates' );
+        certificateCreator.create( this.options.initPrompts.botusername, 'certificates' );
+      } else {
+        let log_text_cert = ('* Generating generic certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
+        console.log(log_text_cert.bgRed.white);
+        this.fs.copy(
+          this.templatePath('certificates'),
+          this.destinationPath('certificates')
+        );
+      }
+
+      let log_text_completion = ('* BOT generated successfully!!').bold;
+      console.log(log_text_completion.bgGreen.white);
+
     });
   }
 };

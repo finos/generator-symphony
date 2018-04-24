@@ -24,13 +24,11 @@ CertificateCreator.attrs = [{
     value: 'FOR TEST USE ONLY'
 }]
 
-CertificateCreator.create = function(answers, path) {
+CertificateCreator.create = (botusername, path) => {
 
     /* Change the CName with the application Name */
     var attrs = CertificateCreator.attrs.slice(0);
-    attrs[0].value = answers.application_name;
-
-    console.log(attrs);
+    attrs[0].value = botusername;
 
     certificate.generate( attrs, {
         keySize: 2048, // the size for the private key in bits (default: 1024)
@@ -49,11 +47,9 @@ CertificateCreator.create = function(answers, path) {
         }], // certificate extensions array
         pkcs7: true, // include PKCS#7 as part of the output (default: false)
         clientCertificate: true, // generate client cert signed by the original key (default: false)
-        clientCertificateCN: answers.application_name // client certificate's common name
+        clientCertificateCN: botusername // client certificate's common name
     }, function(err, pems) {
-        let log_text = ('* Generating certificate...').bold;
-        console.log(log_text.bgRed.white);
-        fs.writeFile(path + "/" + answers.application_name + ".pem", pems.clientcert + "\n" +
+        fs.writeFile(path + "/" + botusername + ".pem", pems.clientcert + "\n" +
           pems.clientprivate + "\n" + pems.clientpublic + "\n" + pems.clientpkcs7 + "\n" +
             pems.cert + "\n" + pems.fingerprint + "\n" + pems.private + "\n" + pems.public, function(err) {
             if (err) {
@@ -61,12 +57,10 @@ CertificateCreator.create = function(answers, path) {
             }
 
         });
-        fs.writeFile(path + "/" + "ca-cer-" + answers.application_name + ".cer", pems.cert, function(err) {
+        fs.writeFile(path + "/" + "ca-cer-" + botusername + ".cer", pems.cert, function(err) {
             if (err) {
                 return console.log(err);
             }
-            let log_text = ('* Generation completed successfully').bold;
-            console.log(log_text.bgGreen.white);
         });
     });
 

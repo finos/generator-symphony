@@ -41,6 +41,24 @@ module.exports = class extends Generator {
         name    : 'application_lang',
         message : 'What is your preferred programming language',
         choices : ['Java', '.Net', 'Node.js']
+      },
+      {
+        type    : 'input',
+        name    : 'botusername',
+        message : 'What is the BOT username',
+        default : 'megabot'
+      },
+      {
+        type    : 'input',
+        name    : 'botemail',
+        message : 'What is the BOT email address',
+        default : 'megabot@bot.symphony.com'
+      },
+      {
+        type    : 'list',
+        name    : 'selfsigned_certificate',
+        message : 'Do you want to generate a self signed certificate',
+        choices : ['Yes', 'No']
       }
     ]).then((answers) => {
       answers.dirname = process.cwd();
