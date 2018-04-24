@@ -30,52 +30,44 @@ public class BotExample {
         datafeedEventsService.addRoomListener(roomListenerTest);
         IMListener imListener = new IMListenerImpl(botClient);
         datafeedEventsService.addIMListener(imListener);
-        createRoom(botClient);
+        //createRoom(botClient);
 
     }
 
     private void createRoom(SymBotClient botClient){
-        Room room = new Room();
-        room.setName("test room preview");
-        room.setDescription("test");
-        room.setDiscoverable(true);
-        room.setPublic(true);
-        room.setViewHistory(true);
-        RoomInfo roomInfo = null;
+
 
 
         try {
-            roomInfo = botClient.getStreamsClient().createRoom(room);
+
             UserInfo userInfo = botClient.getUsersClient().getUserFromEmail("manuela.caicedo@example.com", true);
-
-            botClient.getStreamsClient().addMemberToRoom(roomInfo.getRoomSystemInfo().getId(),userInfo.getId());
-
-            //botClient.getStreamsClient().removeMemberFromRoom(roomInfo.getRoomSystemInfo().getId(),userInfo.getId());
-            RoomInfo info = botClient.getStreamsClient().getRoomInfo(roomInfo.getRoomSystemInfo().getId());
-            Room newRoomInfo = new Room();
-            newRoomInfo.setName("test new name preview 3");
-            botClient.getStreamsClient().updateRoom(info.getRoomSystemInfo().getId(),newRoomInfo);
-
-            //DOESNT WORK
-            StreamInfo infoStream = botClient.getStreamsClient().getStreamInfo(roomInfo.getRoomSystemInfo().getId());
-
-            List<RoomMember> members =  botClient.getStreamsClient().getRoomMembers(roomInfo.getRoomSystemInfo().getId());
-            for (RoomMember member:members) {
-                if(member.getId().equals(botClient.getBotUserInfo().getId())&& member.getOwner())
-                    System.out.println("bot is owner");
-            }
-            botClient.getStreamsClient().promoteUserToOwner(roomInfo.getRoomSystemInfo().getId(), userInfo.getId());
-            botClient.getStreamsClient().demoteUserFromOwner(roomInfo.getRoomSystemInfo().getId(), userInfo.getId());
-
-            botClient.getStreamsClient().deactivateRoom(roomInfo.getRoomSystemInfo().getId());
-
             //get user IM and send message
             String IMStreamId = botClient.getStreamsClient().getUserIMStreamId(userInfo.getId());
             OutboundMessage message = new OutboundMessage();
-            message.setMessage("<messageML>test IM</messageML>");
+            message.setMessage("test IM");
             botClient.getMessagesClient().sendMessage(IMStreamId,message);
-            userInfo = botClient.getUsersClient().getUserFromId(userInfo.getId(), true);
-            userInfo = botClient.getUsersClient().getUserFromUsername(userInfo.getUsername());
+
+            Room room = new Room();
+            room.setName("test room preview");
+            room.setDescription("test");
+            room.setDiscoverable(true);
+            room.setPublic(true);
+            room.setViewHistory(true);
+            RoomInfo roomInfo = null;
+            roomInfo = botClient.getStreamsClient().createRoom(room);
+            botClient.getStreamsClient().addMemberToRoom(roomInfo.getRoomSystemInfo().getId(),userInfo.getId());
+
+            Room newRoomInfo = new Room();
+            newRoomInfo.setName("test generator");
+            botClient.getStreamsClient().updateRoom(roomInfo.getRoomSystemInfo().getId(),newRoomInfo);
+
+            List<RoomMember> members =  botClient.getStreamsClient().getRoomMembers(roomInfo.getRoomSystemInfo().getId());
+
+            botClient.getStreamsClient().promoteUserToOwner(roomInfo.getRoomSystemInfo().getId(), userInfo.getId());
+
+            botClient.getStreamsClient().deactivateRoom(roomInfo.getRoomSystemInfo().getId());
+
+
         } catch (NoContentException e) {
             e.printStackTrace();
         } catch (Exception e) {
