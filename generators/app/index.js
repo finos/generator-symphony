@@ -23,7 +23,7 @@ module.exports = class extends Generator {
         type    : 'list',
         name    : 'application_type',
         message : 'What do you want to create',
-        choices : ['bot', 'application']
+        choices : ['bot', 'application (coming soon)']
       },
       {
         type    : 'input',
@@ -63,7 +63,9 @@ module.exports = class extends Generator {
       }
     ]).then((answers) => {
       answers.dirname = upath.normalize(process.cwd());
-      if (answers.application_type=='bot' && answers.application_lang=='Node.js') {
+      if (answers.application_type!='bot') {
+        console.log('* Sorry the application generation is not available yet'.bold.bgRed.white);
+      } else if (answers.application_type=='bot' && answers.application_lang=='Node.js') {
         this.composeWith(require.resolve('../node-bots'), {initPrompts: answers});
       } else if (answers.application_type=='bot' && answers.application_lang=='Java') {
         this.composeWith(require.resolve('../java-bots'), {initPrompts: answers});
