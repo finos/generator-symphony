@@ -51,15 +51,7 @@ module.exports = class extends Generator {
         let log_text_cert = ('* Generating certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
         console.log(log_text_cert.bgRed.white);
         certificateCreator.create( this.options.initPrompts.botusername, this.options.initPrompts.botemail );
-      } 
-      // else {
-      //   let log_text_cert = ('* Generating generic certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
-      //   console.log(log_text_cert.bgRed.white);
-      //   this.fs.copy(
-      //     this.templatePath('certificates'),
-      //     this.destinationPath('certificates')
-      //   );
-      // }
+      }
 
       let log_text_completion = ('* BOT generated successfully!!').bold;
       console.log(log_text_completion.bgGreen.white); 

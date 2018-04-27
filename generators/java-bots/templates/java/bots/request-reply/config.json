@@ -7,7 +7,7 @@
     "podPort": 443,
     "agentHost": "<%= subdomain %>-agent.symphony.com",
     "agentPort": 443,
-    "botCertPath": "<%= dirname %>/ssl/",
+    "botCertPath": "<%= dirname %>/certificates/",
     "botCertName": "<%= botusername %>",
     "botCertPassword": "changeit",
     "botEmailAddress": "<%= botemail %>",

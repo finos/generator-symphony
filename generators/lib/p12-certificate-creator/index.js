@@ -76,9 +76,23 @@ P12CertificateCreator.create = (botusername, botemail) => {
             days: 365
         };
         p12.createClientSSL(p12options).done(function(options, sha1fingerprint) {
+            fs.unlink('ssl/'+botusername+'-ca.key', function (err) {
+                        if (err) throw err;
+            });
+            fs.rename('ssl/'+botusername+'-ca.crt', 'certificates/'+botusername+'-ca.crt', function (err) {
+            if (err) throw err;
+            });
+            fs.rename('ssl/'+botusername+'.p12', 'certificates/'+botusername+'.p12', function (err) {
+                if (err) throw err;
+                });
+            fs.rmdir("ssl", function (err) {
+                if (err) throw err;
+            });
         }).fail( function(err) {
             console.log(err);
         });
+       
+
     });
 
 
