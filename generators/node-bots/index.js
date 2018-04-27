@@ -1,7 +1,7 @@
 const Generator = require('yeoman-generator');
 const colors = require('colors');
 const certificateCreator = require('../lib/certificate-creator');
-var mkdirp = require('mkdirp'); // In your generator mkdirp.sync('/some/path/to/dir/');
+var mkdirp = require('mkdirp');
 
 module.exports = class extends Generator {
   prompting() {
@@ -81,13 +81,6 @@ module.exports = class extends Generator {
         console.log(log_text_cert.bgRed.white);
         mkdirp.sync( 'certificates' );
         certificateCreator.create( this.options.initPrompts.botusername, 'certificates' );
-      } else {
-        let log_text_cert = ('* Generating generic certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
-        console.log(log_text_cert.bgRed.white);
-        this.fs.copy(
-          this.templatePath('certificates'),
-          this.destinationPath('certificates')
-        );
       }
 
       let log_text_completion = ('* BOT generated successfully!!').bold;
