@@ -1,5 +1,7 @@
 const Generator = require('yeoman-generator');
 const colors = require('colors');
+const certificateCreator = require('../lib/p12-certificate-creator');
+var mkdirp = require('mkdirp');
 
 module.exports = class extends Generator {
   prompting() {
@@ -14,6 +16,8 @@ module.exports = class extends Generator {
       answers.application_name = this.options.initPrompts.application_name;
       answers.subdomain = this.options.initPrompts.subdomain;
       answers.dirname = this.options.initPrompts.dirname;
+      answers.botusername = this.options.initPrompts.botusername;
+      answers.botemail = this.options.initPrompts.botemail;
       let log_text = ('* Generating ' +
                      this.options.initPrompts.application_type.italic +
                      ' ' +
@@ -41,7 +45,24 @@ module.exports = class extends Generator {
           this.destinationPath('certificates'),
           answers
         );
+      }
+      /* Install certificate */
+      if (this.options.initPrompts.selfsigned_certificate=='Yes') {
+        let log_text_cert = ('* Generating certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
+        console.log(log_text_cert.bgRed.white);
+        certificateCreator.create( this.options.initPrompts.botusername, this.options.initPrompts.botemail );
       } 
+      // else {
+      //   let log_text_cert = ('* Generating generic certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
+      //   console.log(log_text_cert.bgRed.white);
+      //   this.fs.copy(
+      //     this.templatePath('certificates'),
+      //     this.destinationPath('certificates')
+      //   );
+      // }
+
+      let log_text_completion = ('* BOT generated successfully!!').bold;
+      console.log(log_text_completion.bgGreen.white); 
     });
   }
 };
