@@ -12,8 +12,8 @@ const botHearsRequest = ( event, messages ) => {
       /* Find grettings */
       let doc_grettings = doc.match('(hello|hi|bonjour)').out('tags');
       if (doc_grettings.length>0) {
-        let reply_message = 'Hello ' + message.initiator.user.firstName;
-        Symphony.sendMessage( message.payload.messageSent.message.stream.streamId, reply_message, {});
+        let reply_message = 'Hello ' + message.user.firstName;
+        Symphony.sendMessage( message.stream.streamId, reply_message, null, Symphony.MESSAGEML_FORMAT);
       }
 
       /* Detect & analyze request */
