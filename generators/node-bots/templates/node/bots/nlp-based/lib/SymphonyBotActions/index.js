@@ -10,7 +10,7 @@ SymphonyBotActions.buyShares = (tags, context_params, message) => {
   let reply_message = 'You want to buy <b>' + context_params.amount + '</b> of <b>' + tags[1].text + '</b> shares';
 
   /* Reply to the initiator */
-  Symphony.sendMessage( message.payload.messageSent.message.stream.streamId, reply_message, {}, Symphony.MESSAGEML_FORMAT);
+  Symphony.sendMessage( message.stream.streamId, reply_message, null, Symphony.MESSAGEML_FORMAT);
 
 };
 
@@ -20,7 +20,7 @@ SymphonyBotActions.sellShares = (tags, context_params, message) => {
   let reply_message = 'You want to sell <b>' + context_params.amount + '</b> of <b>' + tags[1].text + '</b> shares';
 
   /* Reply to the initiator */
-  Symphony.sendMessage( message.payload.messageSent.message.stream.streamId, reply_message, {}, Symphony.MESSAGEML_FORMAT);
+  Symphony.sendMessage( message.stream.streamId, reply_message, null, Symphony.MESSAGEML_FORMAT);
 
 };
 
@@ -50,7 +50,7 @@ SymphonyBotActions.getPrice = (tags, context_params, message) => {
                               '(low: <span class="tempo-text-color--red"><b>$' + json_str.low + '</b></span>)';
 
           /* Reply to the initiator */
-          Symphony.sendMessage( message.payload.messageSent.message.stream.streamId, reply_message, {}, Symphony.MESSAGEML_FORMAT);
+          Symphony.sendMessage( message.stream.streamId, reply_message, null, Symphony.MESSAGEML_FORMAT);
 
       });
       res.on('error', function(e) {
