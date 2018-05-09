@@ -10,6 +10,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "symphony-api-client-node": "^0.0.3"
+    "symphony-api-client-node": "^0.1.0"
   }
 }
