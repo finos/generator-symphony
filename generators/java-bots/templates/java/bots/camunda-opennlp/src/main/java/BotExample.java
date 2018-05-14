@@ -48,7 +48,7 @@ public class BotExample {
                     OutboundMessage outboundMessage = new OutboundMessage();
                     if(security!=null) {
                         Quote quote = PricingClient.getQuote(security);
-                        outboundMessage.setMessage("Current price is {price}. Confirm BUY {quantity} {product}?".replace("{quantity}",externalTask.getVariable("quantity").toString()).replace("{product}",product).replace("{price}",Double.toString(quote.getLatestPrice())));
+                        outboundMessage.setMessage("Current price is {price}. Confirm BUY {quantity} <cash tag=\"{security}\"/>?".replace("{quantity}",externalTask.getVariable("quantity").toString()).replace("{security}",security.toUpperCase()).replace("{price}",Double.toString(quote.getLatestPrice())));
                     }
                     else{
                         outboundMessage.setMessage("Could not find symbol. Try again.");
@@ -100,10 +100,10 @@ public class BotExample {
                     String streamId = externalTask.getVariable("streamId").toString();
                     OutboundMessage outboundMessage = new OutboundMessage();
                     String product = externalTask.getVariable("product").toString();
-                    String security = getSecurity(product);
+                    String security = getSecurity(product).toUpperCase();
                     if(security!=null){
                         List<News> news = PricingClient.getNews(security);
-                        StringBuilder messageBuilder = new StringBuilder("{product} headlines:<br/><ul>".replace("{product}", product));
+                        StringBuilder messageBuilder = new StringBuilder("<cash tag=\"{security}\"/> headlines:<br/><ul>".replace("{security}", security));
                         for (News article : news) {
                             messageBuilder.append("<li><a href=\"" + article.getUrl() + "\">" + article.getHeadline().replace("&", "&amp;") + "</a></li>");
                         }

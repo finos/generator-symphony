@@ -36,15 +36,8 @@ public class IMListenerImpl implements IMListener {
     }
 
     public void onIMMessage(InboundMessage inboundMessage) {
-//        OutboundMessage messageOut = new OutboundMessage();
-//        messageOut.setMessage("Hi "+inboundMessage.getUser().getFirstName()+"!");
-//        try {
-//            this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), messageOut);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
-        List<Action> actions = nlp.match(inboundMessage.getMessageText());
+        List<Action> actions = nlp.match(inboundMessage.getMessageText().replace("$", ""));
         if (!actions.isEmpty()) {
             Action action = actions.get(0);
             ProcessInstance instance = processInstanceClient.getProcessInstance(inboundMessage.getStream().getStreamId().replace("_", "%"));
@@ -70,18 +63,17 @@ public class IMListenerImpl implements IMListener {
                     processInstanceClient.setProcessVariable(instance.getId(),parameter,action.getParameters().get(parameter));
                 }
                 Task task = taskClient.getTask(instance.getId(), inboundMessage.getUser().getEmail());
-                System.out.println(task.getId());
                 taskClient.completeTask(task.getId());
 
             }
         } else {
             OutboundMessage messageOut = new OutboundMessage();
-        messageOut.setMessage("Hi "+inboundMessage.getUser().getFirstName()+"! How can I help you?");
-        try {
-            this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), messageOut);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            messageOut.setMessage("Hi "+inboundMessage.getUser().getFirstName()+"! How can I help you?");
+            try {
+                this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), messageOut);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
