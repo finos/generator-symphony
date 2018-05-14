@@ -62,7 +62,7 @@ module.exports = class extends Generator {
           answers
         );
         this.fs.copy(
-          this.templatePath('java/bots/request-reply/certificates'),
+          this.templatePath('java/bots/camunda-opennlp/certificates'),
           this.destinationPath('certificates')
         );
         this.fs.copyTpl(
