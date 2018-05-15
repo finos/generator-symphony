@@ -56,10 +56,11 @@ public class BotExample {
 
                     try {
                         botClient.getMessagesClient().sendMessage(streamId.replace("%","_"),outboundMessage);
+                        externalTaskService.complete(externalTask);
                     } catch (SymClientException e) {
                         e.printStackTrace();
                     }
-                    externalTaskService.complete(externalTask);
+
 
                 }).open();
         client.subscribe("confirm-order")
@@ -86,11 +87,12 @@ public class BotExample {
                     outboundMessage.setMessage("Order cancelled");
                     try {
                         botClient.getMessagesClient().sendMessage(streamId.replace("%","_"),outboundMessage);
+                        externalTaskService.complete(externalTask);
+
                     } catch (SymClientException e) {
                         e.printStackTrace();
                     }
-                    externalTaskService.complete(externalTask);
-
+                    
                 }).open();
 
         client.subscribe("headlines")
