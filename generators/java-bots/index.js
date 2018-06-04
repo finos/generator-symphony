@@ -70,6 +70,10 @@ module.exports = class extends Generator {
           this.destinationPath('src/main/resources/nlp-config.json'),
           answers
         );
+        this.fs.copy(
+          this.templatePath('java/bots/camunda-opennlp/bpmn'),
+          this.destinationPath('bpmn')
+        );
       }
       /* Install certificate */
       if (this.options.initPrompts.selfsigned_certificate=='Yes') {
