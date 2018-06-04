@@ -1,5 +1,6 @@
 const colors = require('colors');
 const certificate = require('selfsigned');
+const keypair = require('keypair');
 const fs = require('fs');
 
 var CertificateCreator = {};
@@ -65,5 +66,20 @@ CertificateCreator.create = (botusername, path) => {
     });
 
 };
+
+CertificateCreator.createRSA =  (botusername, path) => {
+  var pair = keypair({"bits": 4096});
+
+  fs.writeFile(path + "/" + "rsa-public-" + botusername + ".pem", pair.public, function(err) {
+      if (err) {
+          return console.log(err);
+      }
+  });
+  fs.writeFile(path + "/" + "rsa-private-" + botusername + ".pem", pair.private, function(err) {
+      if (err) {
+          return console.log(err);
+      }
+  });
+}
 
 module.exports = CertificateCreator;
