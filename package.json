@@ -1,6 +1,6 @@
 {
   "name": "generator-symphony",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Generator to create Symphony BOT and Applications",
   "files": [
     "generators"
