@@ -18,6 +18,7 @@ module.exports = class extends Generator {
       answers.dirname = this.options.initPrompts.dirname;
       answers.botusername = this.options.initPrompts.botusername;
       answers.botemail = this.options.initPrompts.botemail;
+      answers.encryption = this.options.initPrompts.encryption;
       let log_text = ('* Generating ' +
                      this.options.initPrompts.application_type.italic +
                      ' ' +
@@ -25,6 +26,30 @@ module.exports = class extends Generator {
                      ' code from ' +
                      answers.node_bot_tpl.italic + ' template...').bold;
       console.log(log_text.bgRed.white);
+
+      if (answers.encryption=='RSA') {
+        answers.authType = 'rsa';
+        answers.botCertPath = '';
+        answers.botCertName = '';
+        answers.botCertPassword = '';
+        answers.botRSAPath = __dirname + '/rsa/';
+        answers.botRSAName = 'rsa-private-' + answers.botusername + '.pem';
+      } else if (answers.encryption=='Self Signed Certificate') {
+        answers.authType = 'cert';
+        answers.botCertPath = __dirname + '/certificates/';
+        answers.botCertName = answers.botusername + '.pem';
+        answers.botCertPassword = 'changeit';
+        answers.botRSAPath = '';
+        answers.botRSAName = '';
+      } else {
+        answers.authType = 'cert';
+        answers.botCertPath = '';
+        answers.botCertName = '';
+        answers.botCertPassword = '';
+        answers.botRSAPath = '';
+        answers.botRSAName = '';
+      }
+
       if (answers.node_bot_tpl=='Request/Reply') {
         this.fs.copyTpl(
           this.templatePath('node/bots/request-reply/index.js'),
@@ -76,11 +101,16 @@ module.exports = class extends Generator {
       }
 
       /* Install certificate */
-      if (this.options.initPrompts.selfsigned_certificate=='Yes') {
-        let log_text_cert = ('* Generating certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
+      if (answers.encryption=='Self Signed Certificate') {
+        let log_text_cert = ('* Generating certificate for BOT ' + answers.botusername + '...').bold;
         console.log(log_text_cert.bgRed.white);
         mkdirp.sync( 'certificates' );
-        certificateCreator.create( this.options.initPrompts.botusername, 'certificates' );
+        certificateCreator.create( answers.botusername, 'certificates' );
+      } else if (answers.encryption=='RSA') {
+        let log_text_cert = ('* Generating RSA public/private keys for BOT ' + answers.botusername + '...').bold;
+        console.log(log_text_cert.bgRed.white);
+        mkdirp.sync( 'rsa' );
+        certificateCreator.createRSA(answers.botusername, 'rsa' );
       }
 
       let log_text_completion = ('* BOT generated successfully!!').bold;
