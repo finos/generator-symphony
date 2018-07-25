@@ -1,6 +1,7 @@
 const Generator = require('yeoman-generator');
 const colors = require('colors');
 const certificateCreator = require('../lib/p12-certificate-creator');
+const RSAcertificateCreator = require('../lib/certificate-creator');
 var mkdirp = require('mkdirp');
 
 module.exports = class extends Generator {
@@ -18,6 +19,7 @@ module.exports = class extends Generator {
       answers.dirname = this.options.initPrompts.dirname;
       answers.botusername = this.options.initPrompts.botusername;
       answers.botemail = this.options.initPrompts.botemail;
+      answers.encryption = this.options.initPrompts.encryption;
       let log_text = ('* Generating ' +
                      this.options.initPrompts.application_type.italic +
                      ' ' +
@@ -25,6 +27,29 @@ module.exports = class extends Generator {
                      ' code from ' +
                      answers.java_bot_tpl.italic + ' template...').bold;
       console.log(log_text.bgRed.white);
+
+      if (answers.encryption=='RSA') {
+        answers.authType = 'rsa';
+        answers.botCertPath = '';
+        answers.botCertName = '';
+        answers.botCertPassword = '';
+        answers.botRSAPath = answers.dirname + '/rsa/';
+        answers.botRSAName = 'rsa-private-' + answers.botusername + '.pem';
+      } else if (answers.encryption=='Self Signed Certificate') {
+        answers.authType = 'cert';
+        answers.botCertPath = answers.dirname + '/certificates/';
+        answers.botCertName = answers.botusername;
+        answers.botCertPassword = 'changeit';
+        answers.botRSAPath = '';
+        answers.botRSAName = '';
+      } else {
+        answers.authType = 'cert';
+        answers.botCertPath = '';
+        answers.botCertName = '';
+        answers.botCertPassword = '';
+        answers.botRSAPath = '';
+        answers.botRSAName = '';
+      }
       if (answers.java_bot_tpl=='Request/Reply') {
         this.fs.copyTpl(
           this.templatePath('java/bots/request-reply/pom.xml'),
@@ -76,14 +101,32 @@ module.exports = class extends Generator {
         );
       }
       /* Install certificate */
-      if (this.options.initPrompts.selfsigned_certificate=='Yes') {
-        let log_text_cert = ('* Generating certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
+      console.log("generating from template "+ answers.java_bot_tpl);
+      if (answers.encryption=='Self Signed Certificate') {
+        let log_text_cert = ('* Generating certificate for BOT ' + answers.botusername + '...').bold;
         console.log(log_text_cert.bgRed.white);
-        certificateCreator.create( this.options.initPrompts.botusername, this.options.initPrompts.botemail );
+        certificateCreator.create( answers.botusername, 'certificates' );
+      } else if (answers.encryption=='RSA') {
+        let log_text_cert = ('* Generating RSA public/private keys for BOT ' + answers.botusername + '...').bold;
+        console.log(log_text_cert.bgRed.white);
+        mkdirp.sync( 'rsa' );
+        RSAcertificateCreator.createRSA(answers.botusername, 'rsa' );
+        if (answers.java_bot_tpl=='Request/Reply') {
+          this.fs.copy(
+            this.templatePath('java/bots/request-reply/main-class-rsa/BotExample.java'),
+            this.destinationPath('src/main/java/BotExample.java')
+          );
+        } else {
+          this.fs.copy(
+          this.templatePath('java/bots/camunda-opennlp/main-class-rsa/BotExample.java'),
+          this.destinationPath('src/main/java/BotExample.java')
+        );
+        }
+        
       }
 
       let log_text_completion = ('* BOT generated successfully!!').bold;
-      console.log(log_text_completion.bgGreen.white); 
+      console.log(log_text_completion.bgGreen.white);
     });
   }
 };

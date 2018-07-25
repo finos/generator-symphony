@@ -1,17 +1,18 @@
+import authentication.ISymAuth;
 import authentication.SymBotAuth;
+import authentication.SymBotRSAAuth;
 import clients.SymBotClient;
 import configuration.SymConfig;
 import configuration.SymConfigLoader;
 import listeners.IMListener;
 import listeners.RoomListener;
 import model.*;
+import org.apache.log4j.BasicConfigurator;
 import services.DatafeedEventsService;
 import javax.ws.rs.core.NoContentException;
 
 import java.net.URL;
 import java.util.List;
-import org.apache.log4j.BasicConfigurator;
-
 
 public class BotExample {
 
@@ -22,10 +23,11 @@ public class BotExample {
 
     public BotExample() {
         BasicConfigurator.configure();
+
         URL url = getClass().getResource("config.json");
         SymConfigLoader configLoader = new SymConfigLoader();
         SymConfig config = configLoader.loadFromFile(url.getPath());
-        SymBotAuth botAuth = new SymBotAuth(config);
+        ISymAuth botAuth = new SymBotRSAAuth(config);
         botAuth.authenticate();
         SymBotClient botClient = SymBotClient.initBot(config, botAuth);
         DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
