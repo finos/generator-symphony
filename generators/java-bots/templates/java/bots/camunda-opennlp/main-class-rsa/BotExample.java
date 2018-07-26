@@ -1,4 +1,6 @@
+import authentication.ISymAuth;
 import authentication.SymBotAuth;
+import authentication.SymBotRSAAuth;
 import clients.SymBotClient;
 import configuration.SymConfig;
 import configuration.SymConfigLoader;
@@ -6,6 +8,7 @@ import exceptions.SymClientException;
 import listeners.IMListener;
 import listeners.RoomListener;
 import model.*;
+import org.apache.log4j.BasicConfigurator;
 import org.camunda.bpm.client.ExternalTaskClient;
 import pricing.PricingClient;
 import pricing.model.News;
@@ -13,8 +16,6 @@ import pricing.model.Quote;
 import pricing.model.Securities;
 import pricing.model.Security;
 import services.DatafeedEventsService;
-import org.apache.log4j.BasicConfigurator;
-
 
 import java.net.URL;
 import java.util.List;
@@ -32,7 +33,7 @@ public class BotExample {
         URL url = getClass().getResource("config.json");
         SymConfigLoader configLoader = new SymConfigLoader();
         SymConfig config = configLoader.loadFromFile(url.getPath());
-        SymBotAuth botAuth = new SymBotAuth(config);
+        ISymAuth botAuth = new SymBotRSAAuth(config);
         botAuth.authenticate();
         SymBotClient botClient = SymBotClient.initBot(config, botAuth);
         DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();

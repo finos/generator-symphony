@@ -1,5 +1,7 @@
 package pricing.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class News {
 
     private String datetime;
