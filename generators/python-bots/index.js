@@ -25,6 +25,30 @@ module.exports = class extends Generator {
                      ' code from ' +
                      answers.python_bot_tpl.italic + ' template...').bold;
       console.log(log_text.bgRed.white);
+
+      if (answers.encryption=='RSA') {
+        answers.authType = 'rsa';
+        answers.botCertPath = '';
+        answers.botCertName = '';
+        answers.botCertPassword = '';
+        answers.botRSAPath = answers.dirname + '/rsa/';
+        answers.botRSAName = 'rsa-private-' + answers.botusername + '.pem';
+      } else if (answers.encryption=='Self Signed Certificate') {
+        answers.authType = 'cert';
+        answers.botCertPath = answers.dirname + '/certificates/';
+        answers.botCertName = answers.botusername;
+        answers.botCertPassword = 'changeit';
+        answers.botRSAPath = '';
+        answers.botRSAName = '';
+      } else {
+        answers.authType = 'cert';
+        answers.botCertPath = '';
+        answers.botCertName = '';
+        answers.botCertPassword = '';
+        answers.botRSAPath = '';
+        answers.botRSAName = '';
+      }
+
       if (answers.python_bot_tpl=='Request/Reply') {
         this.fs.copyTpl(
           this.templatePath('python/bots/request-reply/requirements.txt'),
@@ -38,11 +62,6 @@ module.exports = class extends Generator {
         this.fs.copyTpl(
           this.templatePath('python/bots/request-reply/config.json'),
           this.destinationPath('src/main/resources/config.json'),
-          answers
-        );
-        this.fs.copy(
-          this.templatePath('python/bots/request-reply/certificates'),
-          this.destinationPath('certificates'),
           answers
         );
       }
@@ -60,10 +79,6 @@ module.exports = class extends Generator {
           this.templatePath('python/bots/request-reply/config.json'),
           this.destinationPath('src/main/resources/config.json'),
           answers
-        );
-        this.fs.copy(
-          this.templatePath('python/bots/camunda-opennlp/certificates'),
-          this.destinationPath('certificates')
         );
         this.fs.copyTpl(
           this.templatePath('python/bots/camunda-opennlp/src/main/resources/nlp-config.json'),

@@ -50,6 +50,7 @@ module.exports = class extends Generator {
         answers.botRSAPath = '';
         answers.botRSAName = '';
       }
+
       if (answers.java_bot_tpl=='Request/Reply') {
         this.fs.copyTpl(
           this.templatePath('java/bots/request-reply/pom.xml'),
