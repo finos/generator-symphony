@@ -84,7 +84,7 @@ module.exports = class extends Generator {
         );
         this.fs.copyTpl(
           this.templatePath('java/bots/request-reply/config.json'),
-          this.destinationPath('src/main/resources/config.json'),d
+          this.destinationPath('src/main/resources/config.json'),
           answers
         );
         this.fs.copy(

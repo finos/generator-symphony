@@ -1,0 +1,21 @@
+{
+  "sessionAuthHost": "<%= subdomain %>.symphony.com",
+  "sessionAuthPort": 8444,
+  "keyAuthHost": "<%= subdomain %>.symphony.com",
+  "keyAuthPort": 8444,
+  "podHost": "<%= subdomain %>.symphony.com",
+  "podPort": 443,
+  "agentHost": "<%= subdomain %>-agent.symphony.com",
+  "agentPort": 443,
+  "botRSAPath":"<%= botRSAPath %>",
+  "botRSAName": "<%= botRSAName %>",
+  "botUserName": "<%= botusername %>",
+  "botEmailAddress": "<%= botemail %>",
+  "appCertPath": "",
+  "appCertName": "",
+  "appCertPassword": "",
+  "proxyURL": "",
+  "proxyUsername": "",
+  "proxyPassword": "",
+  "authTokenRefreshPeriod": "30"
+}
