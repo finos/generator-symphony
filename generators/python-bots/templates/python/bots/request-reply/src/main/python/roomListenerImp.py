@@ -12,34 +12,33 @@ class RoomListenerTestImp(RoomListener):
         self.botClient = SymBotClient
 
     def onRoomMessage(self, message):
-        print('room message recieved', message)
+        logging.debug('room message recieved', message)
         #sample code for developer to implement --> use MessageClient and
         #data recieved from message event to reply with a #reed
-        streamId = message['payload']['messageSent']['message']['stream']['streamId']
-        messageId = message['payload']['messageSent']['message']['messageId']
-        message = dict(message = '<messageML><hash tag="reed"/></messageML>')
-        self.botClient.messageClient.createMessage(streamId, message)
+        streamId = message['stream']['streamId']
+        message = dict(message = '<messageML><hash tag="ReedF"/></messageML>')
+        self.botClient.getMessageClient().sendMessage(streamId, message)
 
     def onRoomCreated(self, roomCreated):
-        print('room created', roomCreated)
+        logging.debug('room created', roomCreated)
 
     def onRoomDeactivated(self, roomDeactivated):
-        print('room Deactivated', roomDeactivated)
+        logging.debug('room Deactivated', roomDeactivated)
 
     def onRoomMemberDemotedFromOwner(self, roomMemberDemotedFromOwner):
-        print('room member demoted from owner', roomMemberDemotedFromOwner)
+        logging.debug('room member demoted from owner', roomMemberDemotedFromOwner)
 
     def onRoomMemberPromotedToOwner(self, roomMemberPromotedToOwner):
-        print('room member promoted to owner', roomMemberPromotedToOwner)
+        logging.debug('room member promoted to owner', roomMemberPromotedToOwner)
 
     def onRoomReactivated(self, roomReactivated):
-        print('room reactivated', roomReactivated)
+        logging.debug('room reactivated', roomReactivated)
 
     def onRoomUpdated(self, roomUpdated):
-        print('room updated', roomUpdated)
+        logging.debug('room updated', roomUpdated)
 
     def onUserJoinedRoom(self, userJoinedRoom):
-        print('USER JOINED ROOM', userJoinedRoom)
+        logging.debug('USER JOINED ROOM', userJoinedRoom)
 
     def onUserLeftRoom(self, userLeftRoom):
-        print('USER LEFT ROOM', userLeftRoom)
+        logging.debug('USER LEFT ROOM', userLeftRoom)

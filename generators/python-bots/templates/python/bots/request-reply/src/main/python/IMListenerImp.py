@@ -14,4 +14,4 @@ class IMListenerTestImp(IMListener):
         logging.debug('message recieved in IM', message)
 
     def onIMCreated(self, stream):
-        logging.debug('IM created!')
+        logging.debug('IM created!', IMcreated)
