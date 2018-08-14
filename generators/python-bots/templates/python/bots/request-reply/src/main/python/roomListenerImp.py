@@ -1,4 +1,4 @@
-from .RoomListener import RoomListener
+from sym_api_client_python.listeners.RoomListener import RoomListener
 import calendar;
 import time;
 import logging
