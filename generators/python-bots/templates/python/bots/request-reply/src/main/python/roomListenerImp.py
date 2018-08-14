@@ -1,6 +1,7 @@
 from .RoomListener import RoomListener
 import calendar;
 import time;
+import logging
 
 #sample implementation of Abstract RoomListener class
 #has instance of SymBotClient so that it can respond to events coming in by leveraging other clients on SymBotClient

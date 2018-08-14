@@ -15,6 +15,7 @@
   "appCertName": "",
   "appCertPassword": "",
   "proxyURL": "",
+  "proxyPort": "",
   "proxyUsername": "",
   "proxyPassword": "",
   "authTokenRefreshPeriod": "30"
