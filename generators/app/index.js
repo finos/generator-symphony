@@ -1,13 +1,14 @@
 const colors = require('colors');
 const Generator = require('yeoman-generator');
 const upath = require('upath');
+const appSettings = require('../../package.json')
 
 module.exports = class extends Generator {
 
   constructor(args, opts) {
     super(args, opts);
     this.log('/------------------------------------------/'.cyan);
-    this.log('/          SYMPHONY GENERATOR 1.0          /'.cyan);
+    this.log('/'.cyan + '        SYMPHONY GENERATOR  '.bold + appSettings.version.bold + '         /'.cyan);
     this.log('/    by platformsolutions@symphony.com     /'.cyan);
     this.log('/ (c) 2018 Symphony Communication Services /'.cyan);
     this.log('/------------------------------------------/'.cyan);
@@ -57,9 +58,9 @@ module.exports = class extends Generator {
       },
       {
         type    : 'list',
-        name    : 'selfsigned_certificate',
-        message : 'Do you want to generate a self signed certificate',
-        choices : ['Yes', 'No']
+        name    : 'encryption',
+        message : 'What is your preferred encryption technology',
+        choices : ['RSA', 'Self Signed Certificate', 'Signed Certificate']
       }
     ]).then((answers) => {
       answers.dirname = upath.normalize(process.cwd());
