@@ -9,7 +9,7 @@
   "agentPort": 443,
   "botRSAPath":"<%= botRSAPath %>",
   "botRSAName": "<%= botRSAName %>",
-  "botUserName": "<%= botusername %>",
+  "botUsername": "<%= botusername %>",
   "botEmailAddress": "<%= botemail %>",
   "appCertPath": "",
   "appCertName": "",
