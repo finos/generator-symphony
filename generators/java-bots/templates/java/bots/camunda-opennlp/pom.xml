@@ -165,12 +165,18 @@
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
             <artifactId>symphony-api-client-java</artifactId>
-            <version>1.0.4</version>
+            <version>1.0.7</version>
         </dependency>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
             <artifactId>symphony-camunda-client</artifactId>
             <version>1.0.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.symphony.platformsolutions</groupId>
+                    <artifactId>symphony-api-client-java</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>

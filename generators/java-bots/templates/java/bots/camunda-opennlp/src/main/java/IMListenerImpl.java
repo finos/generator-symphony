@@ -36,8 +36,9 @@ public class IMListenerImpl implements IMListener {
     }
 
     public void onIMMessage(InboundMessage inboundMessage) {
-
-        List<Action> actions = nlp.match(inboundMessage.getMessageText().replace("$", ""));
+        String toBeProcessed = inboundMessage.getMessageText().replaceAll("$", "");
+        toBeProcessed = toBeProcessed.toLowerCase();
+        List<Action> actions = nlp.match(toBeProcessed);
         if (!actions.isEmpty()) {
             Action action = actions.get(0);
             ProcessInstance instance = processInstanceClient.getProcessInstance(inboundMessage.getStream().getStreamId().replace("_", "%"));
