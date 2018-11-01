@@ -10,7 +10,7 @@ module.exports = class extends Generator {
         type    : 'list',
         name    : 'node_bot_tpl',
         message : 'Which template do you want to start with',
-        choices : ['Request/Reply', 'NLP Based Trade Order']
+        choices : ['Request/Reply', 'NLP Based Trade Order', 'Dev Meetup AWS']
       }
     ]).then((answers) => {
       answers.application_name = this.options.initPrompts.application_name;
@@ -32,22 +32,22 @@ module.exports = class extends Generator {
         answers.botCertPath = '';
         answers.botCertName = '';
         answers.botCertPassword = '';
-        answers.botRSAPath = __dirname + '/rsa/';
-        answers.botRSAName = 'rsa-private-' + answers.botusername + '.pem';
+        answers.botPrivateKeyPath = __dirname + '/rsa/';
+        answers.botPrivateKeyName = 'rsa-private-' + answers.botusername + '.pem';
       } else if (answers.encryption=='Self Signed Certificate') {
         answers.authType = 'cert';
         answers.botCertPath = __dirname + '/certificates/';
         answers.botCertName = answers.botusername + '.pem';
         answers.botCertPassword = 'changeit';
-        answers.botRSAPath = '';
-        answers.botRSAName = '';
+        answers.botPrivateKeyPath = '';
+        answers.botPrivateKeyName = '';
       } else {
         answers.authType = 'cert';
         answers.botCertPath = '';
         answers.botCertName = '';
         answers.botCertPassword = '';
-        answers.botRSAPath = '';
-        answers.botRSAName = '';
+        answers.botPrivateKeyPath = '';
+        answers.botPrivateKeyName = '';
       }
 
       if (answers.node_bot_tpl=='Request/Reply') {
@@ -63,6 +63,23 @@ module.exports = class extends Generator {
         );
         this.fs.copyTpl(
           this.templatePath('node/bots/request-reply/config.json'),
+          this.destinationPath('config.json'),
+          answers
+        );
+
+      } else if (answers.node_bot_tpl=='Dev Meetup AWS') {
+        this.fs.copyTpl(
+          this.templatePath('node/bots/dev-meetup-aws/index.js'),
+          this.destinationPath('index.js'),
+          answers
+        );
+        this.fs.copyTpl(
+          this.templatePath('node/bots/dev-meetup-aws/package.json'),
+          this.destinationPath('package.json'),
+          answers
+        );
+        this.fs.copyTpl(
+          this.templatePath('node/bots/dev-meetup-aws/config.json'),
           this.destinationPath('config.json'),
           answers
         );
