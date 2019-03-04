@@ -1,7 +1,7 @@
 const colors = require('colors');
 const Generator = require('yeoman-generator');
 const upath = require('upath');
-const appSettings = require('../../package.json')
+const appSettings = require('../../package.json');
 
 module.exports = class extends Generator {
 
