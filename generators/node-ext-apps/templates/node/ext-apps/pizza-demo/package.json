@@ -7,11 +7,13 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Symphony Platform Solutions",
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.346.0",
-    "nba": "^4.5.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "sqlite3": "^4.0.6",
     "symphony-api-client-node": "^1.0.2"
   }
 }

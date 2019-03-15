@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza App Manager</title>
+    <link rel="stylesheet" type="text/css" href="https://symphony.com/resources/api/v2.0/styles/symphony-external-app.css" />
+    <style>
+        body { margin-top: 10px }
+        th { text-align: left; }
+        tr:nth-child(even) { background: #ddd }
+        tr:nth-child(even) > td:not(:last-child) { border-right: #fff 1px solid }
+        tr:nth-child(odd)  > td:not(:last-child) { border-right: #bbb 1px solid }
+        td, th { padding: 6px 12px; }
+        div { margin: 15px 0; }
+        table, th { border: #aaa 1px solid }
+        h1:not(:first-child) { margin-top: 50px }
+        #addMenuOptionInput { width: 300px; }
+    </style>
+</head>
+<body>
+    <h1>Order History</h1>
+    <div id="orderHistory"></div>
+
+    <h1>Manage Menu</h1>
+    <div>
+        <input id="addMenuOptionInput" type="text" class="tempo-input-standard" placeholder="Hawaiian" />
+        <button class="tempo-btn tempo-btn--primary" onClick="addMenuOption()">
+            Add Menu Option
+        </button>
+    </div>
+    <button class="tempo-btn tempo-btn--primary" onClick="launchMenuDialog()">
+        Preview Menu
+    </button>
+
+    <script type="text/javascript" src="https://www.symphony.com/resources/api/v1.0/symphony-api.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/app.js" charset="utf-8"></script>
+</body>
+</html>

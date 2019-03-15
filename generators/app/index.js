@@ -1,30 +1,29 @@
-const colors = require('colors');
-const Generator = require('yeoman-generator');
-const upath = require('upath');
-const appSettings = require('../../package.json');
+const colors = require('colors')
+const Generator = require('yeoman-generator')
+const upath = require('upath')
+const appSettings = require('../../package.json')
 
 module.exports = class extends Generator {
-
-  constructor(args, opts) {
-    super(args, opts);
-    this.log('/------------------------------------------/'.cyan);
-    this.log('/'.cyan + '        SYMPHONY GENERATOR  '.bold + appSettings.version.bold + '         /'.cyan);
-    this.log('/    by platformsolutions@symphony.com     /'.cyan);
-    this.log('/ (c) 2018 Symphony Communication Services /'.cyan);
-    this.log('/------------------------------------------/'.cyan);
+  constructor (args, opts) {
+    super(args, opts)
+    this.log('/------------------------------------------/'.cyan)
+    this.log('/'.cyan + '        SYMPHONY GENERATOR  '.bold + appSettings.version.bold + '         /'.cyan)
+    this.log('/    by platformsolutions@symphony.com     /'.cyan)
+    this.log('/ (c) 2018 Symphony Communication Services /'.cyan)
+    this.log('/------------------------------------------/'.cyan)
   }
 
-  init() {
+  init () {
 
   }
 
-  prompting() {
+  prompting () {
     return this.prompt([
       {
         type    : 'list',
         name    : 'application_type',
         message : 'What do you want to create',
-        choices : ['bot', 'application (coming soon)']
+        choices : ['bot', 'application']
       },
       {
         type    : 'input',
@@ -63,17 +62,18 @@ module.exports = class extends Generator {
         choices : ['RSA', 'Self Signed Certificate', 'Signed Certificate']
       }
     ]).then((answers) => {
-      answers.dirname = upath.normalize(process.cwd());
-      if (answers.application_type!='bot') {
-        console.log('* Sorry the application generation is not available yet'.bold.bgRed.white);
-      } else if (answers.application_type=='bot' && answers.application_lang=='Node.js') {
-        this.composeWith(require.resolve('../node-bots'), {initPrompts: answers});
-      } else if (answers.application_type=='bot' && answers.application_lang=='Java') {
-        this.composeWith(require.resolve('../java-bots'), {initPrompts: answers});
-      } else if (answers.application_type=='bot' && answers.application_lang=='.Net') {
-        this.composeWith(require.resolve('../dotnet-bots'), {initPrompts: answers});
+      answers.dirname = upath.normalize(process.cwd())
+      if (answers.application_type === 'application' && answers.application_lang === 'Node.js') {
+        this.composeWith(require.resolve('../node-ext-apps'), { initPrompts: answers })
+      } else if (answers.application_type === 'application' && answers.application_lang === 'Java') {
+        this.composeWith(require.resolve('../java-ext-apps'), { initPrompts: answers })
+      } else if (answers.application_type === 'bot' && answers.application_lang === 'Node.js') {
+        this.composeWith(require.resolve('../node-bots'), { initPrompts: answers })
+      } else if (answers.application_type === 'bot' && answers.application_lang === 'Java') {
+        this.composeWith(require.resolve('../java-bots'), { initPrompts: answers })
+      } else if (answers.application_type === 'bot' && answers.application_lang === '.Net') {
+        this.composeWith(require.resolve('../dotnet-bots'), { initPrompts: answers })
       }
-    });
+    })
   }
-
-};
+}
