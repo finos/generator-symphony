@@ -74,7 +74,7 @@ module.exports = class extends Generator {
           this.templatePath('node/ext-apps/pizza-demo/webcerts'),
           this.destinationPath('webcerts')
         )
-      } else if (answers.node_bot_tpl === 'Dev Meetup AWS') {
+      } else if (answers.node_ext_app_tpl === 'Dev Meetup AWS') {
         this.fs.copyTpl(
           this.templatePath('node/bots/dev-meetup-aws/index.js'),
           this.destinationPath('index.js'),
