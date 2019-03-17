@@ -72,8 +72,12 @@ module.exports = class extends Generator {
               this.templatePath('java/pizza-demo/src'),
               this.destinationPath('src')
             )
+            this.fs.copyTpl(
+              this.templatePath('java/pizza-demo/config.json'),
+              this.destinationPath('src/main/resources/config.json'),
+              answers
+            )
           }
-
           /* Install certificate */
           console.log('generating from template ' + answers.java_ext_app_tpl)
           if (answers.encryption === 'Self Signed Certificate') {
