@@ -8,9 +8,9 @@ module.exports = class extends Generator {
     return this.prompt([
       {
         type    : 'list',
-        name    : 'node_bot_tpl',
+        name    : 'node_ext_app_tpl',
         message : 'Which template do you want to start with',
-        choices : ['Request/Reply', 'NLP Based Trade Order', 'Dev Meetup AWS']
+        choices : ['Pizza Demo Extension App & Bot']
       }
     ]).then((answers) => {
       answers.application_name = this.options.initPrompts.application_name
@@ -24,7 +24,7 @@ module.exports = class extends Generator {
                      ' ' +
                      this.options.initPrompts.application_lang.italic +
                      ' code from ' +
-                     answers.node_bot_tpl.italic + ' template...').bold
+                     answers.node_ext_app_tpl.italic + ' template...').bold
       console.log(log_text.bgRed.white)
 
       if (answers.encryption === 'RSA') {
@@ -32,9 +32,9 @@ module.exports = class extends Generator {
         answers.botCertPath = ''
         answers.botCertName = ''
         answers.botCertPassword = ''
-        answers.botPrivateKeyPath = __dirname + '/rsa/'
+        answers.botPrivateKeyPath = __dirname + '/rsa/';
         answers.botPrivateKeyName = 'rsa-private-' + answers.botusername + '.pem'
-      } else if (answers.encryption=='Self Signed Certificate') {
+      } else if (answers.encryption === 'Self Signed Certificate') {
         answers.authType = 'cert'
         answers.botCertPath = __dirname + '/certificates/'
         answers.botCertName = answers.botusername + '.pem'
@@ -50,23 +50,31 @@ module.exports = class extends Generator {
         answers.botPrivateKeyName = ''
       }
 
-      if (answers.node_bot_tpl=='Request/Reply') {
+      if (answers.node_ext_app_tpl === 'Pizza Demo Extension App & Bot') {
         this.fs.copyTpl(
-          this.templatePath('node/bots/request-reply/index.js'),
+          this.templatePath('node/ext-apps/pizza-demo/index.js'),
           this.destinationPath('index.js'),
           answers
         )
         this.fs.copyTpl(
-          this.templatePath('node/bots/request-reply/package.json'),
+          this.templatePath('node/ext-apps/pizza-demo/package.json'),
           this.destinationPath('package.json'),
           answers
         )
         this.fs.copyTpl(
-          this.templatePath('node/bots/request-reply/config.json'),
+          this.templatePath('node/ext-apps/pizza-demo/config.json'),
           this.destinationPath('config.json'),
           answers
         )
-      } else if (answers.node_bot_tpl === 'Dev Meetup AWS') {
+        this.fs.copy(
+          this.templatePath('node/ext-apps/pizza-demo/web'),
+          this.destinationPath('web')
+        )
+        this.fs.copy(
+          this.templatePath('node/ext-apps/pizza-demo/webcerts'),
+          this.destinationPath('webcerts')
+        )
+      } else if (answers.node_ext_app_tpl === 'Dev Meetup AWS') {
         this.fs.copyTpl(
           this.templatePath('node/bots/dev-meetup-aws/index.js'),
           this.destinationPath('index.js'),
@@ -81,36 +89,6 @@ module.exports = class extends Generator {
           this.templatePath('node/bots/dev-meetup-aws/config.json'),
           this.destinationPath('config.json'),
           answers
-        )
-      } else if (answers.node_bot_tpl === 'NLP Based Trade Order') {
-        this.fs.copyTpl(
-          this.templatePath('node/bots/nlp-based/index.js'),
-          this.destinationPath('index.js'),
-          answers
-        )
-        this.fs.copyTpl(
-          this.templatePath('node/bots/nlp-based/package.json'),
-          this.destinationPath('package.json'),
-          answers
-        )
-        this.fs.copyTpl(
-          this.templatePath('node/bots/nlp-based/config.json'),
-          this.destinationPath('config.json'),
-          answers
-        )
-        this.fs.copy(
-          this.templatePath('node/bots/nlp-based/README.md'),
-          this.destinationPath('README.md'),
-          answers
-        )
-        this.fs.copy(
-          this.templatePath('node/bots/nlp-based/LICENSE'),
-          this.destinationPath('LICENSE'),
-          answers
-        )
-        this.fs.copy(
-          this.templatePath('node/bots/nlp-based/lib'),
-          this.destinationPath('lib')
         )
       }
 

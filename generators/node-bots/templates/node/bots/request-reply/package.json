@@ -1,6 +1,6 @@
 {
   "name": "<%= application_name %>",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sample Symphony Bot",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "symphony-api-client-node": "^0.1.2"
+    "symphony-api-client-node": "^1.0.2"
   }
 }

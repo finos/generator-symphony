@@ -1,0 +1,14 @@
+{
+  "applications": [
+    {
+      "type": "sandbox",
+      "id": "pizzaApp",
+      "name": "A Pizza App",
+      "description": "The world's finest pizza app",
+      "publisher": "Symphony Platform Solutions",
+      "url": "https://localhost:4000/controller.html",
+      "icon": "https://localhost:4000/img/icon.png",
+      "domain": "localhost"
+    }
+  ]
+}
