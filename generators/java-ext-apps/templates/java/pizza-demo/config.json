@@ -19,9 +19,9 @@
     "proxyUsername": "",
     "proxyPassword": "",
     "authTokenRefreshPeriod": "30",
-    "truststorePath": "<%= dirname %>/certificates/all_symphony_certs_truststore",
+    "truststorePath": "src/main/resources/certificates/all_symphony_certs_truststore",
     "truststorePassword": "changeit",
-    "botPrivateKeyPath": "<%= botRSAPath %>",
+    "botPrivateKeyPath": "rsa/",
     "botPrivateKeyName": "<%= botRSAName %>",
     "botUsername": "<%= botusername %>"
 }
