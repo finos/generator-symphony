@@ -107,7 +107,7 @@ server.post('/menu', function (req, res) {
   const newItem = req.body.name
   if (menuOptions.indexOf(newItem) === -1) {
     let db = new sqlite.Database(sqliteDatabase)
-    db.run(`insert into pizza_menu VALUES(?)`, newItem)
+    db.run('insert into pizza_menu VALUES(?)', newItem)
     db.close()
     menuOptions.push(newItem)
   }
@@ -118,18 +118,20 @@ server.post('/menu', function (req, res) {
 server.get('/orders', function (req, res) {
   let orders = []
   let db = new sqlite.Database(sqliteDatabase)
-  db.each('select * from pizza_order', (err, row) =>
-   orders.push({ id: row.id, date: row.date, choice: row.choice })
-  )
+  db.each('select * from pizza_order', (err, row) => {
+    if (err) return
+    orders.push({ id: row.id, date: row.date, choice: row.choice })
+  })
   db.close(() => res.send(orders))
 })
 
 server.get('/order/:orderId', function (req, res) {
   let order = null
   let db = new sqlite.Database(sqliteDatabase)
-  db.get(`select * from pizza_order where id = '${req.params.orderId}'`, (err, row) =>
+  db.get(`select * from pizza_order where id = '${req.params.orderId}'`, (err, row) => {
+    if (err) return
     order = { id: row.id, date: row.date, choice: row.choice }
-  )
+  })
   db.close(() => res.send(order))
 })
 
@@ -139,7 +141,7 @@ server.post('/order', function (req, res) {
   const order = req.body
   let db = new sqlite.Database(sqliteDatabase)
 
-  const insertSql = `insert into pizza_order(id, date, choice) VALUES(?, ?, ?)`
+  const insertSql = 'insert into pizza_order(id, date, choice) VALUES(?, ?, ?)'
   const insertData = [order.id, order.date, order.choice]
   db.run(insertSql, insertData)
   db.close(() => res.send(order))
