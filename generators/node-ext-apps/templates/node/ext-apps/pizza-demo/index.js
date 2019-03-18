@@ -13,9 +13,9 @@ AWS.config.update({ region: 'us-west-2' })
 
 // Bot Implementation
 let menuOptions = [ 'Double Cheese', 'Margherita', 'Pepperoni' ]
-const helpML = 'To get the menu, use /menu'
+const helpML = 'Hey to get the menu, use /menu'
 const menuML = '<div class="entity" data-entity-id="pizza-menu"><b><i>Please install A Pizza App to render this entity.</i></b></div>'
-const menuData = '{"pizza-menu": { "type": "com.symphony.ps.pizzaMenu", "version": "1.0", "options": [\"$menu\"], "quoteId": "$quoteId" }}'
+const menuData = { 'pizza-menu': { 'type': 'com.symphony.ps.pizzaMenu', 'version': '1.0', 'options': [], 'quoteId': '' } }
 const chars = '0123456789abcdefghijklmnopqrstuvwxyz'
 
 const randomString = () => {
@@ -32,24 +32,26 @@ const botHearsSomething = (event, messages) => {
 
     if (message.messageText === '/menu') {
       replyML = menuML
-      replyData = menuData
-        .replace('$quoteId', randomString())
-        .replace('$menu', menuOptions.join('","'))
-    }
-
-    else {
+      replyData = JSON.parse(JSON.stringify(menuData))
+      replyData['pizza-menu'].options = menuOptions.slice(0)
+      replyData['pizza-menu'].quoteId = randomString()
+    } else {
       replyML = helpML
       symphony.sendMessage(message.stream.streamId, replyML, replyData, symphony.MESSAGEML_FORMAT)
     }
+    console.log('MessageML: ', replyML)
+    console.log('Data: ', replyData)
+    symphony.sendMessage(message.stream.streamId, replyML, JSON.stringify(replyData), symphony.MESSAGEML_FORMAT)
   })
 }
 
+// Bot initialisation
 symphony.setDebugMode(true)
 symphony.initBot(path.join(__dirname, '/config.json')).then(() => {
   symphony.getDatafeedEventsService(botHearsSomething)
 })
 
-// HTTP Server
+// Create HTTPS Web Server
 const server = express()
 var sslOptions = {
   key: fs.readFileSync('webcerts/localhost-key.pem'),
@@ -65,7 +67,7 @@ server.use(express.static('web'))
 server.use(bodyParser.urlencoded({ extended: false }))
 server.use(bodyParser.json())
 
-// Init Menu
+// Init our Menu items into the SQL database
 let db = new sqlite.Database(sqliteDatabase)
 db.get('select * from pizza_menu', (err, row) => {
   if (err && row === undefined) {
@@ -75,9 +77,10 @@ db.get('select * from pizza_menu', (err, row) => {
     })
   } else {
     menuOptions = []
-    db.each('select * from pizza_menu', (err, row) =>
-    menuOptions.push(row.name)
-    )
+    db.each('select * from pizza_menu', (err, row) => {
+      if (err) return
+      menuOptions.push(row.name)
+    })
   }
 })
 
@@ -89,15 +92,17 @@ db.get('select * from pizza_order', (err, row) => {
 
 db.close()
 
-// APIs
+// Define our Application API Endpoints
 server.get('/', function (req, res) {
   res.send('Hello, World')
 })
 
+// Pizza App - List menu items
 server.get('/menu', function (req, res) {
   res.send(menuOptions)
 })
 
+// Pizza App - Add new menu item
 server.post('/menu', function (req, res) {
   const newItem = req.body.name
   if (menuOptions.indexOf(newItem) === -1) {
@@ -109,6 +114,7 @@ server.post('/menu', function (req, res) {
   res.send(menuOptions)
 })
 
+// Pizza App - Order Histrory list
 server.get('/orders', function (req, res) {
   let orders = []
   let db = new sqlite.Database(sqliteDatabase)
@@ -120,14 +126,16 @@ server.get('/orders', function (req, res) {
 
 server.get('/order/:orderId', function (req, res) {
   let order = null
-  let db = new sqlite.Database(sqliteDatabase);
+  let db = new sqlite.Database(sqliteDatabase)
   db.get(`select * from pizza_order where id = '${req.params.orderId}'`, (err, row) =>
     order = { id: row.id, date: row.date, choice: row.choice }
   )
   db.close(() => res.send(order))
 })
 
+// On menu item click, add new order to our database
 server.post('/order', function (req, res) {
+  console.log('New Order Received: ', req.body)
   const order = req.body
   let db = new sqlite.Database(sqliteDatabase)
 
