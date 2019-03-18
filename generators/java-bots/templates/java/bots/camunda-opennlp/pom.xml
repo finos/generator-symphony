@@ -165,7 +165,7 @@
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
             <artifactId>symphony-api-client-java</artifactId>
-            <version>1.0.7</version>
+            <version><%= java_client_library_version %></version>
         </dependency>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
