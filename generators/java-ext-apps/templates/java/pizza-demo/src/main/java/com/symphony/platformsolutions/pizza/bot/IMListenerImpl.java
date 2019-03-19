@@ -3,6 +3,7 @@ package com.symphony.platformsolutions.pizza.bot;
 import clients.SymBotClient;
 import listeners.IMListener;
 import model.InboundMessage;
+import model.OutboundMessage;
 import model.Stream;
 
 public class IMListenerImpl implements IMListener {
@@ -13,8 +14,13 @@ public class IMListenerImpl implements IMListener {
     }
 
     public void onIMMessage(InboundMessage inboundMessage) {
+        OutboundMessage message;
         if (inboundMessage.getMessageText().equalsIgnoreCase("/menu"))
-            this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), PizzaController.getMenuMessage());
+            message = PizzaController.getMenuMessage();
+        else
+            message = PizzaController.getHelpMessage();
+
+        this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), message);
     }
 
     public void onIMCreated(Stream stream) {}
