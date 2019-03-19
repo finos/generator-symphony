@@ -114,7 +114,7 @@ server.post('/menu', function (req, res) {
   res.send(menuOptions)
 })
 
-// Pizza App - Order Histrory list
+// Pizza App - Order History list
 server.get('/orders', function (req, res) {
   let orders = []
   let db = new sqlite.Database(sqliteDatabase)
