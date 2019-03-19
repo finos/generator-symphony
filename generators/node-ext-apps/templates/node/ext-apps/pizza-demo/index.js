@@ -46,7 +46,7 @@ const botHearsSomething = (event, messages) => {
 }
 
 // Bot initialisation
-symphony.setDebugMode(true)
+symphony.setDebugMode(false)
 symphony.initBot(path.join(__dirname, '/config.json')).then(() => {
   symphony.getDatafeedEventsService(botHearsSomething)
 })
