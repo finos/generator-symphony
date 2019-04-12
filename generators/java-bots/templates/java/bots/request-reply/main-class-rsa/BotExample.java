@@ -1,33 +1,31 @@
-import authentication.ISymAuth;
-import authentication.SymBotAuth;
 import authentication.SymBotRSAAuth;
 import clients.SymBotClient;
 import configuration.SymConfig;
 import configuration.SymConfigLoader;
+import exceptions.SymClientException;
 import listeners.IMListener;
 import listeners.RoomListener;
 import model.*;
 import org.apache.log4j.BasicConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import services.DatafeedEventsService;
 import javax.ws.rs.core.NoContentException;
-
 import java.net.URL;
-import java.util.List;
+import java.util.Date;
 
 public class BotExample {
+    private static final Logger LOG = LoggerFactory.getLogger(BotExample.class);
 
-    public static void main(String [] args) {
-        BotExample app = new BotExample();
+    public static void main(String[] args) {
+        new BotExample();
     }
-
 
     public BotExample() {
         BasicConfigurator.configure();
-
         URL url = getClass().getResource("config.json");
-        SymConfigLoader configLoader = new SymConfigLoader();
-        SymConfig config = configLoader.loadFromFile(url.getPath());
-        ISymAuth botAuth = new SymBotRSAAuth(config);
+        SymConfig config = SymConfigLoader.loadFromFile(url.getPath());
+        SymBotRSAAuth botAuth = new SymBotRSAAuth(config);
         botAuth.authenticate();
         SymBotClient botClient = SymBotClient.initBot(config, botAuth);
         DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
@@ -35,48 +33,53 @@ public class BotExample {
         datafeedEventsService.addRoomListener(roomListenerTest);
         IMListener imListener = new IMListenerImpl(botClient);
         datafeedEventsService.addIMListener(imListener);
-        //createRoom(botClient);
 
+        // functionTest(botClient);
     }
 
-    private void createRoom(SymBotClient botClient){
-
-
-
+    private void functionTest(SymBotClient botClient) {
+        String testEmail = "test@example.com";
+        UserInfo userInfo;
         try {
-
-            UserInfo userInfo = botClient.getUsersClient().getUserFromEmail("manuela.caicedo@example.com", true);
-            //get user IM and send message
-            String IMStreamId = botClient.getStreamsClient().getUserIMStreamId(userInfo.getId());
-            OutboundMessage message = new OutboundMessage();
-            message.setMessage("test IM");
-            botClient.getMessagesClient().sendMessage(IMStreamId,message);
-
-            Room room = new Room();
-            room.setName("test room preview");
-            room.setDescription("test");
-            room.setDiscoverable(true);
-            room.setPublic(true);
-            room.setViewHistory(true);
-            RoomInfo roomInfo = null;
-            roomInfo = botClient.getStreamsClient().createRoom(room);
-            botClient.getStreamsClient().addMemberToRoom(roomInfo.getRoomSystemInfo().getId(),userInfo.getId());
-
-            Room newRoomInfo = new Room();
-            newRoomInfo.setName("test generator");
-            botClient.getStreamsClient().updateRoom(roomInfo.getRoomSystemInfo().getId(),newRoomInfo);
-
-            List<RoomMember> members =  botClient.getStreamsClient().getRoomMembers(roomInfo.getRoomSystemInfo().getId());
-
-            botClient.getStreamsClient().promoteUserToOwner(roomInfo.getRoomSystemInfo().getId(), userInfo.getId());
-
-            botClient.getStreamsClient().deactivateRoom(roomInfo.getRoomSystemInfo().getId());
-
-
+            userInfo = botClient.getUsersClient().getUserFromEmail(testEmail, true);
         } catch (NoContentException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("User with this email does not exist: {}", testEmail);
+            return;
         }
+
+        // Get user IM and send message
+        String IMStreamId = botClient.getStreamsClient().getUserIMStreamId(userInfo.getId());
+        OutboundMessage message = new OutboundMessage();
+        message.setMessage("test IM");
+        botClient.getMessagesClient().sendMessage(IMStreamId, message);
+
+        // Create room
+        Room room = new Room();
+        room.setName("Test Room with " + userInfo.getDisplayName());
+        room.setDescription("Test Room Description with " + userInfo.getDisplayName());
+        room.setDiscoverable(true);
+        room.setPublic(true);
+        room.setViewHistory(true);
+        RoomInfo roomInfo;
+        try {
+            roomInfo = botClient.getStreamsClient().createRoom(room);
+        } catch (SymClientException e) {
+            LOG.error(e.getMessage());
+            return;
+        }
+        botClient.getStreamsClient().addMemberToRoom(roomInfo.getRoomSystemInfo().getId(), userInfo.getId());
+
+        // Update room
+        Room newRoomInfo = new Room();
+        newRoomInfo.setName("Test Room with " + userInfo.getDisplayName() + " Updated at " + new Date().getTime());
+        botClient.getStreamsClient().updateRoom(roomInfo.getRoomSystemInfo().getId(), newRoomInfo);
+
+        // Promote room owner
+        botClient.getStreamsClient().promoteUserToOwner(roomInfo.getRoomSystemInfo().getId(), userInfo.getId());
+
+        // Get room members
+        botClient.getStreamsClient()
+            .getRoomMembers(roomInfo.getRoomSystemInfo().getId())
+            .forEach(m -> LOG.info("Room Member: {}", m.getId()));
     }
 }

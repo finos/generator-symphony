@@ -5,7 +5,6 @@ import model.OutboundMessage;
 import model.Stream;
 
 public class IMListenerImpl implements IMListener {
-
     private SymBotClient botClient;
 
     public IMListenerImpl(SymBotClient botClient) {
@@ -14,7 +13,7 @@ public class IMListenerImpl implements IMListener {
 
     public void onIMMessage(InboundMessage inboundMessage) {
         OutboundMessage messageOut = new OutboundMessage();
-        messageOut.setMessage("Hi "+inboundMessage.getUser().getFirstName()+"!");
+        messageOut.setMessage("Hello " + inboundMessage.getUser().getFirstName() + "!");
         try {
             this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), messageOut);
         } catch (Exception e) {
@@ -22,7 +21,5 @@ public class IMListenerImpl implements IMListener {
         }
     }
 
-    public void onIMCreated(Stream stream) {
-
-    }
+    public void onIMCreated(Stream stream) {}
 }

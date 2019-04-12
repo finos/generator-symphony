@@ -4,18 +4,13 @@ import model.InboundMessage;
 import model.OutboundMessage;
 import model.Stream;
 import model.events.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RoomListenerTestImpl implements RoomListener {
-
     private SymBotClient botClient;
 
     public RoomListenerTestImpl(SymBotClient botClient) {
         this.botClient = botClient;
     }
-
-    private final Logger logger = LoggerFactory.getLogger(RoomListenerTestImpl.class);
 
     public void onRoomMessage(InboundMessage inboundMessage) {
         OutboundMessage messageOut = new OutboundMessage();
@@ -27,29 +22,17 @@ public class RoomListenerTestImpl implements RoomListener {
         }
     }
 
-    public void onRoomCreated(RoomCreated roomCreated) {
+    public void onRoomCreated(RoomCreated roomCreated) {}
 
-    }
+    public void onRoomDeactivated(RoomDeactivated roomDeactivated) {}
 
-    public void onRoomDeactivated(RoomDeactivated roomDeactivated) {
+    public void onRoomMemberDemotedFromOwner(RoomMemberDemotedFromOwner roomMemberDemotedFromOwner) {}
 
-    }
+    public void onRoomMemberPromotedToOwner(RoomMemberPromotedToOwner roomMemberPromotedToOwner) {}
 
-    public void onRoomMemberDemotedFromOwner(RoomMemberDemotedFromOwner roomMemberDemotedFromOwner) {
+    public void onRoomReactivated(Stream stream) {}
 
-    }
-
-    public void onRoomMemberPromotedToOwner(RoomMemberPromotedToOwner roomMemberPromotedToOwner) {
-
-    }
-
-    public void onRoomReactivated(Stream stream) {
-
-    }
-
-    public void onRoomUpdated(RoomUpdated roomUpdated) {
-
-    }
+    public void onRoomUpdated(RoomUpdated roomUpdated) {}
 
     public void onUserJoinedRoom(UserJoinedRoom userJoinedRoom) {
         OutboundMessage messageOut = new OutboundMessage();
@@ -61,7 +44,5 @@ public class RoomListenerTestImpl implements RoomListener {
         }
     }
 
-    public void onUserLeftRoom(UserLeftRoom userLeftRoom) {
-
-    }
+    public void onUserLeftRoom(UserLeftRoom userLeftRoom) {}
 }
