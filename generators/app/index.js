@@ -41,7 +41,7 @@ module.exports = class extends Generator {
         type    : 'list',
         name    : 'application_lang',
         message : 'What is your preferred programming language',
-        choices : ['Java', '.Net', 'Node.js']
+        choices : ['Java', '.Net', 'Node.js', 'Python']
       },
       {
         type    : 'input',
@@ -73,7 +73,9 @@ module.exports = class extends Generator {
         this.composeWith(require.resolve('../java-bots'), { initPrompts: answers })
       } else if (answers.application_type === 'bot' && answers.application_lang === '.Net') {
         this.composeWith(require.resolve('../dotnet-bots'), { initPrompts: answers })
-      }
-    })
-  }
-}
+      } else if (answers.application_type=='bot' && answers.application_lang=='Python'){
+	this.composeWith(require.resolve('../python-bots'), {initPrompts: answers});
+    }
+  });
+ }
+};
