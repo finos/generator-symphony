@@ -12,6 +12,6 @@
   "dependencies": {
     "compromise": "^11.5.3",
     "kew": "^0.7.0",
-    "symphony-api-client-node": "^1.0.2"
+    "symphony-api-client-node": "^1.0.4"
   }
 }
