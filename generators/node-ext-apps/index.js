@@ -27,7 +27,7 @@ module.exports = class extends Generator {
                      answers.node_ext_app_tpl.italic + ' template...').bold
       console.log(log_text.bgRed.white)
 
-      if (answers.encryption === 'RSA') {
+      if (answers.encryption.startsWith('RSA')) {
         answers.authType = 'rsa'
         answers.botCertPath = ''
         answers.botCertName = ''
@@ -98,7 +98,7 @@ module.exports = class extends Generator {
         console.log(log_text_cert.bgRed.white)
         mkdirp.sync('certificates')
         certificateCreator.create(answers.botusername, 'certificates')
-      } else if (answers.encryption === 'RSA') {
+      } else if (answers.encryption === 'RSA - Generate New Keys') {
         let log_text_cert = ('* Generating RSA public/private keys for BOT ' + answers.botusername + '...').bold
         console.log(log_text_cert.bgRed.white)
         mkdirp.sync('rsa')

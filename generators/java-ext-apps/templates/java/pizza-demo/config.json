@@ -8,7 +8,7 @@
     "agentHost": "<%= subdomain %>-agent.symphony.com",
     "agentPort": 443,
 
-    "truststorePath": "<%= dirname %>/certificates/all_symphony_certs_truststore",
+    "truststorePath": "certificates/all_symphony_certs_truststore",
     "truststorePassword": "changeit",
 
     "botUsername": "<%= botusername %>",

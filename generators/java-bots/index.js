@@ -1,5 +1,5 @@
 const Generator = require('yeoman-generator');
-const https = require('https');
+const axios = require("axios");
 const certificateCreator = require('../lib/p12-certificate-creator');
 const RSAcertificateCreator = require('../lib/certificate-creator');
 var mkdirp = require('mkdirp');
@@ -28,12 +28,12 @@ module.exports = class extends Generator {
                 answers.java_bot_tpl.italic + ' template...').bold;
             console.log(log_text.bgRed.white);
 
-            if (answers.encryption === 'RSA') {
+            if (answers.encryption.startsWith('RSA')) {
                 answers.authType = 'rsa';
                 answers.botCertPath = '';
                 answers.botCertName = '';
                 answers.botCertPassword = '';
-                answers.botRSAPath = answers.dirname + '/rsa/';
+                answers.botRSAPath = 'rsa/';
                 answers.botRSAName = 'rsa-private-' + answers.botusername + '.pem';
             } else if (answers.encryption === 'Self Signed Certificate') {
                 answers.authType = 'cert';
@@ -51,15 +51,15 @@ module.exports = class extends Generator {
                 answers.botRSAName = '';
             }
 
-            this.log('Looking for latest version of java client library..');
-            let mavenSearchUrl = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:symphony-api-client-java';
+            let mavenSearchUrlRoot = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
 
-            this.generateJavaBot = (data) => {
-                let responseJson = JSON.parse(data);
-                answers.java_client_library_version = responseJson.response.docs[0].latestVersion;
-                this.log('Latest version is', answers.java_client_library_version);
-
+            (async () => {
                 if (answers.java_bot_tpl === 'Request/Reply') {
+                    this.log('Looking for latest version of Java client library..');
+                    const javaClientLibResponse = await axios.get(mavenSearchUrlRoot + 'symphony-api-client-java');
+                    answers.java_client_library_version = javaClientLibResponse.data['response']['docs'][0]['latestVersion'];
+                    this.log('Latest version of Java client library is', answers.java_client_library_version);
+
                     this.fs.copyTpl(
                         this.templatePath('java/bots/request-reply/pom.xml'),
                         this.destinationPath('pom.xml'),
@@ -79,8 +79,17 @@ module.exports = class extends Generator {
                         this.destinationPath('certificates'),
                         answers
                     );
-                }
-                if (answers.java_bot_tpl === 'NLP Based Trade Workflow') {
+                } else if (answers.java_bot_tpl === 'NLP Based Trade Workflow') {
+                    this.log('Looking for latest version of Camunda library..');
+                    const camundaLibResponse = await axios.get(mavenSearchUrlRoot + 'symphony-camunda-client');
+                    answers.camunda_library_version = camundaLibResponse.data['response']['docs'][0]['latestVersion'];
+                    this.log('Latest version of Camunda library is', answers.camunda_library_version);
+
+                    this.log('Looking for latest version of NLP library..');
+                    const nlpLibResponse = await axios.get(mavenSearchUrlRoot + 'symphony-opennlp-java');
+                    answers.nlp_library_version = nlpLibResponse.data['response']['docs'][0]['latestVersion'];
+                    this.log('Latest version of NLP library is', answers.nlp_library_version);
+
                     this.fs.copyTpl(
                         this.templatePath('java/bots/camunda-opennlp/pom.xml'),
                         this.destinationPath('pom.xml'),
@@ -109,26 +118,27 @@ module.exports = class extends Generator {
                         this.destinationPath('bpmn')
                     );
                 }
+
                 /* Install certificate */
                 console.log('generating from template ' + answers.java_bot_tpl);
                 if (answers.encryption === 'Self Signed Certificate') {
                     let log_text_cert = ('* Generating certificate for BOT ' + answers.botusername + '...').bold;
                     console.log(log_text_cert.bgRed.white);
                     certificateCreator.create(answers.botusername, 'certificates');
-                } else if (answers.encryption === 'RSA') {
+                } else if (answers.encryption === 'RSA - Generate New Keys') {
                     let log_text_cert = ('* Generating RSA public/private keys for BOT ' + answers.botusername + '...').bold;
                     console.log(log_text_cert.bgRed.white);
                     mkdirp.sync('rsa');
                     RSAcertificateCreator.createRSA(answers.botusername, 'rsa');
                     if (answers.java_bot_tpl === 'Request/Reply') {
                         this.fs.copy(
-                            this.templatePath('java/bots/request-reply/main-class-rsa/BotExample.java'),
-                            this.destinationPath('src/main/java/BotExample.java')
+                            this.templatePath('java/bots/request-reply/main-class-rsa/RequestReplyBot.java'),
+                            this.destinationPath('src/main/java/RequestReplyBot.java')
                         );
                     } else {
                         this.fs.copy(
-                            this.templatePath('java/bots/camunda-opennlp/main-class-rsa/BotExample.java'),
-                            this.destinationPath('src/main/java/BotExample.java')
+                            this.templatePath('java/bots/camunda-opennlp/main-class-rsa/NLPBot.java'),
+                            this.destinationPath('src/main/java/NLPBot.java')
                         );
                     }
 
@@ -136,16 +146,7 @@ module.exports = class extends Generator {
 
                 let log_text_completion = ('* BOT generated successfully!!').bold;
                 console.log(log_text_completion.bgGreen.white);
-            };
-
-            https.get(mavenSearchUrl, (resp) => {
-                let data = '';
-                resp.on('data', (chunk) => {
-                    data += chunk;
-                });
-                resp.on('end', () => this.generateJavaBot(data));
-            })
-            .on('error', (err) => this.log('Error: ' + err.message));
+            })();
         });
     }
 };

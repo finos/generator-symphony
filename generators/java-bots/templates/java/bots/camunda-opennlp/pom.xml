@@ -24,34 +24,13 @@
     <dependencies>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
-            <artifactId>symphony-api-client-java</artifactId>
-            <version><%= java_client_library_version %></version>
-        </dependency>
-        <dependency>
-            <groupId>com.symphony.platformsolutions</groupId>
             <artifactId>symphony-camunda-client</artifactId>
-            <version>1.0.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.symphony.platformsolutions</groupId>
-                    <artifactId>symphony-api-client-java</artifactId>
-                </exclusion>
-            </exclusions>
+            <version><%= camunda_library_version %></version>
         </dependency>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
             <artifactId>symphony-opennlp-java</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.camunda.bpm</groupId>
-            <artifactId>camunda-external-task-client</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.opennlp</groupId>
-            <artifactId>opennlp-tools</artifactId>
-            <version>1.8.4</version>
+            <version><%= nlp_library_version %></version>
         </dependency>
     </dependencies>
 </project>
