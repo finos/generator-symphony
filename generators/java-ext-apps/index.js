@@ -74,6 +74,11 @@ module.exports = class extends Generator {
                         this.destinationPath('src/main/resources/config.json'),
                         answers
                     );
+                    this.fs.copy(
+                        this.templatePath('../../java-bots/templates/java/bots/request-reply/certificates'),
+                        this.destinationPath('certificates'),
+                        answers
+                    );
                 }
                 /* Install certificate */
                 console.log('generating from template ' + answers.java_ext_app_tpl);
