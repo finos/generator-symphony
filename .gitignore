@@ -60,3 +60,6 @@ typings/
 # IntelliJ project files
 .idea
 *.iml
+
+# macOS system file
+.DS_Store
