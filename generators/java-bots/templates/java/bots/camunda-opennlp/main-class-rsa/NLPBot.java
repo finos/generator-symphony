@@ -28,14 +28,12 @@ public class NLPBot {
         BasicConfigurator.configure();
         org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
 
-        URL url = getClass().getResource("config.json");
-        SymConfig config = SymConfigLoader.loadFromFile(url.getPath());
-        ISymAuth botAuth = new SymBotRSAAuth(config);
-        botAuth.authenticate();
-        botClient = SymBotClient.initBot(config, botAuth);
-        DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
-        IMListenerImpl imListener = new IMListenerImpl(botClient);
-        datafeedEventsService.addIMListener(imListener);
+        SymBotClient botClient = SymBotClient.initBotRsa("config.json");
+
+        botClient.getDatafeedEventsService().addListeners(
+            new IMListenerImpl(botClient),
+            new RoomListenerImpl(botClient)
+        );
 
         ExternalTaskClient client = ExternalTaskClient.create()
             .lockDuration(20L)

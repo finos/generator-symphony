@@ -1,3 +1,4 @@
+const fs = require('fs');
 const colors = require('colors');
 const Generator = require('yeoman-generator');
 const upath = require('upath');
@@ -68,6 +69,16 @@ module.exports = class extends Generator {
             }
         ]).then((answers) => {
             answers.dirname = upath.normalize(process.cwd());
+            const root = this;
+            fs.readdir('.', function(err, files) {
+                if (err) return;
+                const isDirEmpty = files.filter(f => !f.startsWith('.')).length === 0;
+                const isDirNameAppName = process.cwd().endsWith(answers.application_name);
+                if (!isDirEmpty && !isDirNameAppName) {
+                    root.destinationRoot(upath.normalize(process.cwd() + '/' + answers.application_name));
+                }
+            });
+
             let nextScript = undefined;
             if (answers.application_type === 'application') {
                 switch (answers.application_lang) {

@@ -13,13 +13,12 @@ public class RequestReplyBot {
 
     public RequestReplyBot() {
         BasicConfigurator.configure();
-        URL url = getClass().getResource("config.json");
-        SymConfig config = SymConfigLoader.loadFromFile(url.getPath());
-        SymBotRSAAuth botAuth = new SymBotRSAAuth(config);
-        botAuth.authenticate();
-        SymBotClient botClient = SymBotClient.initBot(config, botAuth);
-        DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
-        datafeedEventsService.addRoomListener(new RoomListenerImpl(botClient));
-        datafeedEventsService.addIMListener(new IMListenerImpl(botClient));
+
+        SymBotClient botClient = SymBotClient.initBotRsa("config.json");
+
+        botClient.getDatafeedEventsService().addListeners(
+            new IMListenerImpl(botClient),
+            new RoomListenerImpl(botClient)
+        );
     }
 }
