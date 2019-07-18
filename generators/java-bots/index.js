@@ -37,7 +37,7 @@ module.exports = class extends Generator {
                 answers.botRSAName = 'rsa-private-' + answers.botusername + '.pem';
             } else if (answers.encryption === 'Self Signed Certificate') {
                 answers.authType = 'cert';
-                answers.botCertPath = answers.dirname + '/certificates/';
+                answers.botCertPath = 'certificates/';
                 answers.botCertName = answers.botusername;
                 answers.botCertPassword = 'changeit';
                 answers.botRSAPath = '';
@@ -130,18 +130,20 @@ module.exports = class extends Generator {
                     console.log(log_text_cert.bgRed.white);
                     mkdirp.sync('rsa');
                     RSAcertificateCreator.createRSA(answers.botusername, 'rsa');
+                }
+
+                if (answers.encryption.startsWith('RSA')) {
                     if (answers.java_bot_tpl === 'Request/Reply') {
                         this.fs.copy(
-                            this.templatePath('java/bots/request-reply/main-class-rsa/RequestReplyBot.java'),
-                            this.destinationPath('src/main/java/RequestReplyBot.java')
+                          this.templatePath('java/bots/request-reply/main-class-rsa/RequestReplyBot.java'),
+                          this.destinationPath('src/main/java/RequestReplyBot.java')
                         );
                     } else {
                         this.fs.copy(
-                            this.templatePath('java/bots/camunda-opennlp/main-class-rsa/NLPBot.java'),
-                            this.destinationPath('src/main/java/NLPBot.java')
+                          this.templatePath('java/bots/camunda-opennlp/main-class-rsa/NLPBot.java'),
+                          this.destinationPath('src/main/java/NLPBot.java')
                         );
                     }
-
                 }
 
                 let log_text_completion = ('* BOT generated successfully!!').bold;

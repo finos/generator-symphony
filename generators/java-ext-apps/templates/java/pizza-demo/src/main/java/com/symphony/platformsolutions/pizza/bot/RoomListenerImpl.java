@@ -6,10 +6,10 @@ import model.InboundMessage;
 import model.Stream;
 import model.events.*;
 
-public class RoomListenerTestImpl implements RoomListener {
+public class RoomListenerImpl implements RoomListener {
     private SymBotClient botClient;
 
-    public RoomListenerTestImpl(SymBotClient botClient) {
+    public RoomListenerImpl(SymBotClient botClient) {
         this.botClient = botClient;
     }
 

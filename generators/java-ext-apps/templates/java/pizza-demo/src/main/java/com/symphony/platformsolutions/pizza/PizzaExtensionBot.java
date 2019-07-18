@@ -4,7 +4,7 @@ import authentication.ISymAuth;
 import authentication.SymBotRSAAuth;
 import clients.SymBotClient;
 import com.symphony.platformsolutions.pizza.bot.IMListenerImpl;
-import com.symphony.platformsolutions.pizza.bot.RoomListenerTestImpl;
+import com.symphony.platformsolutions.pizza.bot.RoomListenerImpl;
 import configuration.SymConfig;
 import configuration.SymConfigLoader;
 import listeners.IMListener;
@@ -24,16 +24,12 @@ public class PizzaExtensionBot {
     }
 
     public PizzaExtensionBot() {
-        URL url = getClass().getClassLoader().getResource("config.json");
-        SymConfig config = SymConfigLoader.loadFromFile(url.getPath());
-        ISymAuth botAuth = new SymBotRSAAuth(config);
-        botAuth.authenticate();
-        SymBotClient botClient = SymBotClient.initBot(config, botAuth);
-        DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
-        RoomListener roomListenerTest = new RoomListenerTestImpl(botClient);
-        datafeedEventsService.addRoomListener(roomListenerTest);
-        IMListener imListener = new IMListenerImpl(botClient);
-        datafeedEventsService.addIMListener(imListener);
+        SymBotClient botClient = SymBotClient.initBotRsa("config.json");
+
+        botClient.getDatafeedEventsService().addListeners(
+            new IMListenerImpl(botClient),
+            new RoomListenerImpl(botClient)
+        );
     }
 
     @Bean

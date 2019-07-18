@@ -1,8 +1,4 @@
-import authentication.ISymAuth;
-import authentication.SymBotRSAAuth;
 import clients.SymBotClient;
-import configuration.SymConfig;
-import configuration.SymConfigLoader;
 import model.OutboundMessage;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
@@ -12,8 +8,6 @@ import org.camunda.bpm.client.task.ExternalTaskHandler;
 import pricing.IEXClient;
 import pricing.model.News;
 import pricing.model.Quote;
-import services.DatafeedEventsService;
-import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,14 +22,9 @@ public class NLPBot {
         BasicConfigurator.configure();
         org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
 
-        URL url = getClass().getResource("config.json");
-        SymConfig config = SymConfigLoader.loadFromFile(url.getPath());
-        ISymAuth botAuth = new SymBotRSAAuth(config);
-        botAuth.authenticate();
-        botClient = SymBotClient.initBot(config, botAuth);
-        DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
+        SymBotClient botClient = SymBotClient.initBotRsa("config.json");
         IMListenerImpl imListener = new IMListenerImpl(botClient);
-        datafeedEventsService.addIMListener(imListener);
+        botClient.getDatafeedEventsService().addListeners(imListener);
 
         ExternalTaskClient client = ExternalTaskClient.create()
             .lockDuration(20L)
