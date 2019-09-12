@@ -70,7 +70,7 @@ module.exports = class extends Generator {
                     answers
                 );
 
-             if (answers.python_bot_tpl === 'Elements Form') {
+	    } else if (answers.python_bot_tpl === 'Elements Form') {
                 this.fs.copyTpl(
                     this.templatePath('python/bots/elements_form/requirements.txt'),
                     this.destinationPath('requirements.txt'),
@@ -86,7 +86,6 @@ module.exports = class extends Generator {
                     answers
                 );
             }
-           }
             /* Install certificate */
             /*TODO add logging */
             if (answers.encryption === 'Self Signed Certificate') {
