@@ -12,24 +12,14 @@ public class RoomListenerImpl implements RoomListener {
         this.botClient = botClient;
     }
 
-    public void onRoomMessage(InboundMessage inboundMessage) {
-        OutboundMessage messageOut = new OutboundMessage();
-        messageOut.setMessage("Hi "+inboundMessage.getUser().getFirstName()+"!");
-        try {
-            this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), messageOut);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void onRoomMessage(InboundMessage msg) {
+        OutboundMessage msgOut = new OutboundMessage("Hi " + msg.getUser().getFirstName() + "!");
+        botClient.getMessagesClient().sendMessage(msg.getStream().getStreamId(), msgOut);
     }
 
     public void onUserJoinedRoom(UserJoinedRoom userJoinedRoom) {
-        OutboundMessage messageOut = new OutboundMessage();
-        messageOut.setMessage("Welcome "+userJoinedRoom.getAffectedUser().getFirstName()+"!");
-        try {
-            this.botClient.getMessagesClient().sendMessage(userJoinedRoom.getStream().getStreamId(), messageOut);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        OutboundMessage msgOut = new OutboundMessage("Welcome " + userJoinedRoom.getAffectedUser().getFirstName() + "!");
+        botClient.getMessagesClient().sendMessage(userJoinedRoom.getStream().getStreamId(), msgOut);
     }
 
     public void onRoomCreated(RoomCreated roomCreated) {}

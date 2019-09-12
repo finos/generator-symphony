@@ -1,10 +1,12 @@
 <messageML>
     <form id="form_id">
         <h2>{{simpleForm.title}}</h2>
-        <text-field name="name_01" required="true" />
+
+        <h4>Name</h4>
+        <text-field name="name_01" required="true" minlength="5" maxlength="100" />
 
         <h4>Select your country</h4>
-        <select name="Country">
+        <select name="country">
             <option value="Australia">Australia</option>
             <option value="Brazil">Brazil</option>
             <option value="China">China</option>
@@ -16,19 +18,18 @@
             <option value="Japan">Japan</option>
         </select>
 
-        <h4>Choose your option</h4>
+        <h4>Choose your radio option</h4>
         <radio name="example_radio" value="option_01" checked="true">Marked</radio>
         <radio name="example_radio" value="option_02">Unmarked</radio>
 
-        <h4>Choose your option</h4>
+        <h4>Choose your checkbox option</h4>
         <checkbox name="checkbox_1" value="value01" checked="true">Checked</checkbox>
         <checkbox name="checkbox_2" value="value02">Unchecked</checkbox>
 
         <h4>Send a comment</h4>
-        <textarea name="comment" placeholder="In my opnion..." required="true">In my opnion...</textarea>
+        <textarea name="comment" placeholder="In my opinion..." required="true"></textarea>
 
         <button type="reset">Reset</button>
         <button name="submit_button" type="action">Submit</button>
-
     </form>
 </messageML>
