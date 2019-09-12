@@ -9,10 +9,8 @@ from ..simple_form.render import form_data, render_simple_form
 class IMProcessor:
     def __init__(self, bot_client):
         self.bot_client = bot_client
-        # self.msg = msg
         self.message_formatter = MessageFormatter()
         self.sym_message_parser = SymMessageParser()
-        # self.process(self.msg)
 
     #reads message and processes it
     #look inside logs/example.log to see the payload (metadata representing event coming over the datafeed)
