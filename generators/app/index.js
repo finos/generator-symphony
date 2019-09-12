@@ -7,10 +7,11 @@ const appSettings = require('../../package.json');
 module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
+        const year = new Date().getYear() + 1900;
         this.log('/------------------------------------------/'.cyan);
         this.log('/'.cyan + '        SYMPHONY GENERATOR  '.bold + appSettings.version.bold + '         /'.cyan);
         this.log('/    by platformsolutions@symphony.com     /'.cyan);
-        this.log('/ (c) 2018 Symphony Communication Services /'.cyan);
+        this.log(`/ (c) ${year} Symphony Communication Services /`.cyan);
         this.log('/------------------------------------------/'.cyan);
     }
 
@@ -69,6 +70,9 @@ module.exports = class extends Generator {
             }
         ]).then((answers) => {
             answers.dirname = upath.normalize(process.cwd());
+            answers.sessionAuthSuffix = (answers.encryption.startsWith('RSA')) ? '' : '-api';
+            answers.keyAuthSuffix = (answers.encryption.startsWith('RSA')) ? '' : '-keyauth';
+
             const root = this;
             fs.readdir('.', function(err, files) {
                 if (err) return;

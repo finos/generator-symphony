@@ -15,10 +15,12 @@ module.exports = class extends Generator {
     ]).then((answers) => {
       answers.application_name = this.options.initPrompts.application_name;
       answers.subdomain = this.options.initPrompts.subdomain;
+      answers.sessionAuthSuffix = this.options.initPrompts.sessionAuthSuffix;
+      answers.keyAuthSuffix = this.options.initPrompts.keyAuthSuffix;
       answers.dirname = this.options.initPrompts.dirname;
       answers.botusername = this.options.initPrompts.botusername;
       answers.botemail = this.options.initPrompts.botemail;
-      
+
       let log_text = ('* Generating ' +
                      this.options.initPrompts.application_type.italic +
                      ' ' +
@@ -55,7 +57,7 @@ module.exports = class extends Generator {
         console.log(log_text_cert.bgRed.white);
         certificateCreator.create( this.options.initPrompts.botusername, this.options.initPrompts.botemail );
       }
-      } 
+      }
     });
   }
 };
