@@ -11,7 +11,7 @@ module.exports = class extends Generator {
                 type: 'list',
                 name: 'python_bot_tpl',
                 message: 'Which template do you want to start with',
-                choices: ['Request/Reply']
+                choices: ['Request/Reply','Elements Form']
             }
         ]).then((answers) => {
             answers.application_name = this.options.initPrompts.application_name;
@@ -69,7 +69,24 @@ module.exports = class extends Generator {
                     this.destinationPath('resources/config.json'),
                     answers
                 );
+
+             if (answers.python_bot_tpl === 'Elements Form') {
+                this.fs.copyTpl(
+                    this.templatePath('python/bots/elements_form/requirements.txt'),
+                    this.destinationPath('requirements.txt'),
+                    answers
+                );
+                this.fs.copy(
+                    this.templatePath('python/bots/elements_form/src'),
+                    this.destinationPath('python')
+                );
+                this.fs.copyTpl(
+                    this.templatePath('python/bots/elements_form/config.json'),
+                    this.destinationPath('resources/config.json'),
+                    answers
+                );
             }
+           }
             /* Install certificate */
             /*TODO add logging */
             if (answers.encryption === 'Self Signed Certificate') {
