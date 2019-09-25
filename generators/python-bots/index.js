@@ -66,6 +66,10 @@ module.exports = class extends Generator {
                     this.templatePath('python/bots/request-reply/src'),
                     this.destinationPath('python')
                 );
+                this.fs.copy(
+                  this.templatePath('python/bots/request-reply/listeners'),
+                  this.destinationPath('python/listeners')
+                )
                 this.fs.copyTpl(
                     this.templatePath('python/bots/request-reply/config.json'),
                     this.destinationPath('resources/config.json'),
