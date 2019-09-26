@@ -10,7 +10,7 @@ module.exports = class extends Generator {
                 type: 'list',
                 name: 'node_bot_tpl',
                 message: 'Which template do you want to start with',
-                choices: ['Request/Reply', 'NLP Based Trade Order', 'Dev Meetup AWS']
+                choices: ['Request/Reply', 'NLP Based Trade Order', 'Dev Meetup AWS', 'ExpenseBot']
             }
         ]).then((answers) => {
             answers.application_name = this.options.initPrompts.application_name;
@@ -113,6 +113,27 @@ module.exports = class extends Generator {
                 this.fs.copy(
                     this.templatePath('node/bots/nlp-based/lib'),
                     this.destinationPath('lib')
+                );
+            } else if (answers.node_bot_tpl === 'ExpenseBot') {
+                this.fs.copyTpl(
+                  this.templatePath('node/bots/expense-bot/index.js'),
+                  this.destinationPath('index.js'),
+                  answers
+                );
+                this.fs.copyTpl(
+                  this.templatePath('node/bots/expense-bot/Helpers.js'),
+                  this.destinationPath('Helpers.js'),
+                  answers
+                );
+                this.fs.copyTpl(
+                  this.templatePath('node/bots/expense-bot/package.json'),
+                  this.destinationPath('package.json'),
+                  answers
+                );
+                this.fs.copyTpl(
+                  this.templatePath('node/bots/expense-bot/config.json'),
+                  this.destinationPath('config.json'),
+                  answers
                 );
             }
 
