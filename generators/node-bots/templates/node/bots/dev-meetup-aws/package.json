@@ -12,6 +12,6 @@
   "dependencies": {
     "aws-sdk": "^2.346.0",
     "nba": "^4.5.0",
-    "symphony-api-client-node": "^1.0.4"
+    "symphony-api-client-node": "^1.0.11"
   }
 }
