@@ -11,7 +11,7 @@ module.exports = class extends Generator {
         type: 'list',
         name: 'java_bot_tpl',
         message: 'Which template do you want to start with',
-        choices: ['Request/Reply', 'NLP Based Trade Workflow', 'Elements Form']
+        choices: ['Request/Reply', 'NLP Based Trade Workflow', 'Elements Form', 'ExpenseBot']
       }
     ]).then((answers) => {
       answers.application_name = this.options.initPrompts.application_name;
@@ -56,13 +56,23 @@ module.exports = class extends Generator {
       let mavenSearchUrlRoot = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
 
       (async () => {
-        if (['Request/Reply', 'Elements Form'].indexOf(answers.java_bot_tpl) > -1) {
+        if (['Request/Reply', 'Elements Form', 'ExpenseBot'].indexOf(answers.java_bot_tpl) > -1) {
           this.log('Looking for latest version of Java client library..');
           const javaClientLibResponse = await axios.get(mavenSearchUrlRoot + 'symphony-api-client-java');
           answers.java_client_library_version = javaClientLibResponse.data['response']['docs'][0]['latestVersion'];
           this.log('Latest version of Java client library is', answers.java_client_library_version);
 
-          const subDir = (answers.java_bot_tpl === 'Request/Reply') ? 'request-reply' : 'elements';
+          let subDir = 'Request/Reply'
+          switch(answers.java_bot_tpl) {
+            case 'Elements Form':
+              subDir = 'elements';
+              break;
+            case 'ExpenseBot':
+              subDir = 'expense-bot';
+              break;
+          }
+
+
           const rootDir = `java/bots/${subDir}`;
 
           [ 'pom.xml', 'src', 'config.json', 'certificates' ].forEach(file => {
@@ -129,7 +139,8 @@ module.exports = class extends Generator {
           const { mainClass, subDir } = [
             { type: 'Request/Reply', mainClass: 'RequestReplyBot', subDir: 'request-reply' },
             { type: 'NLP Based Trade Workflow', mainClass: 'NLPBot', subDir: 'camunda-opennlp' },
-            { type: 'Elements Form', mainClass: 'ElementsBot', subDir: 'elements' }
+            { type: 'Elements Form', mainClass: 'ElementsBot', subDir: 'elements' },
+            { type: 'ExpenseBot', mainClass: 'ExpenseBot', subDir: 'expense-bot' }
           ].filter(template => template.type === answers.java_bot_tpl)[0];
 
           this.fs.copy(
