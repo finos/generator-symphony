@@ -27,5 +27,11 @@
             <artifactId>symphony-api-client-java</artifactId>
             <version><%= java_client_library_version %></version>
         </dependency>
+        <dependency>
+            <!-- jsoup HTML parser library @ https://jsoup.org/ -->
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.12.1</version>
+        </dependency>
     </dependencies>
 </project>

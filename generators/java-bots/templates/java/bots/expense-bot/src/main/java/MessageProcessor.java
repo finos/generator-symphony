@@ -19,7 +19,7 @@ public class MessageProcessor {
         UserInfo botUserInfo = this.botClient.getBotUserInfo();
 
         if (mentions.contains(botUserInfo.getId())) {
-            String cleanMessage = MessageHelper.clean(inboundMessage.getMessageText());
+            String cleanMessage = MessageHelper.clean(inboundMessage.getMessage());
             String[] commands = cleanMessage.split(" ");
 
             Boolean sendHelpMessage = false;
