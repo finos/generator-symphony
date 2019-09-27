@@ -1,38 +1,27 @@
 const HTMLParser = require('node-html-parser')
 
-// BEGIN: Helper to parse message
-
-const parseMessage = (message) => {
-  const parsedMessage = HTMLParser.parse(message.message)
-  return parsedMessage.text
-}
-
-// END: Helper to parse message
-
 // BEGIN: Helper to parse and clean message
 
 const parseAndCleanMessage = (message) => {
-  let parsedMessage = parseMessage(message)
+  const dataJSON = JSON.parse(message.data)
 
-  // removing mentions
-  parsedMessage = parsedMessage.replace(/\B@[a-z0-9_-]+/gi, '')
-
-  // removing hashtags
-  parsedMessage = parsedMessage.replace(/\B#[a-z0-9_-]+/gi, '')
-
-  // removing cashtags
-  parsedMessage = parsedMessage.replace(/\B\$[a-z0-9_-]+/gi, '')
+  const parsedMessage = HTMLParser.parse(message.message)
+  // Remove all identified entities
+  const entities = parsedMessage.querySelectorAll('.entity')
+  entities.forEach(entity => {
+    const entityId = entity.attributes['data-entity-id']
+    if (entityId && dataJSON[entityId]) {
+      entity.set_content('')
+    }
+  })
 
   // trim whitespaces
-  parsedMessage = parsedMessage.trim()
-
-  return parsedMessage
+  return parsedMessage.text.trim()
 }
 
 // END: Helper to parse and clean message
 
 const Helpers = {
-  parseMessage,
   parseAndCleanMessage,
 }
 
