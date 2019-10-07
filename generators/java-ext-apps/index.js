@@ -95,6 +95,15 @@ module.exports = class extends Generator {
                     RSAcertificateCreator.createRSA(answers.botusername, 'rsa');
                 }
 
+                if (answers.encryption.startsWith('RSA')) {
+                  console.log('reached rsa')
+                  const mainClass = 'PizzaExtensionBot'
+                  this.fs.copy(
+                    this.templatePath(`java/pizza-demo/main-class-rsa/${mainClass}.java`),
+                    this.destinationPath(`src/main/java/com/symphony/platformsolutions/pizza/${mainClass}.java`)
+                  );
+                }
+
                 let log_text_completion = ('* BOT generated successfully!!').bold;
                 console.log(log_text_completion.bgGreen.white);
             })();

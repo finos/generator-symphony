@@ -19,7 +19,7 @@ public class PizzaExtensionBot {
 
     public PizzaExtensionBot() {
         try {
-            SymBotClient botClient = SymBotClient.initBot("config.json");
+            SymBotClient botClient = SymBotClient.initBotRsa("config.json");
 
             botClient.getDatafeedEventsService().addListeners(
                 new IMListenerImpl(botClient),

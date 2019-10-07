@@ -1,19 +1,23 @@
 import clients.SymBotClient;
 import org.apache.log4j.BasicConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ElementsBot {
-    public static void main(String[] args) {
-        new ElementsBot();
-    }
+    private static final Logger log = LoggerFactory.getLogger(ElementsBot.class);
 
-    public ElementsBot() {
+    public static void main(String[] args) {
         BasicConfigurator.configure();
 
-        SymBotClient botClient = SymBotClient.initBotRsa("config.json");
+        try {
+            SymBotClient botClient = SymBotClient.initBotRsa("config.json");
 
-        botClient.getDatafeedEventsService().addListeners(
-            new IMListenerImpl(botClient),
-            new ElementsListenerImpl(botClient)
-        );
+            botClient.getDatafeedEventsService().addListeners(
+                new IMListenerImpl(botClient),
+                new ElementsListenerImpl(botClient)
+            );
+        } catch (Exception e) {
+            log.error("Error", e);
+        }
     }
 }
