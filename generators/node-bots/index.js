@@ -114,7 +114,7 @@ module.exports = class extends Generator {
           this.templatePath('node/bots/nlp-based/lib'),
           this.destinationPath('lib')
         )
-      } else if (answers.node_bot_tpl === 'ExpenseBot') {
+      } else if (answers.node_bot_tpl === 'ExpenseBot (using Symphony Elements)') {
         this.fs.copyTpl(
           this.templatePath('node/bots/expense-bot/index.js'),
           this.destinationPath('index.js'),
