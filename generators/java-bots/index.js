@@ -53,7 +53,7 @@ module.exports = class extends Generator {
         answers.botRSAName = ''
       }
 
-      let mavenSearchUrlRoot = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:'
+      let mavenSearchUrlRoot = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
 
       (async () => {
         if (['Request/Reply', 'Elements Form', 'ExpenseBot'].indexOf(answers.java_bot_tpl) > -1) {
@@ -72,8 +72,7 @@ module.exports = class extends Generator {
               break
           }
 
-
-          const rootDir = `java/bots/${subDir}`
+          const rootDir = `java/bots/${subDir}`;
 
             [ 'pom.xml', 'src', 'config.json', 'certificates' ].forEach(file => {
               const prefix = (file.indexOf('.json') > 0) ? 'src/main/resources/' : ''
