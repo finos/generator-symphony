@@ -56,7 +56,7 @@ module.exports = class extends Generator {
       let mavenSearchUrlRoot = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:'
 
       (async () => {
-        if (['Request/Reply', 'Elements Form', 'ExpenseBot (using Symphony Elements)'].indexOf(answers.java_bot_tpl) > -1) {
+        if (['Request/Reply', 'Elements Form', 'ExpenseBot'].indexOf(answers.java_bot_tpl) > -1) {
           this.log('Looking for latest version of Java client library..')
           const javaClientLibResponse = await axios.get(mavenSearchUrlRoot + 'symphony-api-client-java')
           answers.java_client_library_version = javaClientLibResponse.data['response']['docs'][0]['latestVersion']
