@@ -62,7 +62,7 @@ module.exports = class extends Generator {
           answers.java_client_library_version = javaClientLibResponse.data['response']['docs'][0]['latestVersion']
           this.log('Latest version of Java client library is', answers.java_client_library_version)
 
-          let subDir = 'Request/Reply'
+          let subDir = 'request-reply'
           switch (answers.java_bot_tpl) {
             case 'Elements Form':
               subDir = 'elements'
