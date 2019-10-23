@@ -126,6 +126,7 @@ module.exports = class extends Generator {
         if (answers.encryption === 'Self Signed Certificate') {
           let log_text_cert = ('* Generating certificate for BOT ' + answers.botusername + '...').bold
           console.log(log_text_cert.bgRed.white)
+          mkdirp.sync('ssl')
           certificateCreator.create(answers.botusername, 'certificates')
         } else if (answers.encryption === 'RSA - Generate New Keys') {
           let log_text_cert = ('* Generating RSA public/private keys for BOT ' + answers.botusername + '...').bold

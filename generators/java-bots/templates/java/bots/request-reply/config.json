@@ -5,7 +5,7 @@
     "keyAuthPort": 443,
     "podHost": "<%= subdomain %>.symphony.com",
     "podPort": 443,
-    "agentHost": "<%= subdomain %>-agent.symphony.com",
+    "agentHost": "<%= subdomain %>.symphony.com",
     "agentPort": 443,
 
     "truststorePath": "certificates/all_symphony_certs_truststore",
