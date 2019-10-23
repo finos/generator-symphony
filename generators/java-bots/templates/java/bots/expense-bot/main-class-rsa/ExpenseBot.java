@@ -9,17 +9,21 @@ public class ExpenseBot {
     public ExpenseBot() {
         BasicConfigurator.configure();
 
-        SymBotClient botClient = SymBotClient.initBotRsa("config.json");
+        try {
+            SymBotClient botClient = SymBotClient.initBotRsa("config.json");
 
-        MessageSender.createInstance(botClient);
+            MessageSender.createInstance(botClient);
 
-        MessageProcessor messageProcessor = new MessageProcessor(botClient);
-        ActionProcessor actionProcessor = new ActionProcessor(botClient);
+            MessageProcessor messageProcessor = new MessageProcessor(botClient);
+            ActionProcessor actionProcessor = new ActionProcessor(botClient);
 
-        botClient.getDatafeedEventsService().addListeners(
-            new IMListenerImpl(messageProcessor),
-            new RoomListenerImpl(messageProcessor),
-            new ElementsListenerImpl(actionProcessor)
-        );
+            botClient.getDatafeedEventsService().addListeners(
+                new IMListenerImpl(messageProcessor),
+                new RoomListenerImpl(messageProcessor),
+                new ElementsListenerImpl(actionProcessor)
+            );
+        } catch (Exception e) {
+            log.error("Error", e);
+        }
     }
 }
