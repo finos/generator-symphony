@@ -3,6 +3,8 @@ import model.OutboundMessage;
 import model.UserInfo;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class MessageSender {
     private static MessageSender instance;
@@ -144,6 +146,54 @@ public class MessageSender {
         String message =
                 "<h3>Your expense has been submitted to " + referalUsers + ".</h3>" +
                 "<p>Thanks for using ExpenseBot !</p>";
+
+        OutboundMessage messageOut = new OutboundMessage();
+        messageOut.setMessage(message);
+
+        return messageOut;
+    }
+
+    public OutboundMessage buildApprovalMessage(ArrayList<Long> referals, String userId) {
+        ExpenseManager expenseManager = ExpenseManager.getInstance();
+
+        String mentions = referals.stream().map(referalId -> "<mention uid=\"" + referalId + "\" />").collect(Collectors.joining(","));
+
+        String message =
+                "<p>Hello " + mentions + ",</p><br/>" +
+                "<p><mention uid=\"" + userId + "\" /> requests your approval for this expense list:</p><br />" +
+                "<table>" +
+                    "<thead>" +
+                        "<tr>" +
+                            "<td>Expense Name:</td>" +
+                            "<td>Expense Date:</td>" +
+                            "<td>Expense Amount:</td>" +
+                        "</tr>" +
+                    "</thead>" +
+                    "<tbody>";
+
+        DecimalFormat formatter = new DecimalFormat("#0.00");
+
+        for (Expense expense : expenseManager.getExpenses()) {
+            Float price = Float.parseFloat(expense.getPrice());
+            message +=
+                    "<tr>" +
+                            "<td>" + expense.getName() + "</td>" +
+                            "<td>" + expense.getDate() + "</td>" +
+                            "<td>$" + formatter.format(price) + "</td>" +
+                            "</tr>";
+        }
+
+        message +=
+                "</tbody>" +
+                        "<tfoot>" +
+                        "<tr>" +
+                        "<td></td>" +
+                        "<td></td>" +
+                        "<td>Total: $" + formatter.format(expenseManager.getReportTotal()) + "</td>" +
+                        "</tr>" +
+                        "</tfoot>" +
+                        "</table>" +
+                        "<br />";
 
         OutboundMessage messageOut = new OutboundMessage();
         messageOut.setMessage(message);

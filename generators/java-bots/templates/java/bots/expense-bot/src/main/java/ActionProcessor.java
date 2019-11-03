@@ -1,6 +1,8 @@
 import clients.SymBotClient;
+import clients.symphony.api.StreamsClient;
 import clients.symphony.api.UsersClient;
 import model.OutboundMessage;
+import model.User;
 import model.UserInfo;
 import model.events.SymphonyElementsAction;
 
@@ -16,7 +18,7 @@ public class ActionProcessor {
         this.botClient = botClient;
     }
 
-    public void process(SymphonyElementsAction action) {
+    public void process(SymphonyElementsAction action, User user) {
         Map<String, Object> formValues =  action.getFormValues();
 
         switch (action.getFormId()) {
@@ -28,7 +30,7 @@ public class ActionProcessor {
             }
             case "expense-approval-form": {
                 if (formValues.get("action").equals("submit-expense")) {
-                    this.manageExpenseApprovalForm(action);
+                    this.manageExpenseApprovalForm(action, user);
                 }
                 break;
             }
@@ -49,11 +51,22 @@ public class ActionProcessor {
         MessageSender.getInstance().sendMessage(action.getStreamId(), messageOut);
     }
 
-    public void manageExpenseApprovalForm(SymphonyElementsAction action) {
+    public void manageExpenseApprovalForm(SymphonyElementsAction action, User user) {
         Map<String, Object> formValues =  action.getFormValues();
         ArrayList<Long> referals = (ArrayList<Long>)formValues.get("person-selector");
 
         if (referals.size() > 0) {
+            StreamsClient streamsClient = this.botClient.getStreamsClient();
+            try {
+                String roomId = streamsClient.getUserListIM((List<Long>)referals);
+
+                OutboundMessage messageOut = MessageSender.getInstance().buildApprovalMessage(referals, user.getUserId().toString());
+
+                MessageSender.getInstance().sendMessage(roomId, messageOut);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             UsersClient usersClient = this.botClient.getUsersClient();
 
             try {
