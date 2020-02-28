@@ -1,14 +1,14 @@
 {
-    "sessionAuthHost": "<%= subdomain %>-api.symphony.com",
+    "sessionAuthHost": "<%= subdomain %><%= sessionAuthSuffix %>.symphony.com",
     "sessionAuthPort": 443,
-    "keyAuthHost": "<%= subdomain %>-keyauth.symphony.com",
+    "keyAuthHost": "<%= subdomain %><%= keyAuthSuffix %>.symphony.com",
     "keyAuthPort": 443,
     "podHost": "<%= subdomain %>.symphony.com",
     "podPort": 443,
-    "agentHost": "<%= subdomain %>-agent.symphony.com",
+    "agentHost": "<%= subdomain %>.symphony.com",
     "agentPort": 443,
 
-    "truststorePath": "<%= dirname %>/certificates/all_symphony_certs_truststore",
+    "truststorePath": "certificates/all_symphony_certs_truststore",
     "truststorePassword": "changeit",
 
     "botUsername": "<%= botusername %>",

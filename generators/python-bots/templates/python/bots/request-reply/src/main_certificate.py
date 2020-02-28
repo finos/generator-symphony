@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 
 def is_venv():
     return (hasattr(sys, 'real_prefix') or
@@ -7,7 +8,7 @@ def is_venv():
 if is_venv():
     print('In virtual environment. Proceeding.')
 else:
-    print('Not running in virtual environment. Consider exiting program with ctrl-c') 
+    print('Not running in virtual environment. Consider exiting program with ctrl-c')
     print('Docs for setting up virtual environment:')
     print('https://docs.python.org/3/library/venv.html')
 
@@ -22,6 +23,11 @@ from sym_api_client_python.listeners.room_listener_test_imp import \
 
 
 def configure_logging():
+
+        mydir = Path('logs')
+        mydir.mkdir(exist_ok=True, parents=True)
+        myfname = mydir.joinpath('example.log')
+
         logging.basicConfig(
                 filename='./logs/example.log',
                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -63,4 +69,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
