@@ -63,3 +63,6 @@ typings/
 
 # macOS system file
 .DS_Store
+
+# local dev files
+dist
