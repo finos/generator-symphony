@@ -15,6 +15,7 @@ else:
 
 
 import logging
+import os
 from sym_api_client_python.configure.configure import SymConfig
 from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
 from sym_api_client_python.clients.sym_bot_client import SymBotClient
@@ -23,6 +24,14 @@ from listeners.room_listener_test_imp import RoomListenerTestImp
 from listeners.elements_listener_test_imp import ElementsListenerTestImp
 
 def configure_logging():
+    if not os.path.exists('logs'):
+        os.mkdir('logs')
+    logging.basicConfig(
+            filename='./logs/example.log',
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            filemode='w', level=logging.DEBUG
+    )
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
 
     mydir = Path('logs')
     mydir.mkdir(exist_ok=True, parents=True)
