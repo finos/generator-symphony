@@ -10,6 +10,6 @@ public class ElementsListenerImpl implements ElementsListener {
     }
 
     public void onElementsAction(User user, SymphonyElementsAction action) {
-        this.actionProcessor.process(action);
+        this.actionProcessor.process(action, user);
     }
 }

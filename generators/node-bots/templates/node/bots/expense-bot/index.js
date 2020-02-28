@@ -241,16 +241,59 @@ const confirmMessage = (referals) => {
     '<p>Thanks for using ExpenseBot !</p>'
 }
 
+const buildApprovalMessage = (referals, userId) => {
+  const mentions = referals.map((referalId) => (`<mention uid="${referalId}"/>`))
+  let message =
+    '<p>Hello ' + mentions.join(',') + ',' + '</p><br/>' +
+    '<p><mention uid="' + userId + '" /> requests your approval for this expense list:</p><br/>' +
+    '<table>' +
+    '<thead>' +
+    '<tr>' +
+    '<td>Expense Name:</td>' +
+    '<td>Expense Date:</td>' +
+    '<td>Expense Amount:</td>' +
+    '</tr>' +
+    '</thead>' +
+    '<tbody>'
+  expenseFormData.expenses.forEach((expense) => {
+    message +=
+      '<tr>' +
+      '<td>' + expense.name + '</td>' +
+      '<td>' + expense.date + '</td>' +
+      '<td>$' + parseFloat(expense.price).toFixed(2) + '</td>' +
+      '</tr>'
+  })
+
+  message +=
+    '</tbody>' +
+    '<tfoot>' +
+    '<tr>' +
+    '<td></td>' +
+    '<td></td>' +
+    '<td>Total: $' + parseFloat(expenseFormData.reportTotal).toFixed(2) + '</td>' +
+    '</tr>' +
+    '</tfoot>' +
+    '</table>' +
+    '<br />'
+
+  return message
+}
+
 const manageExpenseApprovalForm = (action) => {
   const { 'person-selector': referals } = action.formValues
 
   if (referals.length > 0) {
-    Symphony.getUsersFromIdList(referals.join(',')).then((response) => {
-      const referalsUsers = response.users.map(user => user.displayName)
-      console.log('Send confirmation message')
-      Symphony.sendMessage(action.streamId, confirmMessage(referalsUsers), null, Symphony.MESSAGEML_FORMAT)
+    Symphony.getUserIMStreamId(referals).then((roomInfo) => {
+      console.log('Send approval message')
+      Symphony.sendMessage(roomInfo.id, buildApprovalMessage(referals, action.initiator.userId), null, Symphony.MESSAGEML_FORMAT)
 
-      expenseFormData = null
+      Symphony.getUsersFromIdList(referals.join(',')).then((response) => {
+        const referalsUsers = response.users.map(user => user.displayName)
+        console.log('Send confirmation message')
+        Symphony.sendMessage(action.streamId, confirmMessage(referalsUsers), null, Symphony.MESSAGEML_FORMAT)
+
+        expenseFormData = null
+      })
     })
   } else {
     console.log('Send updated form message')
