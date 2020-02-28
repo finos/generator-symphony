@@ -129,7 +129,7 @@ module.exports = class extends Generator {
             this.log('\n' + this.pair.public);
         }
 
-        this.log(`\nYour ${this.answers.templateName} has been successfully generated and compiled !`.cyan.bold);
+        this.log(`\nYour ${this.answers.templateName.bold} project has been successfully generated !`.cyan.bold);
     }
 
     _generateJava8 () {
