@@ -3,6 +3,48 @@ const Generator = require('yeoman-generator');
 const upath = require('upath');
 const header = require('./header');
 
+const MODULES = {
+  application: {
+    node: {
+      path: '../node-ext-apps'
+    },
+    java: {
+      path: '../java-ext-apps'
+    }
+  },
+  bot: {
+    node: {
+      path: '../node-bots'
+    },
+    java: {
+      path: '../java'
+    },
+    dotnet: {
+      path: '../dotnet-bots'
+    },
+    python: {
+      path: '../python-bots'
+    }
+  }
+};
+
+const projectType = {
+  bot: 'bot',
+  application: 'application'
+};
+Object.defineProperty(projectType, 'all', { get: function() { return Object.values(this)}, enumerable: false});
+
+const language = {
+  java: 'Java',
+  node: 'Node.js',
+  dotnet: '.Net',
+  python: 'Python'
+};
+Object.defineProperty(language, 'all', { get: function() { return Object.values(this)}, enumerable: false});
+
+/**
+ * Generator entry point.
+ */
 module.exports = class extends Generator {
 
   constructor (args, opts) {
@@ -21,48 +63,23 @@ module.exports = class extends Generator {
    */
   prompting () {
 
-    const modules = {
-      application: {
-        node: {
-          path: '../node-ext-apps'
-        },
-        java: {
-          path: '../java-ext-apps'
+    function selectNextScript(type, lang) {
+      if (type === projectType.application) {
+        switch (lang) {
+          case language.node: return MODULES.application.node.path;
+          case language.java: return MODULES.application.java.path;
         }
-      },
-      bot: {
-        node: {
-          path: '../node-bots'
-        },
-        java: {
-          path: '../java'
-        },
-        dotnet: {
-          path: '../dotnet-bots'
-        },
-        python: {
-          path: '../python-bots'
+      } else {
+        switch (lang) {
+          case language.node: return MODULES.bot.node.path;
+          case language.java: return MODULES.bot.java.path;
+          case language.dotnet: return MODULES.bot.dotnet.path;
+          case language.python: return MODULES.bot.python.path;
         }
       }
-    };
+    }
 
-    const projectType = {
-      bot: 'bot',
-      application: 'application',
-
-      all: [ 'bot', 'application' ]
-    };
-
-    const language = {
-      java: 'Java',
-      node: 'Node.js',
-      dotnet: '.Net',
-      python: 'Python',
-
-      all: [ 'Java', 'Node.js', '.Net', 'Python' ]
-    };
-
-    const questions = [
+    return this.prompt([
       {
         type: 'list',
         name: 'application_type',
@@ -110,25 +127,7 @@ module.exports = class extends Generator {
           'Signed Certificate'
         ]
       }
-    ];
-
-    function selectNextScript(type, lang) {
-      if (type === projectType.application) {
-        switch (lang) {
-          case language.node: return modules.application.node.path;
-          case language.java: return modules.application.java.path;
-        }
-      } else {
-        switch (lang) {
-          case language.node: return modules.bot.node.path;
-          case language.java: return modules.bot.java.path;
-          case language.dotnet: return modules.bot.dotnet.path;
-          case language.python: return modules.bot.python.path;
-        }
-      }
-    }
-
-    return this.prompt(questions).then(answers => {
+    ]).then(answers => {
 
       answers.dirname = upath.normalize(process.cwd());
 
