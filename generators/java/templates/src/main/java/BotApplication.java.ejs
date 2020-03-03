@@ -1,0 +1,46 @@
+package <%= java.basePackage %>;
+
+import clients.SymBotClient;
+import clients.symphony.api.MessagesClient;
+import listeners.IMListener;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import model.InboundMessage;
+import model.OutboundMessage;
+import model.Stream;
+
+/**
+ * Bot Application.
+ *
+ * @author Symphony Yeoman Generator
+ */
+@Slf4j
+public class BotApplication {
+
+    public static void main(String[] args) throws Exception {
+        // load configuration
+        final SymBotClient botClient = SymBotClient.initBotRsa("config.json");
+        // register datafeed listener
+        botClient.getDatafeedEventsService().addListeners(
+            new HelloListener(botClient.getMessagesClient())
+        );
+    }
+
+    @RequiredArgsConstructor
+    static class HelloListener implements IMListener {
+
+        private final MessagesClient messagesClient;
+
+        @Override
+        public void onIMMessage(final InboundMessage msg) {
+            final OutboundMessage msgOut = new OutboundMessage("Hello, " + msg.getUser().getFirstName() + "!");
+            this.messagesClient.sendMessage(msg.getStream().getStreamId(), msgOut);
+        }
+
+        @Override
+        public void onIMCreated(final Stream stream) {
+            final OutboundMessage msgOut = new OutboundMessage("Welcome!");
+            this.messagesClient.sendMessage(stream.getStreamId(), msgOut);
+        }
+    }
+}
