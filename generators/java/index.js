@@ -10,6 +10,9 @@ const BASE_RESOURCES = 'src/main/resources';
 const DEFAULT_SDK_VERSION = '1.0.50'; // just in case if the search query failed
 const MAVEN_SEARCH_QUERY = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:symphony-api-client-java';
 
+/**
+ * Sub-generator for the Java sample projects.
+ */
 module.exports = class extends Generator {
 
     async initializing () {
