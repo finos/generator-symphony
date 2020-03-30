@@ -35,7 +35,7 @@ module.exports = class extends Generator {
                 answers.botCertPath = '';
                 answers.botCertName = '';
                 answers.botCertPassword = '';
-                answers.botRSAPath = answers.dirname + '/rsa/';
+                answers.botRSAPath = '../rsa/';
                 answers.botRSAName = 'rsa-private-' + answers.botusername + '.pem';
                 answers.botUserName = '';
             } else if (answers.encryption === 'Self Signed Certificate') {
@@ -75,7 +75,10 @@ module.exports = class extends Generator {
                     this.destinationPath('resources/config.json'),
                     answers
                 );
-
+                this.fs.copy(
+                    this.templatePath('python/.env'),
+                    this.destinationPath('.env')
+                );
 	    } else if (answers.python_bot_tpl === 'Elements Form') {
                 this.fs.copyTpl(
                     this.templatePath('python/bots/elements_form/requirements.txt'),
@@ -90,6 +93,10 @@ module.exports = class extends Generator {
                     this.templatePath('python/bots/elements_form/config.json'),
                     this.destinationPath('resources/config.json'),
                     answers
+                );
+                this.fs.copy(
+                    this.templatePath('python/.env'),
+                    this.destinationPath('.env')
                 );
             }
             /* Install certificate */
