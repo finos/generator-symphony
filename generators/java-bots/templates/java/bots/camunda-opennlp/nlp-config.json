@@ -1,0 +1,5 @@
+{
+  "posmodelPath": "<%= dirname %>/src/main/resources/en-pos-maxent.bin",
+  "sentenceSplitterModelPath": "<%= dirname %>/src/main/resources/en-sent.bin",
+  "patternsFile": "<%= dirname %>/src/main/resources/patterns.json"
+}

@@ -1,0 +1,47 @@
+[
+
+  {"action":"buyShares",
+    "posrequirementList":[
+      {"options":["buy","purchase"],"parameter":null,"pos":"V"},
+      {"options":null,"parameter":"quantity","pos":"CD"},
+      {"options":["shares","stock"],"parameter":null,"pos":"NN"},
+      {"options":null,"parameter":null,"pos":"IN"},
+      {"options":null,"parameter":"product","pos":"NN"}]
+  },
+  {"action":"buyShares",
+    "posrequirementList":[
+      {"options":["buy","purchase"],"parameter":null,"pos":"V"},
+      {"options":null,"parameter":"product","pos":"NN"},
+      {"options":null,"parameter":"quantity","pos":"CD"}]
+  },
+  {"action":"buyShares",
+    "posrequirementList":[
+      {"options":["buy","purchase"],"parameter":null,"pos":"V"},
+      {"options":null,"parameter":"product","pos":"*"},
+      {"options":null,"parameter":"quantity","pos":"CD"}]
+  },
+  {"action":"buyShares",
+    "posrequirementList":[
+      {"options":["buy","purchase"],"parameter":null,"pos":"V"},
+      {"options":null,"parameter":"quantity","pos":"CD"},
+      {"options":null,"parameter":"product","pos":"NN"}]
+  },
+  {"action": "decision",
+  "posrequirementList":[{"pos":"UH","options":["yes","yeah","sure","yep","confirm","y"],"parameter":"decisionBool", "value": "true"}]
+  },
+  {"action": "decision",
+    "posrequirementList":[{"pos":"UH","options":["no","nope","reject","n"],"parameter":"decisionBool", "value": "false"}]
+  },
+  {"action":"headlines",
+    "posrequirementList":[
+      {"options":["headlines","news","articles"],"parameter":null,"pos":"NN"},
+      {"options":null,"parameter":null,"pos":"*"},
+      {"options":null,"parameter":"product","pos":"NN"}]
+  },
+  {"action":"headlines",
+    "posrequirementList":[
+      {"options":null,"parameter":"product","pos":"NN"},
+      {"options":["headlines","news","articles"],"parameter":null,"pos":"NN"}
+      ]
+  }
+]
