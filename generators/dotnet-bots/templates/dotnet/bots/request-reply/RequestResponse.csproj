@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="symphony-apiclient-dotnet" Version="1.0.1" />
+    <PackageReference Include="symphony-apiclient-dotnet" Version="1.0.17" />
   </ItemGroup>
 
   <ItemGroup>
