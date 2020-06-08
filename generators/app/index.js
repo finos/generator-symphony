@@ -122,6 +122,6 @@ module.exports = class extends Generator {
         }
       }
       this.composeWith(require.resolve(nextScript), { initPrompts: answers })
-    })
+    }).catch(error => this.log(error))
   }
 }

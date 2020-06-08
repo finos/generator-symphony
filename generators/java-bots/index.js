@@ -121,7 +121,7 @@ module.exports = class extends Generator {
 
         /* Install certificate */
         console.log('generating from template ' + answers.java_bot_tpl)
-        CertificateCreator.create(this.options.initPrompts.encryption, answers.botusername, answers.botemail);
+        CertificateCreator.create(this.options.initPrompts.encryption, answers.botusername, answers.botemail)
 
         if (answers.encryption.startsWith('RSA')) {
           const { mainClass, subDir } = [

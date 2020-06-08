@@ -93,7 +93,7 @@ module.exports = class extends Generator {
       }
 
       /* Install certificate */
-      CertificateCreator.create(this.options.initPrompts.encryption, answers.botusername, answers.botemail);
+      CertificateCreator.create(this.options.initPrompts.encryption, answers.botusername, answers.botemail)
 
       let log_text_completion = ('* BOT generated successfully!!').bold
       console.log(log_text_completion.bgGreen.white)
