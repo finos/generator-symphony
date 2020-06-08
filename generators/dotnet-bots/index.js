@@ -1,5 +1,5 @@
 const Generator = require('yeoman-generator');
-const certificateCreator = require('../lib/p12-certificate-creator');
+const CertificateCreator = require('../lib/certificate-creator');
 
 module.exports = class extends Generator {
   prompting() {
@@ -50,11 +50,7 @@ module.exports = class extends Generator {
           answers
         );
         /* Install certificate */
-        if (this.options.initPrompts.selfsigned_certificate == 'Yes') {
-          let log_text_cert = ('* Generating certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
-          console.log(log_text_cert.bgRed.white);
-          certificateCreator.create(this.options.initPrompts.botusername, this.options.initPrompts.botemail);
-        }
+        CertificateCreator.create(this.options.initPrompts.encryption, answers.botusername, answers.botemail);
       }
     });
   }

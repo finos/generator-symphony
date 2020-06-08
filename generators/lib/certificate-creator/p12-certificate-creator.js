@@ -1,4 +1,3 @@
-const p12 = require('node-openssl-p12');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const selfsigned = require('selfsigned');
@@ -27,7 +26,7 @@ P12CertificateCreator.attrs = [{
 }]
 
 P12CertificateCreator.create = (botusername, botemail) => {
-    var attrs = P12CertificateCreator.attrs.slice(0);
+    let attrs = P12CertificateCreator.attrs.slice(0);
     attrs[0].value = botusername;
 
     selfsigned.generate(attrs, {
@@ -75,7 +74,11 @@ P12CertificateCreator.create = (botusername, botemail) => {
             serial: '01',
             days: 365
         };
-        p12.createClientSSL(p12options).done(function (options, sha1fingerprint) {
+
+        mkdirp.sync('certificates');
+
+        // 'require' put here because node-openssl-p12 evaluates the ssl path using process.cwd() at module load time
+        require('node-openssl-p12').createClientSSL(p12options).done(function (options, sha1fingerprint) {
             fs.unlink('ssl/' + botusername + '-ca.key', function (err) {
                 if (err) throw err;
             });

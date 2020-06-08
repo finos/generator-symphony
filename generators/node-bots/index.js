@@ -1,7 +1,5 @@
 const Generator = require('yeoman-generator')
-const colors = require('colors')
-const certificateCreator = require('../lib/certificate-creator')
-var mkdirp = require('mkdirp')
+const CertificateCreator = require('../lib/certificate-creator');
 
 module.exports = class extends Generator {
   prompting () {
@@ -138,17 +136,7 @@ module.exports = class extends Generator {
       }
 
       /* Install certificate */
-      if (answers.encryption === 'Self Signed Certificate') {
-        let log_text_cert = ('* Generating certificate for BOT ' + answers.botusername + '...').bold
-        console.log(log_text_cert.bgRed.white)
-        mkdirp.sync('certificates')
-        certificateCreator.create(answers.botusername, 'certificates')
-      } else if (answers.encryption === 'RSA - Generate New Keys') {
-        let log_text_cert = ('* Generating RSA public/private keys for BOT ' + answers.botusername + '...').bold
-        console.log(log_text_cert.bgRed.white)
-        mkdirp.sync('rsa')
-        certificateCreator.createRSA(answers.botusername, 'rsa')
-      }
+      CertificateCreator.create(this.options.initPrompts.encryption, answers.botusername, answers.botemail);
 
       let log_text_completion = ('* BOT generated successfully!!').bold
       console.log(log_text_completion.bgGreen.white)
