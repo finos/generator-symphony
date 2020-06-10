@@ -8,7 +8,7 @@ module.exports = class extends Generator {
                 type: 'list',
                 name: 'python_bot_tpl',
                 message: 'Which template do you want to start with',
-                choices: ['Request/Reply','Elements Form']
+                choices: ['Request/Reply', 'Elements Form']
             }
         ]).then((answers) => {
             answers.application_name = this.options.initPrompts.application_name;
@@ -37,7 +37,7 @@ module.exports = class extends Generator {
                 answers.botUserName = '';
             } else if (answers.encryption === 'Self Signed Certificate') {
                 answers.authType = 'cert';
-                answers.botCertPath = answers.dirname + '/certificates/';
+                answers.botCertPath = '../certificates/';
                 console.log(answers.botCertPath);
                 answers.botCertName = answers.botusername;
                 answers.botCertPassword = 'changeit';
@@ -64,19 +64,24 @@ module.exports = class extends Generator {
                     this.destinationPath('python')
                 );
                 this.fs.copy(
-                  this.templatePath('python/bots/request-reply/listeners'),
-                  this.destinationPath('python/listeners')
+                    this.templatePath('python/bots/request-reply/listeners'),
+                    this.destinationPath('python/listeners')
                 )
                 this.fs.copyTpl(
                     this.templatePath('python/bots/request-reply/config.json'),
                     this.destinationPath('resources/config.json'),
                     answers
                 );
+                this.fs.copyTpl(
+                    this.templatePath('python/bots/request-reply/certificates/all_symphony_certs_truststore'),
+                    this.destinationPath('certificates/all_symphony_certs_truststore'),
+                    answers
+                )
                 this.fs.copy(
                     this.templatePath('python/.env'),
                     this.destinationPath('.env')
                 );
-	    } else if (answers.python_bot_tpl === 'Elements Form') {
+            } else if (answers.python_bot_tpl === 'Elements Form') {
                 this.fs.copyTpl(
                     this.templatePath('python/bots/elements_form/requirements.txt'),
                     this.destinationPath('requirements.txt'),
@@ -91,6 +96,11 @@ module.exports = class extends Generator {
                     this.destinationPath('resources/config.json'),
                     answers
                 );
+                this.fs.copyTpl(
+                    this.templatePath('python/bots/elements_form/certificates/all_symphony_certs_truststore'),
+                    this.destinationPath('certificates/all_symphony_certs_truststore'),
+                    answers
+                )
                 this.fs.copy(
                     this.templatePath('python/.env'),
                     this.destinationPath('.env')
