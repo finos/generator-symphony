@@ -1,116 +1,115 @@
 const Generator = require('yeoman-generator');
 const CertificateCreator = require('../lib/certificate-creator');
 
+const REQUEST_REPLY = 'Request/Reply';
+const ELEMENTS_FORM = 'Elements Form';
+
 module.exports = class extends Generator {
+    constructor(args, opts) {
+        super(args, opts);
+
+        this.answers = {};
+        this._fillWithInitPrompts(opts.initPrompts);
+
+        this.baseTemplatePath = '';
+    }
+
     prompting() {
         return this.prompt([
             {
                 type: 'list',
-                name: 'python_bot_tpl',
+                name: 'pythonBotTemplate',
                 message: 'Which template do you want to start with',
-                choices: ['Request/Reply', 'Elements Form']
+                choices: [REQUEST_REPLY, ELEMENTS_FORM]
             }
         ]).then((answers) => {
-            answers.application_name = this.options.initPrompts.application_name;
-            answers.subdomain = this.options.initPrompts.subdomain;
-            answers.sessionAuthSuffix = this.options.initPrompts.sessionAuthSuffix;
-            answers.keyAuthSuffix = this.options.initPrompts.keyAuthSuffix;
-            answers.dirname = this.options.initPrompts.dirname;
-            answers.botusername = this.options.initPrompts.botusername;
-            answers.botemail = this.options.initPrompts.botemail;
-            answers.encryption = this.options.initPrompts.encryption;
-            let log_text = ('* Generating ' +
-                this.options.initPrompts.application_type.italic +
-                ' ' +
-                this.options.initPrompts.application_lang.italic +
-                ' code from ' +
-                answers.python_bot_tpl.italic + ' template...').bold;
-            console.log(log_text.bgRed.white);
-            console.log(answers.encryption);
-            if (answers.encryption.startsWith('RSA')) {
-                answers.authType = 'rsa';
-                answers.botCertPath = '';
-                answers.botCertName = '';
-                answers.botCertPassword = '';
-                answers.botRSAPath = '../rsa/';
-                answers.botRSAName = 'rsa-private-' + answers.botusername + '.pem';
-                answers.botUserName = '';
-            } else if (answers.encryption === 'Self Signed Certificate') {
-                answers.authType = 'cert';
-                answers.botCertPath = '../certificates/';
-                console.log(answers.botCertPath);
-                answers.botCertName = answers.botusername;
-                answers.botCertPassword = 'changeit';
-                answers.botRSAPath = '';
-                answers.botRSAName = '';
-            } else {
-                //Java has this set to cert
-                // answers.authType = 'cert';
-                answers.botCertPath = '';
-                answers.botCertName = '';
-                answers.botCertPassword = '';
-                answers.botRSAPath = '';
-                answers.botRSAName = '';
-            }
+            this._updateWithBotTemplateAnswer(answers);
 
-            if (answers.python_bot_tpl === 'Request/Reply') {
-                this.fs.copyTpl(
-                    this.templatePath('python/bots/request-reply/requirements.txt'),
-                    this.destinationPath('requirements.txt'),
-                    answers
-                );
-                this.fs.copy(
-                    this.templatePath('python/bots/request-reply/src'),
-                    this.destinationPath('python')
-                );
-                this.fs.copy(
-                    this.templatePath('python/bots/request-reply/listeners'),
-                    this.destinationPath('python/listeners')
-                )
-                this.fs.copyTpl(
-                    this.templatePath('python/bots/request-reply/config.json'),
-                    this.destinationPath('resources/config.json'),
-                    answers
-                );
-                this.fs.copyTpl(
-                    this.templatePath('python/bots/request-reply/certificates/all_symphony_certs_truststore'),
-                    this.destinationPath('certificates/all_symphony_certs_truststore'),
-                    answers
-                )
-                this.fs.copy(
-                    this.templatePath('python/.env'),
-                    this.destinationPath('.env')
-                );
-            } else if (answers.python_bot_tpl === 'Elements Form') {
-                this.fs.copyTpl(
-                    this.templatePath('python/bots/elements_form/requirements.txt'),
-                    this.destinationPath('requirements.txt'),
-                    answers
-                );
-                this.fs.copy(
-                    this.templatePath('python/bots/elements_form/src'),
-                    this.destinationPath('python')
-                );
-                this.fs.copyTpl(
-                    this.templatePath('python/bots/elements_form/config.json'),
-                    this.destinationPath('resources/config.json'),
-                    answers
-                );
-                this.fs.copyTpl(
-                    this.templatePath('python/bots/elements_form/certificates/all_symphony_certs_truststore'),
-                    this.destinationPath('certificates/all_symphony_certs_truststore'),
-                    answers
-                )
-                this.fs.copy(
-                    this.templatePath('python/.env'),
-                    this.destinationPath('.env')
-                );
-            }
+            this._logAnswers();
+
+            this._copyTemplateFiles();
+
             /* Install certificate */
-            CertificateCreator.create(this.options.initPrompts.encryption, answers.botusername, answers.botemail);
-
-            let log_text_completion = ('* BOT generated successfully!!').bold;
-            console.log(log_text_completion.bgGreen.white);
+            CertificateCreator.create(this.answers.encryption, this.answers.botusername, this.answers.botemail);
+        }).then(() => {
+            let logTextCompletion = ('* BOT generated successfully!!').bold;
+            console.log(logTextCompletion.bgGreen.white);
         });
+    }
+
+    // Private methods are prepended with '_' to prevent yeoman from executing them
+    // yeoman's behavior is to execute every method in a generator which does not begin with _
+    _updateWithBotTemplateAnswer(answers) {
+        Object.assign(this.answers, answers);
+
+        switch(this.answers.pythonBotTemplate) {
+            case(REQUEST_REPLY):
+                this.baseTemplatePath = 'python/bots/request-reply/';
+                break;
+            case(ELEMENTS_FORM):
+                this.baseTemplatePath = 'python/bots/elements_form/';
+                break;
+            default:
+                this.baseTemplatePath = '';
+                break;
+        }
+    }
+
+    _fillWithInitPrompts(initPrompts) {
+        Object.assign(this.answers, initPrompts);
+
+        this.answers.botCertPath = '';
+        this.answers.botCertName = '';
+        this.answers.botCertPassword = '';
+        this.answers.botRSAPath = '';
+        this.answers.botRSAName = '';
+        if (this.answers.encryption.startsWith('RSA')) {
+            this.answers.authType = 'rsa';
+            this.answers.botRSAPath = '../rsa/';
+            this.answers.botRSAName = 'rsa-private-' + this.answers.botusername + '.pem';
+        } else if (this.answers.encryption === 'Self Signed Certificate') {
+            this.answers.authType = 'cert';
+            this.answers.botCertPath = '../certificates/';
+            this.answers.botCertName = this.answers.botusername;
+            this.answers.botCertPassword = 'changeit';
+        }
+    }
+
+    _logAnswers() {
+        let log_text = ('* Generating ' + this.answers.application_type.italic + ' ' +
+            this.answers.application_lang.italic + ' code from ' + this.answers.pythonBotTemplate.italic + ' template...');
+        console.log(log_text.bold.bgRed.white);
+        console.log(this.answers.encryption);
+    }
+
+    _copyTemplateFiles() {
+        this._copyConfigFile();
+
+        this._getSourceDestinationFilesMap().forEach((destinationFile, sourceFile) => {
+            this.fs.copy(this.templatePath(sourceFile), this.destinationPath(destinationFile));
+        })
+    }
+
+    _copyConfigFile() {
+        this.fs.copyTpl(
+            this.templatePath(this.baseTemplatePath + 'config.json'),
+            this.destinationPath('resources/config.json'),
+            this.answers
+        );
+    }
+
+    _getSourceDestinationFilesMap() {
+        let templateFilesToDestination = new Map();
+
+        if (this.answers.pythonBotTemplate === REQUEST_REPLY) {
+            templateFilesToDestination.set(this.baseTemplatePath + 'listeners', 'python/listeners');
+        }
+        templateFilesToDestination.set(this.baseTemplatePath + 'requirements.txt', 'requirements.txt');
+        templateFilesToDestination.set(this.baseTemplatePath + 'src', 'python');
+        templateFilesToDestination.set(this.baseTemplatePath + 'certificates/all_symphony_certs_truststore',
+            'certificates/all_symphony_certs_truststore');
+        templateFilesToDestination.set('python/.env', '.env');
+
+        return templateFilesToDestination;
     }
 };
