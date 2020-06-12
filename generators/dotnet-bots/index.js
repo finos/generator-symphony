@@ -11,13 +11,21 @@ module.exports = class extends Generator {
         choices: ['Request/Reply', 'NLP Based Trade Order', 'Indication Of Interest', 'Trade Alert']
       }
     ]).then((answers) => {
-      answers.application_name = this.options.initPrompts.application_name;
-      answers.subdomain = this.options.initPrompts.subdomain;
-      answers.sessionAuthSuffix = this.options.initPrompts.sessionAuthSuffix;
-      answers.keyAuthSuffix = this.options.initPrompts.keyAuthSuffix;
-      answers.dirname = this.options.initPrompts.dirname;
-      answers.botusername = this.options.initPrompts.botusername;
-      answers.botemail = this.options.initPrompts.botemail;
+      Object.assign(answers, this.options.initPrompts);
+
+      answers.botCertPath = '';
+      answers.botCertName = '';
+      answers.botCertPassword = '';
+      answers.botRSAPath = '';
+      answers.botRSAName = '';
+      if (answers.encryption.startsWith('RSA')) {
+        answers.botRSAPath = 'rsa/';
+        answers.botRSAName = 'rsa-private-' + answers.botusername + '.pem';
+      } else if (answers.encryption === 'Self Signed Certificate') {
+        answers.botCertPath = 'certificates/';
+        answers.botCertName = answers.botusername;
+        answers.botCertPassword = 'changeit';
+      }
 
       let log_text = ('* Generating ' +
         this.options.initPrompts.application_type.italic +
