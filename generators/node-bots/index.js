@@ -36,8 +36,8 @@ module.exports = class extends Generator {
         answers.botPrivateKeyName = 'rsa-private-' + answers.botusername + '.pem'
       } else if (answers.encryption == 'Self Signed Certificate') {
         answers.authType = 'cert'
-        answers.botCertPath = __dirname + '/certificates/'
-        answers.botCertName = answers.botusername + '.pem'
+        answers.botCertPath = 'certificates/'
+        answers.botCertName = answers.botusername
         answers.botCertPassword = 'changeit'
         answers.botPrivateKeyPath = ''
         answers.botPrivateKeyName = ''
