@@ -22,5 +22,6 @@
     "proxyUsername": "",
     "proxyPassword": "",
     "authTokenRefreshPeriod": "30",
-    "truststorePath": ""
+    "truststorePath": "../certificates/all_symphony_certs_truststore",
+    "truststorePassword": "changeit"
 }
