@@ -7,9 +7,11 @@
   "podPort": 443,
   "agentHost": "<%= subdomain %>.symphony.com",
   "agentPort": 443,
-  "botCertPath": "<%= dirname %>/certificates/",
+  "botCertPath": "<%= botCertPath %>",
   "botCertName": "<%= botusername %>",
-  "botCertPassword": "changeit",
+  "botCertPassword": "<%= botCertPassword %>",
+  "botPrivateKeyPath": "<%= botRSAPath %>",
+  "botPrivateKeyName": "<%= botRSAName %>",
   "botEmailAddress": "<%= botemail %>",
   "appCertPath": "",
   "appCertName": "",
@@ -18,7 +20,7 @@
   "proxyUsername": "",
   "proxyPassword": "",
   "authTokenRefreshPeriod": "30",
-  "truststorePath": "<%= dirname %>/certificates/all_symphony_certs_truststore",
+  "truststorePath": "certificates/all_symphony_certs_truststore",
   "truststorePassword": "changeit"
 }
 
