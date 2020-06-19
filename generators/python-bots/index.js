@@ -106,8 +106,8 @@ module.exports = class extends Generator {
         }
         templateFilesToDestination.set(this.baseTemplatePath + 'requirements.txt', 'requirements.txt');
         templateFilesToDestination.set(this.baseTemplatePath + 'src', 'python');
-        templateFilesToDestination.set(this.baseTemplatePath + 'certificates/all_symphony_certs_truststore',
-            'certificates/all_symphony_certs_truststore');
+        templateFilesToDestination.set(this.baseTemplatePath + 'certificates/all_symphony_certs.pem',
+            'certificates/all_symphony_certs.pem');
         templateFilesToDestination.set('python/.env', '.env');
 
         return templateFilesToDestination;
