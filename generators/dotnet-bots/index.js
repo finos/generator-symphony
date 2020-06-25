@@ -8,7 +8,7 @@ module.exports = class extends Generator {
         type: 'list',
         name: 'dotnet_bot_tpl',
         message: 'Which template do you want to start with',
-        choices: ['Request/Reply', 'NLP Based Trade Order', 'Indication Of Interest', 'Trade Alert']
+        choices: ['Request/Reply']
       }
     ]).then((answers) => {
       Object.assign(answers, this.options.initPrompts);
@@ -42,10 +42,6 @@ module.exports = class extends Generator {
         this.fs.copy(
           this.templatePath('dotnet/bots/request-reply/Program.cs'),
           this.destinationPath('Program.cs')
-        );
-        this.fs.copy(
-          this.templatePath('dotnet/bots/request-reply/obj'),
-          this.destinationPath('obj')
         );
         this.fs.copyTpl(
           this.templatePath('dotnet/bots/request-reply/config.json'),
