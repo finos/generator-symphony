@@ -43,7 +43,19 @@ module.exports = class extends Generator {
         type: 'list',
         name: 'application_lang',
         message: 'What is your preferred programming language',
-        choices: ['Java', '.Net', 'Node.js', 'Python']
+        choices: ['Java', '.Net', 'Node.js', 'Python'],
+        when: function (answer) {
+          return answer.application_type === "bot"
+        }
+      },
+      {
+        type: 'list',
+        name: 'application_lang',
+        message: 'What is your preferred programming language',
+        choices: ['Java', 'Node.js'],
+        when: function (answer) {
+          return answer.application_type === "application"
+        }
       },
       {
         type: 'input',
@@ -110,6 +122,6 @@ module.exports = class extends Generator {
         }
       }
       this.composeWith(require.resolve(nextScript), { initPrompts: answers })
-    })
+    }).catch(error => this.log(error))
   }
 }

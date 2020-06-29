@@ -1,8 +1,6 @@
 const Generator = require('yeoman-generator');
 const axios = require('axios');
-const certificateCreator = require('../lib/p12-certificate-creator');
-const RSAcertificateCreator = require('../lib/certificate-creator');
-var mkdirp = require('mkdirp');
+const CertificateCreator = require('../lib/certificate-creator');
 
 module.exports = class extends Generator {
     prompting() {
@@ -84,16 +82,7 @@ module.exports = class extends Generator {
                 }
                 /* Install certificate */
                 console.log('generating from template ' + answers.java_ext_app_tpl);
-                if (answers.encryption === 'Self Signed Certificate') {
-                    let log_text_cert = ('* Generating certificate for BOT ' + answers.botusername + '...').bold;
-                    console.log(log_text_cert.bgRed.white);
-                    certificateCreator.create(answers.botusername, 'certificates');
-                } else if (answers.encryption === 'RSA - Generate New Keys') {
-                    let log_text_cert = ('* Generating RSA public/private keys for BOT ' + answers.botusername + '...').bold;
-                    console.log(log_text_cert.bgRed.white);
-                    mkdirp.sync('rsa');
-                    RSAcertificateCreator.createRSA(answers.botusername, 'rsa');
-                }
+                CertificateCreator.create(this.options.initPrompts.encryption, answers.botusername, answers.botemail);
 
                 if (answers.encryption.startsWith('RSA')) {
                   console.log('reached rsa')
