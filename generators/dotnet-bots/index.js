@@ -1,34 +1,40 @@
 const Generator = require('yeoman-generator');
-const colors = require('colors');
-const certificateCreator = require('../lib/p12-certificate-creator');
-var mkdirp = require('mkdirp');
+const CertificateCreator = require('../lib/certificate-creator');
 
 module.exports = class extends Generator {
   prompting() {
     return this.prompt([
       {
-        type    : 'list',
-        name    : 'dotnet_bot_tpl',
-        message : 'Which template do you want to start with',
-        choices : ['Request/Reply', 'NLP Based Trade Order', 'Indication Of Interest', 'Trade Alert']
+        type: 'list',
+        name: 'dotnet_bot_tpl',
+        message: 'Which template do you want to start with',
+        choices: ['Request/Reply']
       }
     ]).then((answers) => {
-      answers.application_name = this.options.initPrompts.application_name;
-      answers.subdomain = this.options.initPrompts.subdomain;
-      answers.sessionAuthSuffix = this.options.initPrompts.sessionAuthSuffix;
-      answers.keyAuthSuffix = this.options.initPrompts.keyAuthSuffix;
-      answers.dirname = this.options.initPrompts.dirname;
-      answers.botusername = this.options.initPrompts.botusername;
-      answers.botemail = this.options.initPrompts.botemail;
+      Object.assign(answers, this.options.initPrompts);
+
+      answers.botCertPath = '';
+      answers.botCertName = '';
+      answers.botCertPassword = '';
+      answers.botRSAPath = '';
+      answers.botRSAName = '';
+      if (answers.encryption.startsWith('RSA')) {
+        answers.botRSAPath = 'rsa/';
+        answers.botRSAName = 'rsa-private-' + answers.botusername + '.pem';
+      } else if (answers.encryption === 'Self Signed Certificate') {
+        answers.botCertPath = 'certificates/';
+        answers.botCertName = answers.botusername;
+        answers.botCertPassword = 'changeit';
+      }
 
       let log_text = ('* Generating ' +
-                     this.options.initPrompts.application_type.italic +
-                     ' ' +
-                     this.options.initPrompts.application_lang.italic +
-                     ' code from ' +
-                     answers.dotnet_bot_tpl.italic + ' template...').bold;
+        this.options.initPrompts.application_type.italic +
+        ' ' +
+        this.options.initPrompts.application_lang.italic +
+        ' code from ' +
+        answers.dotnet_bot_tpl.italic + ' template...').bold;
       console.log(log_text.bgRed.white);
-      if (answers.dotnet_bot_tpl=='Request/Reply') {
+      if (answers.dotnet_bot_tpl == 'Request/Reply') {
         this.fs.copy(
           this.templatePath('dotnet/bots/request-reply/RequestResponse.csproj'),
           this.destinationPath('RequestResponse.csproj')
@@ -36,10 +42,6 @@ module.exports = class extends Generator {
         this.fs.copy(
           this.templatePath('dotnet/bots/request-reply/Program.cs'),
           this.destinationPath('Program.cs')
-        );
-        this.fs.copy(
-          this.templatePath('dotnet/bots/request-reply/obj'),
-          this.destinationPath('obj')
         );
         this.fs.copyTpl(
           this.templatePath('dotnet/bots/request-reply/config.json'),
@@ -52,11 +54,7 @@ module.exports = class extends Generator {
           answers
         );
         /* Install certificate */
-      if (this.options.initPrompts.selfsigned_certificate=='Yes') {
-        let log_text_cert = ('* Generating certificate for BOT ' + this.options.initPrompts.botusername + '...').bold;
-        console.log(log_text_cert.bgRed.white);
-        certificateCreator.create( this.options.initPrompts.botusername, this.options.initPrompts.botemail );
-      }
+        CertificateCreator.create(this.options.initPrompts.encryption, answers.botusername, answers.botemail);
       }
     });
   }
