@@ -1,4 +1,5 @@
 import logging
+import json
 from sym_api_client_python.clients.sym_bot_client import SymBotClient
 from sym_api_client_python.listeners.elements_listener import ElementsActionListener
 
@@ -8,4 +9,4 @@ class ElementsListenerImpl(ElementsActionListener):
         self.bot_client = sym_bot_client
 
     async def on_elements_action(self, action):
-        logging.debug('Elements Action Received', action)
+        logging.debug('Elements Action Recieved: {}'.format(json.dumps(action, indent=4)))

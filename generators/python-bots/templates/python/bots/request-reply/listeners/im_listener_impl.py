@@ -17,7 +17,7 @@ class IMListenerImpl(IMListener):
         stream_id = self.message_parser.get_stream_id(im_message)
 
         message = f'<messageML>Hello {first_name}, hope you are doing well!</messageML>'
-        self.bot_client.get_message_client().send_msg(stream_id, dict(message=message))
+        await self.bot_client.get_message_client().send_msg_async(stream_id, dict(message=message))
 
     async def on_im_created(self, im_created):
         logging.debug('IM created', im_created)

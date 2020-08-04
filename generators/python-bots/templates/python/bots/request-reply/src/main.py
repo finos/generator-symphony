@@ -51,6 +51,7 @@ def main():
         # respond to the respective types of events
         datafeed_event_service.add_im_listener(IMListenerImpl(bot_client))
         datafeed_event_service.add_room_listener(RoomListenerImpl(bot_client))
+        datafeed_event_service.add_elements_listener(ElementsListenerImpl(bot_client))
 
         # Create and read the datafeed
         print('Starting datafeed')
