@@ -89,15 +89,15 @@ module.exports = class extends Generator {
               }
             })
         } else if (answers.java_bot_tpl === 'NLP Based Trade Workflow') {
-          this.log('Looking for latest version of Camunda library..')
-          const camundaLibResponse = await axios.get(mavenSearchUrlRoot + 'symphony-camunda-client')
-          answers.camunda_library_version = camundaLibResponse.data['response']['docs'][0]['latestVersion']
-          this.log('Latest version of Camunda library is', answers.camunda_library_version)
+          this.log('Looking for latest version of Camunda library..');
+          const camundaLibResponse = await axios.get(mavenSearchUrlRoot + 'symphony-camunda-client');
+          answers.camunda_library_version = camundaLibResponse.data['response']['docs'][0]['latestVersion'];
+          this.log('Latest version of Camunda library is', answers.camunda_library_version);
 
-          this.log('Looking for latest version of NLP library..')
-          const nlpLibResponse = await axios.get(mavenSearchUrlRoot + 'symphony-opennlp-java')
-          answers.nlp_library_version = nlpLibResponse.data['response']['docs'][0]['latestVersion']
-          this.log('Latest version of NLP library is', answers.nlp_library_version)
+          this.log('Looking for latest version of NLP library..');
+          const nlpLibResponse = await axios.get(mavenSearchUrlRoot + 'symphony-opennlp-java');
+          answers.nlp_library_version = nlpLibResponse.data['response']['docs'][0]['latestVersion'];
+          this.log('Latest version of NLP library is', answers.nlp_library_version);
 
             [ 'pom.xml', 'src', 'nlp-config.json', 'certificates', 'bpmn', 'config.json' ].forEach(file => {
               const prefix = (file.indexOf('.json') > 0) ? 'src/main/resources/' : ''
@@ -109,14 +109,14 @@ module.exports = class extends Generator {
                   this.templatePath(`${rootDir}/${file}`),
                   this.destinationPath(`${prefix}${file}`),
                   answers
-                )
+                );
               } else {
                 this.fs.copy(
                   this.templatePath(`${rootDir}/${file}`),
                   this.destinationPath(`${file}`)
-                )
+                );
               }
-            })
+            });
         }
 
         /* Install certificate */
