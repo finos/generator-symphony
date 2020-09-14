@@ -1,4 +1,4 @@
-import clients.SymBotClient;s
+import clients.SymBotClient;
 import model.OutboundMessage;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
@@ -20,18 +20,21 @@ public class NLPBot {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
+        new NLPBot().start();
+    }
 
+    public void start() {
         try {
-            SymBotClient botClient = SymBotClient.initBot("config.json");
+            botClient = SymBotClient.initBot("config.json");
             IMListenerImpl imListener = new IMListenerImpl(botClient);
             botClient.getDatafeedEventsService().addListeners(imListener);
 
             ExternalTaskClient client = ExternalTaskClient.create()
-                .lockDuration(20L)
-                .maxTasks(1)
-                .disableBackoffStrategy()
-                .baseUrl("http://localhost:8080/engine-rest")
-                .build();
+                    .lockDuration(20L)
+                    .maxTasks(1)
+                    .disableBackoffStrategy()
+                    .baseUrl("http://localhost:8080/engine-rest")
+                    .build();
 
             ExternalTaskHandler confirmationMessageHandler = (externalTask, externalTaskService) -> {
                 String streamId = externalTask.getVariable("streamId").toString();
@@ -69,11 +72,11 @@ public class NLPBot {
 
                 if (news != null) {
                     String newsList = news.stream()
-                        .map(article -> String.format("<li><a href=\"%s\">%s</a></li>",
-                            article.getUrl(), article.getHeadline())
-                        )
-                        .collect(Collectors.joining(""))
-                        .replaceAll("&", "&amp;");
+                            .map(article -> String.format("<li><a href=\"%s\">%s</a></li>",
+                                    article.getUrl(), article.getHeadline())
+                            )
+                            .collect(Collectors.joining(""))
+                            .replaceAll("&", "&amp;");
                     String newsML = String.format("<cash tag=\"%s\"/> headlines:<ul>%s</ul>", product, newsList);
                     sendMessage(externalTask, newsML);
                     externalTaskService.complete(externalTask);
