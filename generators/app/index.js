@@ -5,21 +5,30 @@ const upath = require('upath')
 const appSettings = require('../../package.json')
 
 module.exports = class extends Generator {
+
   constructor (args, opts) {
-    super(args, opts)
-    const year = new Date().getYear() + 1900
-    this.log('/------------------------------------------/'.cyan)
-    this.log('/'.cyan + '        SYMPHONY GENERATOR  '.bold + appSettings.version.bold + '         /'.cyan)
-    this.log('/    by platformsolutions@symphony.com     /'.cyan)
-    this.log(`/ (c) ${year} Symphony Communication Services /`.cyan)
-    this.log('/------------------------------------------/'.cyan)
+    super(args, opts);
+
+    this.argument('2.0', { type: Boolean, required: false });
   }
 
-  init () {
-
+  initializing () {
+    if (this.options['2.0'] === undefined) {
+      const year = new Date().getYear() + 1900
+      this.log('/------------------------------------------/'.cyan)
+      this.log('/'.cyan + '        SYMPHONY GENERATOR  '.bold + appSettings.version.bold + '         /'.cyan)
+      this.log('/    by platformsolutions@symphony.com     /'.cyan)
+      this.log(`/ (c) ${year} Symphony Communication Services /`.cyan)
+      this.log('/------------------------------------------/'.cyan)
+    }
   }
 
   prompting () {
+
+    if (this.options['2.0']) {
+      return this.composeWith(require.resolve('../2.0'), this.options);
+    }
+
     return this.prompt([
       {
         type: 'list',
