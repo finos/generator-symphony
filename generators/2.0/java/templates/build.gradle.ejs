@@ -3,20 +3,14 @@ plugins {
     id 'application'
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
 
     // import a BOM
-    implementation platform('com.symphony.platformsolutions:symphony-bdk-bom:1.2.0-SNAPSHOT')
+    implementation platform('com.symphony.platformsolutions:symphony-bdk-bom:<%= bdkBomVersion %>')
 
     // define dependencies without versions
     implementation 'com.symphony.platformsolutions:symphony-bdk-core'

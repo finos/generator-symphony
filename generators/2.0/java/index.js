@@ -2,9 +2,13 @@ const Generator = require('yeoman-generator');
 const colors = require('colors');
 const path = require('path');
 const keyPair = require('keypair');
+const axios = require('axios')
 
 const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
+
+const BDK_VERSION_DEFAULT = '1.2.1.BETA';
+const MAVEN_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
 
 module.exports = class extends Generator {
 
@@ -53,11 +57,23 @@ module.exports = class extends Generator {
         ]);
     }
 
-    writing () {
+    async writing () {
 
+        // copy input options as answers to be used in templates
         this.answers.host = this.options.host;
         this.answers.username = this.options.username;
 
+        // get latest BDK BOM version
+        try {
+            const mavenResponse = await axios.get(MAVEN_SEARCH_BASE + 'symphony-bdk-bom');
+            this.answers.bdkBomVersion = mavenResponse.data['response']['docs'][0]['latestVersion'];
+            this.log('Latest BDK version is '.green.bold + `${this.answers.bdkBomVersion}`.white.bold);
+        } catch (error) {
+            this.log(`\u26A0 Cannot retrieve latest BDK version from Maven Central. Default: ${BDK_VERSION_DEFAULT}`.grey);
+            this.answers.bdkBomVersion = BDK_VERSION_DEFAULT;
+        }
+
+        // Process build files
         if (this.answers.build === 'Gradle') {
             this._processGradleFiles()
         } else {
@@ -74,14 +90,16 @@ module.exports = class extends Generator {
             this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
         }
 
+        // process and copy config.yaml file
         this.fs.copyTpl(
             this.templatePath('config.yaml.ejs'),
             this.destinationPath(path.join(BASE_RESOURCES, 'config.yaml')),
             this.answers
         );
 
+        // process and copy BotApplication.java class
         this.fs.copyTpl(
-            this.templatePath(path.join(BASE_JAVA, '/BotApplication.java.ejs')),
+            this.templatePath(path.join(BASE_JAVA, 'BotApplication.java.ejs')),
             this.destinationPath(path.join(BASE_JAVA, this.answers.basePackage.split('.').join('/'), 'BotApplication.java')),
             this.answers
         );
