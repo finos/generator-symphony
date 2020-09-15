@@ -14,5 +14,5 @@ Yeoman based generator for Symphony Bots and Applications in 4 different languag
 
 ## BDK2.0 (Beta)
 
-It is now possible to generator BDK2.0 projects through a revamped developer experience of the existing generator. To 
+It is now possible to create BDK2.0 projects through a revamped developer experience of the existing generator. To 
 access to the new menu you just have to run `yo symphony 2.0`
