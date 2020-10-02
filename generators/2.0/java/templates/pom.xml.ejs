@@ -25,15 +25,33 @@
     </dependencyManagement>
 
     <dependencies>
+<% if (framework == 'java') { %>
+        <dependency>
+            <groupId>com.symphony.platformsolutions</groupId>
+            <artifactId>symphony-bdk-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.symphony.platformsolutions</groupId>
+            <artifactId>symphony-bdk-core-invoker-jersey2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.symphony.platformsolutions</groupId>
+            <artifactId>symphony-bdk-template-freemarker</artifactId>
+        </dependency>
 
+<% } else if (framework == 'spring') { %>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
             <artifactId>symphony-bdk-core-spring-boot-starter</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>com.symphony.platformsolutions</groupId>
-            <artifactId>symphony-bdk-template-freemarker</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+<% } %>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
 
     </dependencies>
@@ -41,6 +59,13 @@
     <build>
         <pluginManagement>
             <plugins>
+                <% if (framework == 'spring') { %>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>2.3.3.RELEASE</version>
+                </plugin>
+                <% } %>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>

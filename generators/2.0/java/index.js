@@ -11,8 +11,6 @@ const BASE_RESOURCES = 'src/main/resources';
 const BDK_VERSION_DEFAULT = '1.2.1.BETA';
 const MAVEN_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
 
-let frameworkPrefix = "no-framework"
-
 module.exports = class extends Generator {
 
     initializing () {
@@ -35,8 +33,14 @@ module.exports = class extends Generator {
                 name: 'framework',
                 message: 'Select your framework',
                 choices: [
-                    'Java (no framework)',
-                    'SpringBoot (experimental)'
+                    {
+                        name: 'Java (no framework)',
+                        value: 'java'
+                    },
+                    {
+                        name: 'SpringBoot (experimental)',
+                        value: 'spring'
+                    }
                 ]
             },
             {
@@ -90,35 +94,32 @@ module.exports = class extends Generator {
 
         // check if framework is setup or not
         switch (this.answers.framework) {
-            case 'Java (no framework)':
-                frameworkPrefix = 'no-framework/'
-
+            case 'java':
                 // process and copy config.yaml file
                 this.fs.copyTpl(
-                    this.templatePath(frameworkPrefix + 'config.yaml.ejs'),
+                    this.templatePath(path.join(this.answers.framework, 'config.yaml.ejs')),
                     this.destinationPath(path.join(BASE_RESOURCES, 'config.yaml')),
                     this.answers
                 );
                 break;
-            case 'SpringBoot (experimental)':
-                frameworkPrefix = 'spring/'
-
+            case 'spring':
                 // process and copy application.yaml file
                 this.fs.copyTpl(
-                    this.templatePath(frameworkPrefix + 'application.yaml.ejs'),
+                    this.templatePath(path.join(this.answers.framework, 'application.yaml.ejs')),
                     this.destinationPath(path.join(BASE_RESOURCES, 'application.yaml')),
                     this.answers
                 )
                 // process and copy template file
                 this.fs.copyTpl(
-                    this.templatePath(frameworkPrefix + 'gif.ftl'),
+                    this.templatePath(path.join(this.answers.framework,  'gif.ftl')),
                     this.destinationPath(path.join(BASE_RESOURCES, "templates", "gif.ftl"))
                 )
 
                 break;
         }
+
         // Process Java file
-        this._copyJavaTemplate(path.join(frameworkPrefix + BASE_JAVA), basePackage);
+        this._copyJavaTemplate(path.join(this.answers.framework, BASE_JAVA), basePackage);
 
         // Process build files
         if (this.answers.build === 'Gradle') {
@@ -182,7 +183,7 @@ module.exports = class extends Generator {
         );
 
         this.fs.copyTpl(
-            this.templatePath(frameworkPrefix + 'build.gradle.ejs'),
+            this.templatePath('build.gradle.ejs'),
             this.destinationPath('build.gradle'),
             this.answers
         );
@@ -205,7 +206,7 @@ module.exports = class extends Generator {
         );
 
         this.fs.copyTpl(
-            this.templatePath(frameworkPrefix + 'pom.xml.ejs'),
+            this.templatePath('pom.xml.ejs'),
             this.destinationPath('pom.xml'),
             this.answers
         );
