@@ -10,6 +10,7 @@ const BASE_RESOURCES = 'src/main/resources';
 
 const BDK_VERSION_DEFAULT = '1.2.1.BETA';
 const MAVEN_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
+const MAVEN_SPRING_BOOT_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:org.springframework.boot';
 
 module.exports = class extends Generator {
 
@@ -103,6 +104,9 @@ module.exports = class extends Generator {
                 );
                 break;
             case 'spring':
+                const mavenResponse = await axios.get(MAVEN_SPRING_BOOT_SEARCH_BASE);
+                this.answers.springBootVersion = mavenResponse.data['response']['docs'][0]['latestVersion'];
+
                 // process and copy application.yaml file
                 this.fs.copyTpl(
                     this.templatePath(path.join(this.answers.framework, 'application.yaml.ejs')),

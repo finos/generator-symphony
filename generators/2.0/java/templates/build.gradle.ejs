@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'application'
-    <% if (framework == 'spring') { %>id 'org.springframework.boot' version "2.3.3.RELEASE"<% } %>
+    <% if (framework == 'spring') { %>id 'org.springframework.boot' version "<%= springBootVersion %>"<% } %>
 }
 
 repositories {
