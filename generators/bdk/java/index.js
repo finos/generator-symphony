@@ -118,14 +118,15 @@ module.exports = class extends Generator {
                     this.destinationPath(path.join(BASE_RESOURCES, 'application.yaml')),
                     this.answers
                 )
-                // process and copy template file
-                this.fs.copyTpl(
-                    this.templatePath(path.join(this.answers.framework,  'gif.ftl')),
-                    this.destinationPath(path.join(BASE_RESOURCES, "templates", "gif.ftl"))
-                )
 
                 break;
         }
+
+        // process and copy template file
+        this.fs.copyTpl(
+            this.templatePath('gif.ftl'),
+            this.destinationPath(path.join(BASE_RESOURCES, "templates", "gif.ftl"))
+        )
 
         // Process Java file
         this._copyJavaTemplate(path.join(this.answers.framework, BASE_JAVA), basePackage);

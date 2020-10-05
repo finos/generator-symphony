@@ -15,8 +15,10 @@ dependencies {
     // define dependencies without versions
 
     implementation 'com.symphony.platformsolutions:symphony-bdk-core'
-    implementation 'com.symphony.platformsolutions:symphony-bdk-core-invoker-jersey2'
-    implementation 'com.symphony.platformsolutions:symphony-bdk-template-freemarker'
+    implementation 'com.symphony.platformsolutions:symphony-bdk-http-api'
+    implementation 'com.symphony.platformsolutions:symphony-bdk-template-api'
+    runtimeOnly 'com.symphony.platformsolutions:symphony-bdk-template-freemarker'
+    runtimeOnly 'com.symphony.platformsolutions:symphony-bdk-http-jersey2'
 
 
     implementation 'ch.qos.logback:logback-classic'

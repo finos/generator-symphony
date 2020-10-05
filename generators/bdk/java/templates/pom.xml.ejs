@@ -32,11 +32,21 @@
         </dependency>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
-            <artifactId>symphony-bdk-core-invoker-jersey2</artifactId>
+            <artifactId>symphony-bdk-http-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.symphony.platformsolutions</groupId>
+            <artifactId>symphony-bdk-template-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
             <artifactId>symphony-bdk-template-freemarker</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.symphony.platformsolutions</groupId>
+            <artifactId>symphony-bdk-http-jersey2</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
 <% } else if (framework == 'spring') { %>

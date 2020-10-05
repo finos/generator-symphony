@@ -1,14 +1,13 @@
 package com.mycompany.bot;
 
-import static com.symphony.bdk.core.config.BdkConfigLoader.loadFromClasspath;
-
 import com.symphony.bdk.core.SymphonyBdk;
-import com.symphony.bdk.core.service.datafeed.RealTimeEventListener;
-import com.symphony.bdk.gen.api.model.V4Initiator;
-import com.symphony.bdk.gen.api.model.V4MessageSent;
-
+import com.symphony.bdk.template.api.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.symphony.bdk.core.config.BdkConfigLoader.loadFromClasspath;
+import static com.symphony.bdk.core.activity.command.SlashCommand.slash;
+import static java.util.Collections.emptyMap;
 
 /**
  * FormReply Sample Application.
@@ -23,15 +22,17 @@ public class BotApplication {
     // Initialize BDK entry point
     final SymphonyBdk bdk = new SymphonyBdk(loadFromClasspath("/config.yaml"));
 
-    // subscribe to "onMessageSent" real-time event
-    bdk.datafeed().subscribe(new RealTimeEventListener() {
-
-      @Override
-      public void onMessageSent(V4Initiator initiator, V4MessageSent event) {
-        // on a message sent, the bot replies with "Hello, {User Display Name}!"
-        bdk.messages().send(event.getMessage().getStream(), "<messageML>Hello, " + initiator.getUser().getDisplayName() + "!</messageML>");
-      }
-    });
+    bdk.activities().register(slash(
+            "/gif",
+            true,
+            context -> {
+              try {
+                bdk.messages().send(context.getStreamId(), "/templates/gif.ftl", emptyMap());
+              } catch (TemplateException e) {
+                log.error(e.getMessage());
+              }
+            }
+    ));
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       log.info("Stopping Datafeed...");

@@ -105,6 +105,7 @@ it('Generate 2.0 java gradle', () => {
                 path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
                 path.join(BASE_RESOURCE, 'rsa/privatekey.pem'),
                 path.join(BASE_RESOURCE, 'rsa/publickey.pem'),
+                path.join(BASE_RESOURCE, 'templates/gif.ftl'),
                 path.join(BASE_RESOURCE, 'config.yaml')
             ]);
 
@@ -182,6 +183,7 @@ it('Generate 2.0 java maven', () => {
                 path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
                 path.join(BASE_RESOURCE, 'rsa/privatekey.pem'),
                 path.join(BASE_RESOURCE, 'rsa/publickey.pem'),
+                path.join(BASE_RESOURCE, 'templates/gif.ftl'),
                 path.join(BASE_RESOURCE, 'config.yaml')
             ]);
 
