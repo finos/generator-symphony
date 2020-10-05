@@ -40,7 +40,7 @@ module.exports = class extends Generator {
                         value: 'java'
                     },
                     {
-                        name: 'SpringBoot (experimental)',
+                        name: 'Spring Boot (experimental)',
                         value: 'spring'
                     }
                 ]
