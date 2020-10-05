@@ -1,6 +1,7 @@
 const Generator = require('yeoman-generator');
 const colors = require('colors');
 const path = require('path');
+const fs = require('fs');
 const keyPair = require('keypair');
 const axios = require('axios')
 
@@ -8,7 +9,9 @@ const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
 
 const BDK_VERSION_DEFAULT = '1.2.1.BETA';
+const SPRING_VERSION_DEFAULT = '2.3.4.RELEASE'
 const MAVEN_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
+const MAVEN_SPRING_BOOT_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:org.springframework.boot';
 
 module.exports = class extends Generator {
 
@@ -27,15 +30,21 @@ module.exports = class extends Generator {
                     'Gradle',
                 ]
             },
-            // {
-            //     type: 'list',
-            //     name: 'framework',
-            //     message: 'Select your framework',
-            //     choices: [
-            //         'Java (no framework)',
-            //         'SpringBoot (experimental)'
-            //     ]
-            // },
+            {
+                type: 'list',
+                name: 'framework',
+                message: 'Select your framework',
+                choices: [
+                    {
+                        name: 'Java (no framework)',
+                        value: 'java'
+                    },
+                    {
+                        name: 'Spring Boot (experimental)',
+                        value: 'spring'
+                    }
+                ]
+            },
             {
                 type: 'input',
                 name: 'groupId',
@@ -58,6 +67,7 @@ module.exports = class extends Generator {
     }
 
     async writing () {
+        let basePackage = this.answers.basePackage.split('.').join('/');
 
         // copy input options as answers to be used in templates
         this.answers.host = this.options.host;
@@ -73,13 +83,6 @@ module.exports = class extends Generator {
             this.answers.bdkBomVersion = BDK_VERSION_DEFAULT;
         }
 
-        // Process build files
-        if (this.answers.build === 'Gradle') {
-            this._processGradleFiles()
-        } else {
-            this._processMavenFiles()
-        }
-
         try {
             this.log('Generating RSA keys...'.green.bold);
             this.pair = keyPair(4096);
@@ -90,19 +93,51 @@ module.exports = class extends Generator {
             this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
         }
 
-        // process and copy config.yaml file
-        this.fs.copyTpl(
-            this.templatePath('config.yaml.ejs'),
-            this.destinationPath(path.join(BASE_RESOURCES, 'config.yaml')),
-            this.answers
-        );
+        // check if framework is setup or not
+        switch (this.answers.framework) {
+            case 'java':
+                // process and copy config.yaml file
+                this.fs.copyTpl(
+                    this.templatePath(path.join(this.answers.framework, 'config.yaml.ejs')),
+                    this.destinationPath(path.join(BASE_RESOURCES, 'config.yaml')),
+                    this.answers
+                );
+                break;
+            case 'spring':
+                try {
+                    const mavenResponse = await axios.get(MAVEN_SPRING_BOOT_SEARCH_BASE);
+                    this.answers.springBootVersion = mavenResponse.data['response']['docs'][0]['latestVersion'];
+                } catch (error) {
+                    this.log(`\u26A0 Cannot retrieve latest Spring Boot Starter version from Maven Central. Default: ${SPRING_VERSION_DEFAULT}`.grey);
+                    this.answers.bdkBomVersion = SPRING_VERSION_DEFAULT;
+                }
 
-        // process and copy BotApplication.java class
+                // process and copy application.yaml file
+                this.fs.copyTpl(
+                    this.templatePath(path.join(this.answers.framework, 'application.yaml.ejs')),
+                    this.destinationPath(path.join(BASE_RESOURCES, 'application.yaml')),
+                    this.answers
+                )
+
+                break;
+        }
+
+        // process and copy template file
         this.fs.copyTpl(
-            this.templatePath(path.join(BASE_JAVA, 'BotApplication.java.ejs')),
-            this.destinationPath(path.join(BASE_JAVA, this.answers.basePackage.split('.').join('/'), 'BotApplication.java')),
-            this.answers
-        );
+            this.templatePath('gif.ftl'),
+            this.destinationPath(path.join(BASE_RESOURCES, "templates", "gif.ftl"))
+        )
+
+        // Process Java file
+        this._copyJavaTemplate(path.join(this.answers.framework, BASE_JAVA), basePackage);
+
+        // Process build files
+        if (this.answers.build === 'Gradle') {
+            this._processGradleFiles()
+        } else {
+            this._processMavenFiles()
+        }
+
     }
 
     /**
@@ -128,6 +163,17 @@ module.exports = class extends Generator {
         }
 
         this.log(`Your Java project has been successfully generated !`.cyan.bold);
+    }
+
+    _copyJavaTemplate(dirPath, basePackage) {
+        let files = fs.readdirSync(path.join(__dirname, 'templates', dirPath))
+        files.forEach(file => {
+            this.fs.copyTpl(
+                this.templatePath(path.join(dirPath, file)),
+                this.destinationPath(path.join(BASE_JAVA, basePackage, file.substr(0,file.length - 4))),
+                this.answers
+            );
+        })
     }
 
     _processGradleFiles() {

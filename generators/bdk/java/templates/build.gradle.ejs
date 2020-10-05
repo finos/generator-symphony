@@ -1,0 +1,34 @@
+plugins {
+    id 'java-library'
+    id 'application'
+    <% if (framework == 'spring') { %>id 'org.springframework.boot' version "<%= springBootVersion %>"<% } %>
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation platform('com.symphony.platformsolutions:symphony-bdk-bom:<%= bdkBomVersion %>')
+
+    // define dependencies without versions
+<% if (framework == 'java') { %>
+    implementation 'com.symphony.platformsolutions:symphony-bdk-core'
+    implementation 'com.symphony.platformsolutions:symphony-bdk-http-api'
+    implementation 'com.symphony.platformsolutions:symphony-bdk-template-api'
+    runtimeOnly 'com.symphony.platformsolutions:symphony-bdk-template-freemarker'
+    runtimeOnly 'com.symphony.platformsolutions:symphony-bdk-http-jersey2'
+
+<% } else if (framework == 'spring') { %>
+    implementation 'com.symphony.platformsolutions:symphony-bdk-core-spring-boot-starter'
+
+    implementation 'org.springframework.boot:spring-boot-starter'<% } %>
+    implementation 'ch.qos.logback:logback-classic'
+}
+
+application {
+    mainClass = '<%= basePackage %>.BotApplication'
+}
+
+version = '1.0.0-SNAPSHOT'

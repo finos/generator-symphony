@@ -26,7 +26,7 @@ module.exports = class extends Generator {
   prompting () {
 
     if (this.options['2.0']) {
-      return this.composeWith(require.resolve('../2.0'), this.options);
+      return this.composeWith(require.resolve('../bdk'), this.options);
     }
 
     return this.prompt([

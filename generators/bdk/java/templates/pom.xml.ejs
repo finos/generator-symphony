@@ -25,19 +25,40 @@
     </dependencyManagement>
 
     <dependencies>
-
+<% if (framework == 'java') { %>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
             <artifactId>symphony-bdk-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
-            <artifactId>symphony-bdk-core-invoker-jersey2</artifactId>
+            <artifactId>symphony-bdk-http-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.symphony.platformsolutions</groupId>
+            <artifactId>symphony-bdk-template-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.symphony.platformsolutions</groupId>
             <artifactId>symphony-bdk-template-freemarker</artifactId>
+            <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>com.symphony.platformsolutions</groupId>
+            <artifactId>symphony-bdk-http-jersey2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+<% } else if (framework == 'spring') { %>
+        <dependency>
+            <groupId>com.symphony.platformsolutions</groupId>
+            <artifactId>symphony-bdk-core-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+<% } %>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -48,6 +69,13 @@
     <build>
         <pluginManagement>
             <plugins>
+<% if (framework == 'spring') { %>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version><%= springBootVersion %></version>
+                </plugin>
+<% } %>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
