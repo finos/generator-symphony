@@ -62,25 +62,6 @@ it('Generate 2.0 spring boot gradle', () => {
                 path.join(BASE_RESOURCE, 'application.yaml')
             ]);
 
-            assert.fileContent(
-                path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
-                fs.readFileSync(path.join(__dirname, 'test-content/bdk/java-spring/BotApplication.java'), 'utf-8')
-            )
-
-            assert.fileContent(
-                path.join(BASE_JAVA, PACKAGE_DIR, 'GifFormActivity.java'),
-                fs.readFileSync(path.join(__dirname, 'test-content/bdk/java-spring/GifFormActivity.java'), 'utf-8')
-            )
-
-            assert.fileContent(
-                path.join(BASE_RESOURCE, 'application.yaml'),
-                fs.readFileSync(path.join(__dirname, 'test-content/bdk/java-spring/application.yaml'), 'utf-8').replace('{tmpDir}', '/private' + dir)
-            )
-
-            assert.fileContent(
-                path.join('build.gradle'),
-                fs.readFileSync(path.join(__dirname, 'test-content/bdk/java-spring/build.gradle'), 'utf-8')
-            )
         })
 })
 
@@ -109,20 +90,6 @@ it('Generate 2.0 java gradle', () => {
                 path.join(BASE_RESOURCE, 'config.yaml')
             ]);
 
-            assert.fileContent(
-                path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
-                fs.readFileSync(path.join(__dirname, 'test-content/bdk/java-no-framework/BotApplication.java'), 'utf-8')
-            )
-
-            assert.fileContent(
-                path.join(BASE_RESOURCE, 'config.yaml'),
-                fs.readFileSync(path.join(__dirname, 'test-content/bdk/java-no-framework/config.yaml'), 'utf-8').replace('{tmpDir}', '/private' + dir)
-            )
-
-            assert.fileContent(
-                path.join('build.gradle'),
-                fs.readFileSync(path.join(__dirname, 'test-content/bdk/java-no-framework/build.gradle'), 'utf-8')
-            )
         })
 })
 
@@ -154,10 +121,6 @@ it('Generate 2.0 spring boot maven', () => {
                 path.join(BASE_RESOURCE, 'application.yaml')
             ]);
 
-            assert.fileContent(
-                path.join('pom.xml'),
-                fs.readFileSync(path.join(__dirname, 'test-content/bdk/java-spring/pom.xml'), 'utf-8')
-            )
         })
 })
 
@@ -187,9 +150,5 @@ it('Generate 2.0 java maven', () => {
                 path.join(BASE_RESOURCE, 'config.yaml')
             ]);
 
-            assert.fileContent(
-                path.join('pom.xml'),
-                fs.readFileSync(path.join(__dirname, 'test-content/bdk/java-no-framework/pom.xml'), 'utf-8')
-            )
         })
 })
