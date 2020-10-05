@@ -9,6 +9,7 @@ const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
 
 const BDK_VERSION_DEFAULT = '1.2.1.BETA';
+const SPRING_VERSION_DEFAULT = '2.3.4.RELEASE'
 const MAVEN_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
 const MAVEN_SPRING_BOOT_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:org.springframework.boot';
 
@@ -66,7 +67,6 @@ module.exports = class extends Generator {
     }
 
     async writing () {
-
         let basePackage = this.answers.basePackage.split('.').join('/');
 
         // copy input options as answers to be used in templates
@@ -104,8 +104,13 @@ module.exports = class extends Generator {
                 );
                 break;
             case 'spring':
-                const mavenResponse = await axios.get(MAVEN_SPRING_BOOT_SEARCH_BASE);
-                this.answers.springBootVersion = mavenResponse.data['response']['docs'][0]['latestVersion'];
+                try {
+                    const mavenResponse = await axios.get(MAVEN_SPRING_BOOT_SEARCH_BASE);
+                    this.answers.springBootVersion = mavenResponse.data['response']['docs'][0]['latestVersion'];
+                } catch (error) {
+                    this.log(`\u26A0 Cannot retrieve latest Spring Boot Starter version from Maven Central. Default: ${SPRING_VERSION_DEFAULT}`.grey);
+                    this.answers.bdkBomVersion = SPRING_VERSION_DEFAULT;
+                }
 
                 // process and copy application.yaml file
                 this.fs.copyTpl(

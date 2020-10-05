@@ -1,0 +1,5 @@
+host: acme.symphony.com
+
+bot:
+  username: test-bot
+  privateKeyPath: {tmpDir}/src/main/resources/rsa/privatekey.pem

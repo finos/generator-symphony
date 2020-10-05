@@ -1,0 +1,27 @@
+plugins {
+    id 'java-library'
+    id 'application'
+    id 'org.springframework.boot' version "2.3.4.RELEASE"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation platform('com.symphony.platformsolutions:symphony-bdk-bom:1.2.2')
+
+    // define dependencies without versions
+
+    implementation 'com.symphony.platformsolutions:symphony-bdk-core-spring-boot-starter'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'ch.qos.logback:logback-classic'
+}
+
+application {
+    mainClass = 'com.mycompany.bot.BotApplication'
+}
+
+version = '1.0.0-SNAPSHOT'

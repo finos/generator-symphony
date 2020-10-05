@@ -12,14 +12,15 @@ import com.symphony.bdk.template.api.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import static java.util.Collections.emptyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static java.util.Collections.emptyMap;
 
 @Component
 public class GifFormActivity extends FormReplyActivity<%-'<'%>FormReplyContext<%-'>'%> {
 
-    private static final Logger log = LoggerFactory.getLogger(BotApplication.class);
+    private static final Logger log = LoggerFactory.getLogger(GifFormActivity.class);
 
     @Autowired
     private MessageService messageService;

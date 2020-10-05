@@ -80,6 +80,7 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
+yarn.lock
 datafeed.id
 
 out/
