@@ -1,0 +1,58 @@
+package <%= basePackage %>;
+
+import com.symphony.bdk.core.SymphonyBdk;
+import com.symphony.bdk.template.api.TemplateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.symphony.bdk.gen.api.model.V4UserJoinedRoom;
+import com.symphony.bdk.gen.api.model.V4Initiator;
+import com.symphony.bdk.core.service.datafeed.RealTimeEventListener;
+import static com.symphony.bdk.core.config.BdkConfigLoader.loadFromClasspath;
+import static com.symphony.bdk.core.activity.command.SlashCommand.slash;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonMap;
+
+/**
+ * Simple Bot Application.
+ */
+public class BotApplication {
+
+  /** The Logger */
+  private static final Logger log = LoggerFactory.getLogger(BotApplication.class);
+
+  public static void main(String[] args) throws Exception {
+
+    // Initialize BDK entry point
+    final SymphonyBdk bdk = new SymphonyBdk(loadFromClasspath("/config.yaml"));
+
+    // Register a "slash" activity
+    bdk.activities().register(slash("/gif", false, context -> {
+        try {
+            bdk.messages().send(context.getStreamId(), "/templates/gif.ftl", emptyMap());
+        } catch (TemplateException e) {
+            log.error("Unable to load template", e);
+        }
+    }));
+
+    // Register a "formReply" activity that handles the Gif category form submission
+    bdk.activities().register(new GifFormActivity(bdk.messages()));
+
+    // Subscribe to 'onUserJoinedRoom' Real Time Event
+    bdk.datafeed().subscribe(new RealTimeEventListener() {
+
+        @Override
+        public void onUserJoinedRoom(V4Initiator initiator, V4UserJoinedRoom event) {
+            final String userDisplayName = event.getAffectedUser().getDisplayName();
+            try {
+                bdk.messages().send(event.getStream(), "/templates/welcome.ftl", singletonMap("name", userDisplayName));
+            } catch (TemplateException e) {
+                log.error("Unable to load template", e);
+            }
+        }
+    });
+
+    // finally, start the datafeed read loop
+    bdk.datafeed().start();
+  }
+}

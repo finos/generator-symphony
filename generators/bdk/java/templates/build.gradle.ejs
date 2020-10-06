@@ -1,7 +1,11 @@
 plugins {
     id 'java-library'
+<% if (framework == 'java') { %>
     id 'application'
-    <% if (framework == 'spring') { %>id 'org.springframework.boot' version "<%= springBootVersion %>"<% } %>
+<% } %>
+<% if (framework == 'spring') { %>
+    id 'org.springframework.boot' version "<%= springBootVersion %>"
+<% } %>
 }
 
 repositories {
@@ -12,23 +16,23 @@ dependencies {
 
     implementation platform('com.symphony.platformsolutions:symphony-bdk-bom:<%= bdkBomVersion %>')
 
-    // define dependencies without versions
 <% if (framework == 'java') { %>
     implementation 'com.symphony.platformsolutions:symphony-bdk-core'
-    implementation 'com.symphony.platformsolutions:symphony-bdk-http-api'
-    implementation 'com.symphony.platformsolutions:symphony-bdk-template-api'
     runtimeOnly 'com.symphony.platformsolutions:symphony-bdk-template-freemarker'
     runtimeOnly 'com.symphony.platformsolutions:symphony-bdk-http-jersey2'
-
 <% } else if (framework == 'spring') { %>
     implementation 'com.symphony.platformsolutions:symphony-bdk-core-spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter'
+<% } %>
 
-    implementation 'org.springframework.boot:spring-boot-starter'<% } %>
-    implementation 'ch.qos.logback:logback-classic'
+    implementation 'org.slf4j:slf4j-api'
+    runtimeOnly 'ch.qos.logback:logback-classic'
 }
 
+<% if (framework == 'java') { %>
 application {
     mainClass = '<%= basePackage %>.BotApplication'
 }
+<% } %>
 
-version = '1.0.0-SNAPSHOT'
+version = '0.0.1-SNAPSHOT'
