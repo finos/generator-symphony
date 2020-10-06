@@ -8,9 +8,9 @@ const axios = require('axios')
 const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
 
-const BDK_VERSION_DEFAULT = '1.2.1.BETA';
+const BDK_VERSION_DEFAULT = '1.3.2.BETA';
 const SPRING_VERSION_DEFAULT = '2.3.4.RELEASE'
-const MAVEN_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
+const MAVEN_BDK_BOM_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
 const MAVEN_SPRING_BOOT_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:org.springframework.boot';
 
 module.exports = class extends Generator {
@@ -75,7 +75,7 @@ module.exports = class extends Generator {
 
         // get latest BDK BOM version
         try {
-            const mavenResponse = await axios.get(MAVEN_SEARCH_BASE + 'symphony-bdk-bom');
+            const mavenResponse = await axios.get(MAVEN_BDK_BOM_SEARCH_BASE + 'symphony-bdk-bom');
             this.answers.bdkBomVersion = mavenResponse.data['response']['docs'][0]['latestVersion'];
             this.log('Latest BDK version is '.green.bold + `${this.answers.bdkBomVersion}`.white.bold);
         } catch (error) {
@@ -109,7 +109,7 @@ module.exports = class extends Generator {
                     this.answers.springBootVersion = mavenResponse.data['response']['docs'][0]['latestVersion'];
                 } catch (error) {
                     this.log(`\u26A0 Cannot retrieve latest Spring Boot Starter version from Maven Central. Default: ${SPRING_VERSION_DEFAULT}`.grey);
-                    this.answers.bdkBomVersion = SPRING_VERSION_DEFAULT;
+                    this.answers.springBootVersion = SPRING_VERSION_DEFAULT;
                 }
 
                 // process and copy application.yaml file
@@ -117,7 +117,7 @@ module.exports = class extends Generator {
                     this.templatePath(path.join(this.answers.framework, 'application.yaml.ejs')),
                     this.destinationPath(path.join(BASE_RESOURCES, 'application.yaml')),
                     this.answers
-                )
+                );
 
                 break;
         }
@@ -125,19 +125,24 @@ module.exports = class extends Generator {
         // process and copy template file
         this.fs.copyTpl(
             this.templatePath('gif.ftl'),
-            this.destinationPath(path.join(BASE_RESOURCES, "templates", "gif.ftl"))
-        )
+            this.destinationPath(path.join(BASE_RESOURCES, 'templates', 'gif.ftl'))
+        );
+        this.fs.copyTpl(
+            this.templatePath('welcome.ftl'),
+            this.destinationPath(path.join(BASE_RESOURCES, 'templates', 'welcome.ftl'))
+        );
 
-        // Process Java file
-        this._copyJavaTemplate(path.join(this.answers.framework, BASE_JAVA), basePackage);
+        // Process Framework specific files
+        this._copyJavaTemplate(this.answers.framework, basePackage);
+        // Process Common files
+        this._copyJavaTemplate('common', basePackage);
 
         // Process build files
         if (this.answers.build === 'Gradle') {
-            this._processGradleFiles()
+            this._processGradleFiles();
         } else {
-            this._processMavenFiles()
+            this._processMavenFiles();
         }
-
     }
 
     /**
@@ -167,13 +172,13 @@ module.exports = class extends Generator {
 
     _copyJavaTemplate(dirPath, basePackage) {
         let files = fs.readdirSync(path.join(__dirname, 'templates', dirPath))
-        files.forEach(file => {
+        files.filter(f => f.endsWith('java.ejs')).forEach(file => {
             this.fs.copyTpl(
                 this.templatePath(path.join(dirPath, file)),
                 this.destinationPath(path.join(BASE_JAVA, basePackage, file.substr(0,file.length - 4))),
                 this.answers
             );
-        })
+        });
     }
 
     _processGradleFiles() {
