@@ -1,12 +1,12 @@
 package <%= basePackage %>;
 
-import com.symphony.bdk.core.service.MessageService;
 import com.symphony.bdk.core.service.datafeed.RealTimeEventListener;
+import com.symphony.bdk.core.service.message.MessageService;
+import com.symphony.bdk.core.service.message.model.Message;
 import com.symphony.bdk.gen.api.model.V4Initiator;
 import com.symphony.bdk.gen.api.model.V4UserJoinedRoom;
-import com.symphony.bdk.template.api.TemplateException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.symphony.bdk.template.api.Template;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,22 +15,19 @@ import static java.util.Collections.singletonMap;
 @Component
 public class OnUserJoinedRoomListener implements RealTimeEventListener {
 
-  private static final Logger log = LoggerFactory.getLogger(OnUserJoinedRoomListener.class);
-
   private final MessageService messageService;
+  private final Template template;
 
   @Autowired
   public OnUserJoinedRoomListener(MessageService messageService) {
     this.messageService = messageService;
+    this.template = messageService.templates().newTemplateFromClasspath("/templates/welcome.ftl");
   }
 
   @Override
   public void onUserJoinedRoom(V4Initiator initiator, V4UserJoinedRoom event) {
     final String userDisplayName = event.getAffectedUser().getDisplayName();
-    try {
-      this.messageService.send(event.getStream(), "/templates/welcome.ftl", singletonMap("name", userDisplayName));
-    } catch (TemplateException e) {
-      log.error("Unable to load template", e);
-    }
+    this.messageService.send(event.getStream(),
+        Message.builder().template(this.template, singletonMap("name", userDisplayName)).build());
   }
 }
