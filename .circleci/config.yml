@@ -1,0 +1,48 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.15
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            # Find a cache corresponding to this specific package-lock.json checksum
+            # when this file is changed, this key will fail
+            - v1-npm-deps-{{ checksum "package-lock.json" }}
+            # Find the most recently generated cache used from any branch
+            - v1-npm-deps-
+      - run:
+          name: Install Dependencies
+          command: npm ci
+
+      - save_cache:
+          key: v1-npm-deps-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/.npm
+
+      - run:
+          name: Run test
+          command: npm run jest
+
+      - run:
+          name: Save test report
+          command: |
+            mkdir -p ~/test-report/
+            find . -type f -regex ".*/test-report.html" -exec cp {} ~/test-report/ \;
+          when: always
+
+      - run:
+          name: Save code coverage
+          command: |
+            mkdir -p ~/code-coverage/
+            find . -type d -regex ".*/coverage" -exec cp --parents -r {} ~/code-coverage/ \;
+          when: always
+
+      - store_artifacts:
+          path: ~/test-report/
+
+      - store_artifacts:
+          path: ~/code-coverage/

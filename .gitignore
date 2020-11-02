@@ -81,7 +81,9 @@ gradle-app.setting
 .gradletasknamecache
 
 datafeed.id
+test-report.html
 
+src/
 out/
 target/
 dist/
