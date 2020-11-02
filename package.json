@@ -41,8 +41,21 @@
   "main": "index.js",
   "scripts": {
     "test:gen:2.0": "rm -rf dist && mkdir dist && cd dist && yo symphony 2.0",
+    "jest": "jest --collectCoverage",
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect"
+  },
+  "jest": {
+    "coverageThreshold": {
+      "./generators/bdk/**/*.js": {
+        "lines": 90,
+        "statements": 90
+      },
+      "global": {
+        "lines": 90,
+        "statements": 90
+      }
+    }
   },
   "author": "symphony-platform-solutions",
   "snyk": true
