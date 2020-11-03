@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8.15
+      - image: circleci/node:lts
 
     steps:
       - checkout
@@ -25,7 +25,7 @@ jobs:
 
       - run:
           name: Run test
-          command: npm run jest
+          command: npm run test
 
       - run:
           name: Save test report
@@ -34,15 +34,8 @@ jobs:
             find . -type f -regex ".*/test-report.html" -exec cp {} ~/test-report/ \;
           when: always
 
-      - run:
-          name: Save code coverage
-          command: |
-            mkdir -p ~/code-coverage/
-            find . -type d -regex ".*/coverage" -exec cp --parents -r {} ~/code-coverage/ \;
-          when: always
-
       - store_artifacts:
           path: ~/test-report/
 
       - store_artifacts:
-          path: ~/code-coverage/
+          path: coverage

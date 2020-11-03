@@ -83,7 +83,6 @@ gradle-app.setting
 datafeed.id
 test-report.html
 
-src/
 out/
 target/
 dist/

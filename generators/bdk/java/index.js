@@ -87,8 +87,8 @@ module.exports = class extends Generator {
         try {
             this.log('Generating RSA keys...'.green.bold);
             this.pair = keyPair(4096);
-            this.fs.write(path.join(BASE_RESOURCES, 'rsa/publickey.pem'), this.pair.public, err => this.log.error(err));
-            this.fs.write(path.join(BASE_RESOURCES, 'rsa/privatekey.pem'), this.pair.private, err => this.log.error(err));
+            this.fs.write(this.destinationPath(path.join(BASE_RESOURCES, 'rsa/publickey.pem')), this.pair.public, err => this.log.error(err));
+            this.fs.write(this.destinationPath(path.join(BASE_RESOURCES, 'rsa/privatekey.pem')), this.pair.private, err => this.log.error(err));
             this.answers.privateKeyPath = path.join(this.destinationPath(), BASE_RESOURCES, 'rsa/privatekey.pem');
         } catch (e) {
             this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
