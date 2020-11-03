@@ -81,7 +81,7 @@ gradle-app.setting
 .gradletasknamecache
 
 datafeed.id
-test-report.html
+junit.xml
 
 out/
 target/

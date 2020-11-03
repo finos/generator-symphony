@@ -18,6 +18,10 @@ jobs:
           name: Install Dependencies
           command: npm ci
 
+      - run:
+          name: Install JUnit coverage reporter
+          command: npm install --save-dev jest-junit
+
       - save_cache:
           key: v1-npm-deps-{{ checksum "package-lock.json" }}
           paths:
@@ -30,12 +34,15 @@ jobs:
       - run:
           name: Save test report
           command: |
-            mkdir -p ~/test-report/
-            find . -type f -regex ".*/test-report.html" -exec cp {} ~/test-report/ \;
+            mkdir -p ./reports/junit
+            find . -type f -regex ".*/junit.xml" -exec cp {} ./reports/junit/ \;
           when: always
 
-      - store_artifacts:
-          path: ~/test-report/
+      - store_test_results:
+          path: ./reports/junit/
 
       - store_artifacts:
-          path: coverage
+          path: ./reports/junit
+
+      - store_artifacts:
+          path: dist/coverage

@@ -1,4 +1,6 @@
-# Symphony BDK Generator [![npm version](https://badge.fury.io/js/generator-symphony.svg)](https://badge.fury.io/js/generator-symphony)
+# Symphony BDK Generator 
+[![npm version](https://badge.fury.io/js/generator-symphony.svg)](https://badge.fury.io/js/generator-symphony)
+[![CircleCI](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony.svg?style=shield)](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony)
 
 Yeoman based generator for Symphony Bots and Applications in 4 different languages:
 - Java
