@@ -59,7 +59,7 @@
       }
     },
     "coverageDirectory": "dist/coverage",
-    "testTimeout": 10000
+    "testTimeout": 90000
   },
   "author": "symphony-platform-solutions",
   "snyk": true
