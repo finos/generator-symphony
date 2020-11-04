@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:15.0.1-browsers
 
     steps:
       - checkout
@@ -34,15 +34,15 @@ jobs:
       - run:
           name: Save test report
           command: |
-            mkdir -p ./reports/junit
-            find . -type f -regex ".*/junit.xml" -exec cp {} ./reports/junit/ \;
+            mkdir -p ./dist/junit
+            find . -type f -regex ".*/junit.xml" -exec cp {} ./dist/junit/ \;
           when: always
 
       - store_test_results:
-          path: ./reports/junit/
+          path: ./dist/junit/
 
       - store_artifacts:
-          path: ./reports/junit
+          path: ./dist/junit
 
       - store_artifacts:
           path: dist/coverage
