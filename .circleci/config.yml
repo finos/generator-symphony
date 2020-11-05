@@ -29,13 +29,6 @@ jobs:
           name: Run test
           command: npm run test
 
-      - run:
-          name: Save test report
-          command: |
-            mkdir -p ./dist/junit
-            find . -type f -regex ".*/junit.xml" -exec cp {} ./dist/junit/ \;
-          when: always
-
       - store_test_results:
           path: ./dist/junit/
 

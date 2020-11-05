@@ -61,6 +61,9 @@
     "coverageDirectory": "dist/coverage",
     "testTimeout": 90000
   },
+  "jest-junit": {
+    "outputDirectory": "<rootDir>/dist/junit"
+  },
   "author": "symphony-platform-solutions",
   "snyk": true
 }
