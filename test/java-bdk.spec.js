@@ -48,7 +48,7 @@ it('Generate 2.0 spring boot gradle', () => {
             artifactId: 'bot-application',
             basePackage: BASE_PACKAGE
         })
-        .then((dir) => {
+        .then(() => {
             assert.file([
                 'gradlew',
                 'gradlew.bat',
@@ -57,8 +57,8 @@ it('Generate 2.0 spring boot gradle', () => {
                 path.join(BASE_JAVA, PACKAGE_DIR, 'GifFormActivity.java'),
                 path.join(BASE_JAVA, PACKAGE_DIR, 'OnUserJoinedRoomListener.java'),
                 path.join(BASE_JAVA, PACKAGE_DIR, 'GifSlashHandler.java'),
-                // path.join(BASE_RESOURCE, 'rsa/privatekey.pem'),
-                // path.join(BASE_RESOURCE, 'rsa/publickey.pem'),
+                path.join(BASE_RESOURCE, 'rsa/privatekey.pem'),
+                path.join(BASE_RESOURCE, 'rsa/publickey.pem'),
                 path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
                 path.join(BASE_RESOURCE, 'templates/gif.ftl'),
                 path.join(BASE_RESOURCE, 'application.yaml')
@@ -80,14 +80,14 @@ it('Generate 2.0 java gradle', () => {
             artifactId: 'bot-application',
             basePackage: BASE_PACKAGE
         })
-        .then((dir) => {
+        .then(() => {
             assert.file([
                 'gradlew',
                 'gradlew.bat',
                 'build.gradle',
                 path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
-                // path.join(BASE_RESOURCE, 'rsa/privatekey.pem'),
-                // path.join(BASE_RESOURCE, 'rsa/publickey.pem'),
+                path.join(BASE_RESOURCE, 'rsa/privatekey.pem'),
+                path.join(BASE_RESOURCE, 'rsa/publickey.pem'),
                 path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
                 path.join(BASE_RESOURCE, 'templates/gif.ftl'),
                 path.join(BASE_RESOURCE, 'config.yaml')
@@ -96,7 +96,7 @@ it('Generate 2.0 java gradle', () => {
         })
 })
 
-it('Generate 2.0 spring boot maven', () => {
+it('Generate 2.0 spring boot maven', async () => {
     return helpers.run(path.join(__dirname, '../generators/bdk'))
         .withPrompts({
             host: 'acme.symphony.com',
@@ -119,8 +119,8 @@ it('Generate 2.0 spring boot maven', () => {
                 path.join(BASE_JAVA, PACKAGE_DIR, 'GifFormActivity.java'),
                 path.join(BASE_JAVA, PACKAGE_DIR, 'OnUserJoinedRoomListener.java'),
                 path.join(BASE_JAVA, PACKAGE_DIR, 'GifSlashHandler.java'),
-                // path.join(BASE_RESOURCE, 'rsa/privatekey.pem'),
-                // path.join(BASE_RESOURCE, 'rsa/publickey.pem'),
+                path.join(BASE_RESOURCE, 'rsa/privatekey.pem'),
+                path.join(BASE_RESOURCE, 'rsa/publickey.pem'),
                 path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
                 path.join(BASE_RESOURCE, 'templates/gif.ftl'),
                 path.join(BASE_RESOURCE, 'application.yaml')
@@ -149,8 +149,8 @@ it('Generate 2.0 java maven', () => {
                 'mvnw.cmd',
                 'pom.xml',
                 path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
-                // path.join(BASE_RESOURCE, 'rsa/privatekey.pem'),
-                // path.join(BASE_RESOURCE, 'rsa/publickey.pem'),
+                path.join(BASE_RESOURCE, 'rsa/privatekey.pem'),
+                path.join(BASE_RESOURCE, 'rsa/publickey.pem'),
                 path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
                 path.join(BASE_RESOURCE, 'templates/gif.ftl'),
                 path.join(BASE_RESOURCE, 'config.yaml')

@@ -30,6 +30,7 @@
   "devDependencies": {
     "fs-extra": "^9.0.1",
     "jest": "^25.5.4",
+    "jest-junit": "^12.0.0",
     "jest-mock-axios": "^3.2.0",
     "yeoman-assert": "^3.1.1",
     "yeoman-test": "^2.2.0"
@@ -41,8 +42,27 @@
   "main": "index.js",
   "scripts": {
     "test:gen:2.0": "rm -rf dist && mkdir dist && cd dist && yo symphony 2.0",
+    "test": "jest --ci --runInBand --reporters=default --reporters=jest-junit --collectCoverage",
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect"
+  },
+  "jest": {
+    "reporters": [ "default", "jest-junit" ],
+    "coverageThreshold": {
+      "./generators/bdk/**/*.js": {
+        "lines": 90,
+        "statements": 90
+      },
+      "global": {
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "coverageDirectory": "dist/coverage",
+    "testTimeout": 90000
+  },
+  "jest-junit": {
+    "outputDirectory": "<rootDir>/dist/junit"
   },
   "author": "symphony-platform-solutions",
   "snyk": true
