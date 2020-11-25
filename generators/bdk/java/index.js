@@ -73,23 +73,14 @@ module.exports = class extends Generator {
         this.answers.host = this.options.host;
         this.answers.username = this.options.username;
 
-        // get latest BDK BOM version
-//         try {
-//             const mavenResponse = await axios.get(MAVEN_BDK_BOM_SEARCH_BASE + 'symphony-bdk-bom');
-//             this.answers.bdkBomVersion = mavenResponse.data['response']['docs'][0]['latestVersion'];
-//             this.log('Latest BDK version is '.green.bold + `${this.answers.bdkBomVersion}`.white.bold);
-//         } catch (error) {
-//             this.log(`\u26A0 Cannot retrieve latest BDK version from Maven Central. Default: ${BDK_VERSION_DEFAULT}`.grey);
-//             this.answers.bdkBomVersion = BDK_VERSION_DEFAULT;
-//         }
         this.answers.bdkBomVersion = BDK_VERSION_DEFAULT;
 
         try {
             this.log('Generating RSA keys...'.green.bold);
             this.pair = keyPair(4096);
-            this.fs.write(this.destinationPath(path.join(BASE_RESOURCES, 'rsa/publickey.pem')), this.pair.public, err => this.log.error(err));
-            this.fs.write(this.destinationPath(path.join(BASE_RESOURCES, 'rsa/privatekey.pem')), this.pair.private, err => this.log.error(err));
-            this.answers.privateKeyPath = path.join(this.destinationPath(), BASE_RESOURCES, 'rsa/privatekey.pem');
+            this.fs.write(this.destinationPath('rsa/publickey.pem'), this.pair.public, err => this.log.error(err));
+            this.fs.write(this.destinationPath('rsa/privatekey.pem'), this.pair.private, err => this.log.error(err));
+            this.answers.privateKeyPath = 'rsa/privatekey.pem';
         } catch (e) {
             this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
         }
@@ -105,13 +96,6 @@ module.exports = class extends Generator {
                 );
                 break;
             case 'spring':
-//                 try {
-//                     const mavenResponse = await axios.get(MAVEN_SPRING_BOOT_SEARCH_BASE);
-//                     this.answers.springBootVersion = mavenResponse.data['response']['docs'][0]['latestVersion'];
-//                 } catch (error) {
-//                     this.log(`\u26A0 Cannot retrieve latest Spring Boot Starter version from Maven Central. Default: ${SPRING_VERSION_DEFAULT}`.grey);
-//                     this.answers.springBootVersion = SPRING_VERSION_DEFAULT;
-//                 }
                 this.answers.springBootVersion = SPRING_VERSION_DEFAULT;
 
                 // process and copy application.yaml file
