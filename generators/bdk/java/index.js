@@ -127,6 +127,12 @@ module.exports = class extends Generator {
         } else {
             this._processMavenFiles();
         }
+        
+        // Process and copy .gitignore.tpl file
+        this.fs.copyTpl(
+          this.templatePath('.gitignore.tpl'),
+          this.destinationPath('.gitignore')
+        )
     }
 
     /**

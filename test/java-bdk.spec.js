@@ -59,6 +59,7 @@ it('Generate 2.0 spring boot gradle', () => {
                 path.join(BASE_JAVA, PACKAGE_DIR, 'GifSlashHandler.java'),
                 path.join('rsa/privatekey.pem'),
                 path.join('rsa/publickey.pem'),
+                path.join('.gitignore'),
                 path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
                 path.join(BASE_RESOURCE, 'templates/gif.ftl'),
                 path.join(BASE_RESOURCE, 'application.yaml')
@@ -88,6 +89,7 @@ it('Generate 2.0 java gradle', () => {
                 path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
                 path.join('rsa/privatekey.pem'),
                 path.join('rsa/publickey.pem'),
+                path.join('.gitignore'),
                 path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
                 path.join(BASE_RESOURCE, 'templates/gif.ftl'),
                 path.join(BASE_RESOURCE, 'config.yaml')
@@ -121,6 +123,7 @@ it('Generate 2.0 spring boot maven', async () => {
                 path.join(BASE_JAVA, PACKAGE_DIR, 'GifSlashHandler.java'),
                 path.join('rsa/privatekey.pem'),
                 path.join('rsa/publickey.pem'),
+                path.join('.gitignore'),
                 path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
                 path.join(BASE_RESOURCE, 'templates/gif.ftl'),
                 path.join(BASE_RESOURCE, 'application.yaml')
@@ -151,6 +154,7 @@ it('Generate 2.0 java maven', () => {
                 path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
                 path.join('rsa/privatekey.pem'),
                 path.join('rsa/publickey.pem'),
+                path.join('.gitignore'),
                 path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
                 path.join(BASE_RESOURCE, 'templates/gif.ftl'),
                 path.join(BASE_RESOURCE, 'config.yaml')
