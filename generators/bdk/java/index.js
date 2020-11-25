@@ -10,8 +10,6 @@ const BASE_RESOURCES = 'src/main/resources';
 
 const BDK_VERSION_DEFAULT = '1.4.0.BETA';
 const SPRING_VERSION_DEFAULT = '2.3.4.RELEASE'
-const MAVEN_BDK_BOM_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:';
-const MAVEN_SPRING_BOOT_SEARCH_BASE = 'https://search.maven.org/solrsearch/select?q=g:org.springframework.boot';
 
 module.exports = class extends Generator {
 
