@@ -12,34 +12,6 @@ const BASE_RESOURCE = 'src/main/resources'
 const BASE_PACKAGE = 'com.mycompany.bot'
 const PACKAGE_DIR = 'com/mycompany/bot'
 
-axios.get.mockImplementation((url) => {
-  if (url === MAVEN_SYMPHONY_SEARCH) {
-    return Promise.resolve({
-      data: {
-        response: {
-          docs: [
-            {
-              latestVersion: "1.3.2.BETA"
-            }
-          ]
-        }
-      }
-    })
-  } else if (url === MAVEN_SPRING_BOOT_SEARCH) {
-    return Promise.resolve({
-      data: {
-        response: {
-          docs: [
-            {
-              latestVersion: "2.3.4.RELEASE"
-            }
-          ]
-        }
-      }
-    })
-  }
-})
-
 it('Generate 2.0 spring boot gradle', () => {
   return helpers.run(path.join(__dirname, '../generators/bdk'))
     .inTmpDir()
