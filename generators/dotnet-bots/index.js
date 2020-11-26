@@ -1,4 +1,5 @@
 const Generator = require('yeoman-generator');
+const path = require('path');
 const CertificateCreator = require('../lib/certificate-creator');
 
 module.exports = class extends Generator {
@@ -34,7 +35,7 @@ module.exports = class extends Generator {
         ' code from ' +
         answers.dotnet_bot_tpl.italic + ' template...').bold;
       console.log(log_text.bgRed.white);
-      if (answers.dotnet_bot_tpl == 'Request/Reply') {
+      if (answers.dotnet_bot_tpl === 'Request/Reply') {
         this.fs.copy(
           this.templatePath('dotnet/bots/request-reply/RequestResponse.csproj'),
           this.destinationPath('RequestResponse.csproj')
@@ -49,8 +50,8 @@ module.exports = class extends Generator {
           answers
         );
         this.fs.copy(
-          this.templatePath('dotnet/bots/request-reply/certificates'),
-          this.destinationPath('certificates'),
+          this.templatePath(path.join(__dirname, '..', 'common-template/truststore/all_symphony_certs_truststore')),
+          this.destinationPath('certificates/all_symphony_certs_truststore'),
           answers
         );
         /* Install certificate */

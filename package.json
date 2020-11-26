@@ -46,21 +46,6 @@
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect"
   },
-  "jest": {
-    "reporters": [ "default", "jest-junit" ],
-    "coverageThreshold": {
-      "./generators/bdk/**/*.js": {
-        "lines": 90,
-        "statements": 90
-      },
-      "global": {
-        "lines": 90,
-        "statements": 90
-      }
-    },
-    "coverageDirectory": "dist/coverage",
-    "testTimeout": 900000
-  },
   "jest-junit": {
     "outputDirectory": "<rootDir>/dist/junit"
   },

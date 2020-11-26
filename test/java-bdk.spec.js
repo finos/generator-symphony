@@ -4,9 +4,6 @@ const path = require('path')
 const axios = require('axios')
 const fs = require('fs')
 const forge = require('node-forge')
-
-const MAVEN_SYMPHONY_SEARCH = "https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:symphony-bdk-bom";
-const MAVEN_SPRING_BOOT_SEARCH = "https://search.maven.org/solrsearch/select?q=g:org.springframework.boot"
 const BASE_JAVA = 'src/main/java'
 const BASE_RESOURCE = 'src/main/resources'
 const BASE_PACKAGE = 'com.mycompany.bot'
@@ -112,7 +109,7 @@ it('Generate 2.0 spring boot maven', async () => {
       let privateKey = fs.readFileSync(path.join(dir, 'rsa/privatekey.pem'), 'utf-8')
       let generatedPublicKey = fs.readFileSync(path.join(dir, 'rsa/publickey.pem'), 'utf-8')
       assertKeyPair(privateKey, generatedPublicKey)
-      
+
     })
 })
 

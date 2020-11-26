@@ -1,4 +1,5 @@
 const Generator = require('yeoman-generator');
+const path = require('path')
 const CertificateCreator = require('../lib/certificate-creator');
 
 const REQUEST_REPLY = 'Request/Reply';
@@ -12,6 +13,7 @@ module.exports = class extends Generator {
         this._fillWithInitPrompts(opts.initPrompts);
 
         this.baseTemplatePath = '';
+        this.trustStorePath = path.join(__dirname, '..', 'common-template/truststore/all_symphony_certs.pem')
     }
 
     prompting() {
@@ -106,7 +108,7 @@ module.exports = class extends Generator {
         }
         templateFilesToDestination.set(this.baseTemplatePath + 'requirements.txt', 'requirements.txt');
         templateFilesToDestination.set(this.baseTemplatePath + 'src', 'python');
-        templateFilesToDestination.set(this.baseTemplatePath + 'certificates/all_symphony_certs.pem',
+        templateFilesToDestination.set(this.trustStorePath,
             'certificates/all_symphony_certs.pem');
         templateFilesToDestination.set('python/.env', '.env');
 
