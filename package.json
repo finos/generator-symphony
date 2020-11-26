@@ -59,7 +59,7 @@
       }
     },
     "coverageDirectory": "dist/coverage",
-    "testTimeout": 90000
+    "testTimeout": 900000
   },
   "jest-junit": {
     "outputDirectory": "<rootDir>/dist/junit"

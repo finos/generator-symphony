@@ -6,13 +6,13 @@ const appSettings = require('../../package.json')
 
 module.exports = class extends Generator {
 
-  constructor (args, opts) {
+  constructor(args, opts) {
     super(args, opts);
 
-    this.argument('2.0', { type: Boolean, required: false });
+    this.argument('2.0', {type: Boolean, required: false});
   }
 
-  initializing () {
+  initializing() {
     if (this.options['2.0'] === undefined) {
       const year = new Date().getYear() + 1900
       this.log('/------------------------------------------/'.cyan)
@@ -23,7 +23,7 @@ module.exports = class extends Generator {
     }
   }
 
-  prompting () {
+  prompting() {
 
     if (this.options['2.0']) {
       return this.composeWith(require.resolve('../bdk'), this.options);
@@ -95,7 +95,7 @@ module.exports = class extends Generator {
       answers.keyAuthSuffix = (answers.encryption.startsWith('RSA')) ? '' : '-keyauth'
 
       const root = this
-      fs.readdir('.', function(err, files) {
+      fs.readdir('.', function (err, files) {
         if (err) return
         const isDirEmpty = files.filter(f => !f.startsWith('.')).length === 0
         const isDirNameAppName = process.cwd().endsWith(answers.application_name)
@@ -130,7 +130,7 @@ module.exports = class extends Generator {
             break
         }
       }
-      this.composeWith(require.resolve(nextScript), { initPrompts: answers })
+      this.composeWith(require.resolve(nextScript), {initPrompts: answers})
     }).catch(error => this.log(error))
   }
 }
