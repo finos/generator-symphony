@@ -42,98 +42,104 @@ axios.get.mockImplementation((url) => {
   }
 })
 
-it('Generate java request-reply bot', () => {
-  return helpers.run(path.join(__dirname, '../generators/java-bots'))
-    .inTmpDir()
-    .withOptions({
-      initPrompts: {
-        application_type: "bot",
-        application_name: 'test-bot',
-        subdomain: 'acme.symphony.com',
-        application_lang: "Java",
-        botusername: 'megabot',
-        botemail: 'botemail',
-        encryption: 'RSA - Use Existing Keys'
-      }
-    })
-    .withPrompts({
-      java_bot_tpl: 'Request/Reply'
-    })
-    .then(() => {
-      assert.file(
-        'certificates/all_symphony_certs_truststore'
-      )
-    })
-})
+describe("Java SDK", () => {
+  const currentDir = process.cwd()
 
-it('Generate java nlp bot', () => {
-  return helpers.run(path.join(__dirname, '../generators/java-bots'))
-    .inTmpDir()
-    .withOptions({
-      initPrompts: {
-        application_type: "bot",
-        application_name: 'test-bot',
-        subdomain: 'acme.symphony.com',
-        application_lang: "Java",
-        botusername: 'megabot',
-        botemail: 'botemail',
-        encryption: 'RSA - Use Existing Keys'
-      }
-    })
-    .withPrompts({
-      java_bot_tpl: 'NLP Based Trade Workflow'
-    })
-    .then(() => {
-      assert.file(
-        'certificates/all_symphony_certs_truststore'
-      )
-    })
-})
+  afterAll(() => process.chdir(currentDir))
 
-it('Generate java elements form bot', () => {
-  return helpers.run(path.join(__dirname, '../generators/java-bots'))
-    .inTmpDir()
-    .withOptions({
-      initPrompts: {
-        application_type: "bot",
-        application_name: 'test-bot',
-        subdomain: 'acme.symphony.com',
-        application_lang: "Java",
-        botusername: 'megabot',
-        botemail: 'botemail',
-        encryption: 'RSA - Use Existing Keys'
-      }
-    })
-    .withPrompts({
-      java_bot_tpl: 'Elements Form'
-    })
-    .then(() => {
-      assert.file(
-        'certificates/all_symphony_certs_truststore'
-      )
-    })
-})
+  it('Generate java request-reply bot', () => {
+    return helpers.run(path.join(__dirname, '../generators/java-bots'))
+      .inTmpDir()
+      .withOptions({
+        initPrompts: {
+          application_type: "bot",
+          application_name: 'test-bot',
+          subdomain: 'acme.symphony.com',
+          application_lang: "Java",
+          botusername: 'megabot',
+          botemail: 'botemail',
+          encryption: 'RSA - Use Existing Keys'
+        }
+      })
+      .withPrompts({
+        java_bot_tpl: 'Request/Reply'
+      })
+      .then(() => {
+        assert.file(
+          'certificates/all_symphony_certs_truststore'
+        )
+      })
+  })
 
-it('Generate java elements form bot', () => {
-  return helpers.run(path.join(__dirname, '../generators/java-bots'))
-    .inTmpDir()
-    .withOptions({
-      initPrompts: {
-        application_type: "bot",
-        application_name: 'test-bot',
-        subdomain: 'acme.symphony.com',
-        application_lang: "Java",
-        botusername: 'megabot',
-        botemail: 'botemail',
-        encryption: 'RSA - Use Existing Keys'
-      }
-    })
-    .withPrompts({
-      java_bot_tpl: 'ExpenseBot'
-    })
-    .then(() => {
-      assert.file(
-        'certificates/all_symphony_certs_truststore'
-      )
-    })
+  it('Generate java nlp bot', () => {
+    return helpers.run(path.join(__dirname, '../generators/java-bots'))
+      .inTmpDir()
+      .withOptions({
+        initPrompts: {
+          application_type: "bot",
+          application_name: 'test-bot',
+          subdomain: 'acme.symphony.com',
+          application_lang: "Java",
+          botusername: 'megabot',
+          botemail: 'botemail',
+          encryption: 'RSA - Use Existing Keys'
+        }
+      })
+      .withPrompts({
+        java_bot_tpl: 'NLP Based Trade Workflow'
+      })
+      .then(() => {
+        assert.file(
+          'certificates/all_symphony_certs_truststore'
+        )
+      })
+  })
+
+  it('Generate java elements form bot', () => {
+    return helpers.run(path.join(__dirname, '../generators/java-bots'))
+      .inTmpDir()
+      .withOptions({
+        initPrompts: {
+          application_type: "bot",
+          application_name: 'test-bot',
+          subdomain: 'acme.symphony.com',
+          application_lang: "Java",
+          botusername: 'megabot',
+          botemail: 'botemail',
+          encryption: 'RSA - Use Existing Keys'
+        }
+      })
+      .withPrompts({
+        java_bot_tpl: 'Elements Form'
+      })
+      .then(() => {
+        assert.file(
+          'certificates/all_symphony_certs_truststore'
+        )
+      })
+  })
+
+  it('Generate java elements form bot', () => {
+    return helpers.run(path.join(__dirname, '../generators/java-bots'))
+      .inTmpDir()
+      .withOptions({
+        initPrompts: {
+          application_type: "bot",
+          application_name: 'test-bot',
+          subdomain: 'acme.symphony.com',
+          application_lang: "Java",
+          botusername: 'megabot',
+          botemail: 'botemail',
+          encryption: 'RSA - Use Existing Keys'
+        }
+      })
+      .withPrompts({
+        java_bot_tpl: 'ExpenseBot'
+      })
+      .then(() => {
+        assert.file(
+          'certificates/all_symphony_certs_truststore'
+        )
+      })
+  })
 })
