@@ -1,5 +1,6 @@
 const Generator = require('yeoman-generator');
 const axios = require('axios');
+const path = require('path');
 const CertificateCreator = require('../lib/certificate-creator');
 
 module.exports = class extends Generator {
@@ -75,8 +76,8 @@ module.exports = class extends Generator {
                         answers
                     );
                     this.fs.copy(
-                        this.templatePath('../../java-bots/templates/java/bots/request-reply/certificates'),
-                        this.destinationPath('certificates'),
+                        this.templatePath(path.join(__dirname, '..', 'common-template/truststore/all_symphony_certs_truststore')),
+                        this.destinationPath('certificates/all_symphony_certs_truststore'),
                         answers
                     );
                 }
