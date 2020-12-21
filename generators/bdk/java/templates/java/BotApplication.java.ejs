@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import static com.symphony.bdk.core.config.BdkConfigLoader.loadFromClasspath;
 import static com.symphony.bdk.core.activity.command.SlashCommand.slash;
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
 
 /**
@@ -20,8 +19,7 @@ import static java.util.Collections.singletonMap;
  */
 public class BotApplication {
 
-  /** The Logger */
-  private static final Logger log = LoggerFactory.getLogger(BotApplication.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BotApplication.class);
 
   public static void main(String[] args) throws Exception {
 
@@ -42,6 +40,7 @@ public class BotApplication {
 
       @Override
       public void onUserJoinedRoom(V4Initiator initiator, V4UserJoinedRoom event) {
+        LOGGER.info("User joined room");
         final String userDisplayName = event.getAffectedUser().getDisplayName();
         Template template = bdk.messages().templates().newTemplateFromClasspath("/templates/welcome.ftl");
         bdk.messages().send(event.getStream(),
