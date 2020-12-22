@@ -8,8 +8,8 @@ const axios = require('axios')
 const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
 
-const BDK_VERSION_DEFAULT = '1.5.1.BETA';
-const SPRING_VERSION_DEFAULT = '2.3.4.RELEASE'
+const BDK_VERSION_DEFAULT = '2.0.0.RC1';
+const SPRING_VERSION_DEFAULT = '2.4.1'
 
 module.exports = class extends Generator {
 
