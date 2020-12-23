@@ -15,17 +15,18 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-npm-deps-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ checksum "yarn.lock" }}
             - v1-npm-deps-
 
       - run:
           name: Install Dependencies
-          command: yarn ci
+          command: yarn install --immutable
 
       - save_cache:
-          key: v1-npm-deps-{{ checksum "yarn.lock" }}
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
-            - ~/.npm
+            - ~/.cache/yarn
 
       - run:
           name: Run test
