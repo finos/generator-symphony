@@ -1,33 +1,35 @@
 version: 2
-jobs:
-  build:
-    docker:
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
       # Using a pre-built docker image with both of NodeJs and Java are installed
       # https://circleci.com/developer/images/image/cimg/node
-      - image: cimg/node:15.0.1-browsers
+    - image: cimg/node:15.0.1-browsers
 
+jobs:
+  build:
+    <<: *defaults
     steps:
       - checkout
 
       - restore_cache:
           keys:
-            # Find a cache corresponding to this specific package-lock.json checksum
-            # when this file is changed, this key will fail
-            - v1-npm-deps-{{ checksum "package-lock.json" }}
-            # Find the most recently generated cache used from any branch
+            - v1-npm-deps-{{ checksum "yarn.lock" }}
             - v1-npm-deps-
+
       - run:
           name: Install Dependencies
-          command: npm ci
+          command: yarn ci
 
       - save_cache:
-          key: v1-npm-deps-{{ checksum "package-lock.json" }}
+          key: v1-npm-deps-{{ checksum "yarn.lock" }}
           paths:
             - ~/.npm
 
       - run:
           name: Run test
-          command: npm run test
+          command: yarn run test
 
       - store_test_results:
           path: ./dist/junit/
@@ -37,3 +39,34 @@ jobs:
 
       - store_artifacts:
           path: dist/coverage
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+  publish:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Publish to NPM
+          command: yarn package
+
+
+workflows:
+  publish:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /^.*/
+      - publish:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^.*/
+            branches:
+              ignore: /.*/
