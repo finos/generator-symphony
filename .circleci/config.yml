@@ -16,7 +16,6 @@ jobs:
       - restore_cache:
           keys:
             - yarn-packages-{{ checksum "yarn.lock" }}
-            - v1-npm-deps-
 
       - run:
           name: Install Dependencies
@@ -52,13 +51,16 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+      - run:
           name: Publish to NPM
-          command: yarn package
+          command: yarn publish
 
 
 workflows:
   version: 2
-  test-publish:
+  build-publish:
     jobs:
       - build:
           filters:
@@ -68,6 +70,7 @@ workflows:
           requires:
             - build
           filters:
+            # Publish only for tags
             tags:
               only: /^.*/
             branches:
