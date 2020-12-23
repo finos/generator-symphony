@@ -56,7 +56,8 @@ jobs:
 
 
 workflows:
-  publish:
+  version: 2
+  test-publish:
     jobs:
       - build:
           filters:
