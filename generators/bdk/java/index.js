@@ -8,7 +8,7 @@ const axios = require('axios')
 const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
 
-const BDK_VERSION_DEFAULT = '2.0.0';
+const BDK_VERSION_DEFAULT = '2.0.1';
 const SPRING_VERSION_DEFAULT = '2.4.1'
 
 module.exports = class extends Generator {
@@ -139,12 +139,19 @@ module.exports = class extends Generator {
    * Build Maven or Gradle project
    */
   install() {
+    let buildResult;
+
     if (this.answers.build === 'Maven') {
       this.log('Running '.green.bold + './mvnw package'.white.bold + ' in your project'.green.bold);
-      this.spawnCommandSync(path.join(this.destinationPath(), 'mvnw'), ['package']);
+      buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'mvnw'), ['package']);
     } else {
       this.log('Running '.green.bold + './gradlew build'.white.bold + ' in your project'.green.bold);
-      this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['build']);
+      buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['build']);
+    }
+
+    if (buildResult.status !== 0) {
+      this.log.error(buildResult.stderr);
+      this.env.error("Failed to build generated project");
     }
   }
 
