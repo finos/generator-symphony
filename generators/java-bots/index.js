@@ -3,7 +3,7 @@ const axios = require('axios')
 const path = require('path')
 const CertificateCreator = require('../lib/certificate-creator')
 
-const trustStorePath = path.join(__dirname, '..', 'common-template/truststore/all_symphony_certs.pem')
+const trustStorePath = path.join(__dirname, '..', 'common-template/truststore/all_symphony_certs_truststore')
 
 module.exports = class extends Generator {
   prompting () {
