@@ -4,10 +4,13 @@ const path = require('path')
 const axios = require('axios')
 const fs = require('fs')
 const forge = require('node-forge')
+
 const BASE_JAVA = 'src/main/java'
 const BASE_RESOURCE = 'src/main/resources'
 const BASE_PACKAGE = 'com.mycompany.bot'
 const PACKAGE_DIR = 'com/mycompany/bot'
+
+const SMALL_KEY_PAIR_LENGTH = 512;
 
 describe('Java BDK', () => {
   const currentDir = process.cwd()
@@ -17,6 +20,9 @@ describe('Java BDK', () => {
   it('Generate 2.0 spring boot gradle', () => {
     return helpers.run(path.join(__dirname, '../generators/bdk'))
       .inTmpDir()
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
       .withPrompts({
         host: 'acme.symphony.com',
         username: 'test-bot',
@@ -52,6 +58,9 @@ describe('Java BDK', () => {
   it('Generate 2.0 java gradle', () => {
     return helpers.run(path.join(__dirname, '../generators/bdk'))
       .inTmpDir()
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
       .withPrompts({
         host: 'acme.symphony.com',
         username: 'test-bot',
@@ -83,6 +92,9 @@ describe('Java BDK', () => {
 
   it('Generate 2.0 spring boot maven', async () => {
     return helpers.run(path.join(__dirname, '../generators/bdk'))
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
       .withPrompts({
         host: 'acme.symphony.com',
         username: 'test-bot',
@@ -120,6 +132,9 @@ describe('Java BDK', () => {
 
   it('Generate 2.0 java maven', () => {
     return helpers.run(path.join(__dirname, '../generators/bdk'))
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
       .withPrompts({
         host: 'acme.symphony.com',
         username: 'test-bot',

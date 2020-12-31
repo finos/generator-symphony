@@ -11,6 +11,9 @@ const BASE_RESOURCES = 'src/main/resources';
 const BDK_VERSION_DEFAULT = '2.0.0';
 const SPRING_VERSION_DEFAULT = '2.4.1'
 
+// Make it configurable for faster test execution
+const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
+
 module.exports = class extends Generator {
 
   initializing() {
@@ -75,7 +78,7 @@ module.exports = class extends Generator {
 
     try {
       this.log('Generating RSA keys...'.green.bold);
-      this.pair = keyPair(4096);
+      this.pair = keyPair(this.config.get(KEY_PAIR_LENGTH) || 4096);
       this.fs.write(this.destinationPath('rsa/publickey.pem'), this.pair.public, err => this.log.error(err));
       this.fs.write(this.destinationPath('rsa/privatekey.pem'), this.pair.private, err => this.log.error(err));
       this.answers.privateKeyPath = 'rsa/privatekey.pem';
