@@ -3,6 +3,8 @@ const assert = require('yeoman-assert')
 const path = require('path')
 const axios = require('axios')
 const colors = require('colors')
+const fs = require('fs');
+const jks = require('jks-js');
 
 const MAVEN_SYMPHONY_SEARCH = "https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:symphony-api-client-java";
 const MAVEN_SYMPHONY_CAMUNDA_SEARCH = "https://search.maven.org/solrsearch/select?q=g:com.symphony.platformsolutions+AND+a:symphony-camunda-client"
@@ -10,7 +12,8 @@ const MAVEN_SYMPHONY_OPENNLP_SEARCH = "https://search.maven.org/solrsearch/selec
 
 axios.get.mockImplementation((url) => {
   if (url === MAVEN_SYMPHONY_SEARCH) {
-    return Promise.resolve({data: {
+    return Promise.resolve({
+      data: {
         response: {
           docs: [
             {
@@ -18,9 +21,11 @@ axios.get.mockImplementation((url) => {
             }
           ]
         }
-      }})
+      }
+    })
   } else if (url === MAVEN_SYMPHONY_CAMUNDA_SEARCH) {
-    return Promise.resolve({data: {
+    return Promise.resolve({
+      data: {
         response: {
           docs: [
             {
@@ -28,9 +33,11 @@ axios.get.mockImplementation((url) => {
             }
           ]
         }
-      }})
+      }
+    })
   } else if (url === MAVEN_SYMPHONY_OPENNLP_SEARCH) {
-    return Promise.resolve({data: {
+    return Promise.resolve({
+      data: {
         response: {
           docs: [
             {
@@ -38,7 +45,8 @@ axios.get.mockImplementation((url) => {
             }
           ]
         }
-      }})
+      }
+    })
   }
 })
 
@@ -65,9 +73,8 @@ describe("Java SDK", () => {
         java_bot_tpl: 'Request/Reply'
       })
       .then(() => {
-        assert.file(
-          'certificates/all_symphony_certs_truststore'
-        )
+        checkTruststore('certificates/all_symphony_certs_truststore',
+          path.join(__dirname, '../generators/common-template/truststore/all_symphony_certs.pem'));
       })
   })
 
@@ -89,9 +96,8 @@ describe("Java SDK", () => {
         java_bot_tpl: 'NLP Based Trade Workflow'
       })
       .then(() => {
-        assert.file(
-          'certificates/all_symphony_certs_truststore'
-        )
+        checkTruststore('certificates/all_symphony_certs_truststore',
+          path.join(__dirname, '../generators/common-template/truststore/all_symphony_certs.pem'));
       })
   })
 
@@ -113,9 +119,8 @@ describe("Java SDK", () => {
         java_bot_tpl: 'Elements Form'
       })
       .then(() => {
-        assert.file(
-          'certificates/all_symphony_certs_truststore'
-        )
+        checkTruststore('certificates/all_symphony_certs_truststore',
+          path.join(__dirname, '../generators/common-template/truststore/all_symphony_certs.pem'));
       })
   })
 
@@ -137,9 +142,42 @@ describe("Java SDK", () => {
         java_bot_tpl: 'ExpenseBot'
       })
       .then(() => {
-        assert.file(
-          'certificates/all_symphony_certs_truststore'
-        )
+        checkTruststore('certificates/all_symphony_certs_truststore',
+          path.join(__dirname, '../generators/common-template/truststore/all_symphony_certs.pem'));
       })
   })
+
+  function checkTruststore(truststore, pem) {
+    const truststorePems = Object.values(
+      jks.toPem(fs.readFileSync(truststore), 'changeit'))
+      .map(key => key.ca);
+
+    const certs = extractPems(pem);
+
+    assert.deepStrictEqual(truststorePems.sort(), certs.sort(),
+      'Truststore file is not matching the PEM file');
+  }
+
+  function extractPems(pem) {
+    const pems = fs.readFileSync(pem, 'utf8')
+
+    const certs = []
+    let cert = null;
+    // read file line by line to split each certificate
+    pems.split('\n').forEach(line => {
+      if (line === '-----BEGIN CERTIFICATE-----') {
+        cert = line + '\n';
+      } else if (line === '-----END CERTIFICATE-----') {
+        cert += line + '\n';
+        certs.push(cert)
+        cert = null
+      } else {
+        // drop lines that are not part of a certificate
+        if (cert != null) {
+          cert += line + '\n';
+        }
+      }
+    });
+    return certs;
+  }
 })
