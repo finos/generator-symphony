@@ -1,6 +1,9 @@
 const Generator = require('yeoman-generator')
 const axios = require('axios')
+const path = require('path')
 const CertificateCreator = require('../lib/certificate-creator')
+
+const trustStorePath = path.join(__dirname, '..', 'common-template/truststore/all_symphony_certs_truststore')
 
 module.exports = class extends Generator {
   prompting () {
@@ -72,7 +75,7 @@ module.exports = class extends Generator {
 
           const rootDir = `java/bots/${subDir}`;
 
-            [ 'pom.xml', 'src', 'config.json', 'certificates' ].forEach(file => {
+            [ 'pom.xml', 'src', 'config.json' ].forEach(file => {
               const prefix = (file.indexOf('.json') > 0) ? 'src/main/resources/' : ''
 
               if (file.indexOf('.') > 0) {
@@ -99,7 +102,7 @@ module.exports = class extends Generator {
           answers.nlp_library_version = nlpLibResponse.data['response']['docs'][0]['latestVersion'];
           this.log('Latest version of NLP library is', answers.nlp_library_version);
 
-            [ 'pom.xml', 'src', 'nlp-config.json', 'certificates', 'bpmn', 'config.json' ].forEach(file => {
+            [ 'pom.xml', 'src', 'nlp-config.json', 'bpmn', 'config.json' ].forEach(file => {
               const prefix = (file.indexOf('.json') > 0) ? 'src/main/resources/' : ''
               const subDir = (file === 'config.json') ? 'request-reply' : 'camunda-opennlp'
               const rootDir = `java/bots/${subDir}`
@@ -118,6 +121,11 @@ module.exports = class extends Generator {
               }
             });
         }
+
+        this.fs.copy(
+          this.templatePath(trustStorePath),
+          this.destinationPath('certificates/all_symphony_certs_truststore')
+        )
 
         /* Install certificate */
         console.log('generating from template ' + answers.java_bot_tpl)

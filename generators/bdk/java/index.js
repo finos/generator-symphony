@@ -8,8 +8,11 @@ const axios = require('axios')
 const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
 
-const BDK_VERSION_DEFAULT = '1.5.1.BETA';
-const SPRING_VERSION_DEFAULT = '2.3.4.RELEASE'
+const BDK_VERSION_DEFAULT = '2.0.0';
+const SPRING_VERSION_DEFAULT = '2.4.1'
+
+// Make it configurable for faster test execution
+const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 
 module.exports = class extends Generator {
 
@@ -75,7 +78,7 @@ module.exports = class extends Generator {
 
     try {
       this.log('Generating RSA keys...'.green.bold);
-      this.pair = keyPair(4096);
+      this.pair = keyPair(this.config.get(KEY_PAIR_LENGTH) || 4096);
       this.fs.write(this.destinationPath('rsa/publickey.pem'), this.pair.public, err => this.log.error(err));
       this.fs.write(this.destinationPath('rsa/privatekey.pem'), this.pair.private, err => this.log.error(err));
       this.answers.privateKeyPath = 'rsa/privatekey.pem';
@@ -139,12 +142,19 @@ module.exports = class extends Generator {
    * Build Maven or Gradle project
    */
   install() {
+    let buildResult;
+
     if (this.answers.build === 'Maven') {
       this.log('Running '.green.bold + './mvnw package'.white.bold + ' in your project'.green.bold);
-      this.spawnCommandSync(path.join(this.destinationPath(), 'mvnw'), ['package']);
+      buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'mvnw'), ['package']);
     } else {
       this.log('Running '.green.bold + './gradlew build'.white.bold + ' in your project'.green.bold);
-      this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['build']);
+      buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['build']);
+    }
+
+    if (buildResult.status !== 0) {
+      this.log.error(buildResult.stderr);
+      this.env.error("Failed to build generated project");
     }
   }
 
