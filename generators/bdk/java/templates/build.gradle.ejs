@@ -3,7 +3,7 @@ plugins {
 <% if (framework == 'java') { %>
     id 'application'
 <% } %>
-<% if (framework == 'spring') { %>
+<% if (framework == 'spring' || application == 'ext-app') { %>
     id 'org.springframework.boot' version "<%= springBootVersion %>"
 <% } %>
 }
@@ -23,6 +23,10 @@ dependencies {
 <% } else if (framework == 'spring') { %>
     implementation 'com.symphony.platformsolutions:symphony-bdk-core-spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter'
+<% } else if (application == 'ext-app') { %>
+    implementation 'com.symphony.platformsolutions:symphony-bdk-app-spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 <% } %>
 
     implementation 'org.slf4j:slf4j-api'

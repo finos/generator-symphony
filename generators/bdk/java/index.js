@@ -32,21 +32,6 @@ module.exports = class extends Generator {
         ]
       },
       {
-        type: 'list',
-        name: 'framework',
-        message: 'Select your framework',
-        choices: [
-          {
-            name: 'Java (no framework)',
-            value: 'java'
-          },
-          {
-            name: 'Spring Boot (experimental)',
-            value: 'spring'
-          }
-        ]
-      },
-      {
         type: 'input',
         name: 'groupId',
         message: 'Enter your project groupId',
@@ -73,8 +58,12 @@ module.exports = class extends Generator {
     // copy input options as answers to be used in templates
     this.answers.host = this.options.host;
     this.answers.username = this.options.username;
+    this.answers.framework = this.options.framework;
+    this.answers.application = this.options.application;
+    this.answers.appId = this.options.appId;
 
     this.answers.bdkBomVersion = BDK_VERSION_DEFAULT;
+    this.answers.springBootVersion = SPRING_VERSION_DEFAULT;
 
     try {
       this.log('Generating RSA keys...'.green.bold);
@@ -86,43 +75,69 @@ module.exports = class extends Generator {
       this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
     }
 
-    // check if framework is setup or not
-    switch (this.answers.framework) {
-      case 'java':
-        // process and copy config.yaml file
+    if (this.answers.application === 'bot-app') { // Bot application
+
+      // check if framework is setup or not
+      switch (this.answers.framework) {
+        case 'java':
+          // process and copy config.yaml file
+          this.fs.copyTpl(
+            this.templatePath(path.join(this.answers.framework, 'config.yaml.ejs')),
+            this.destinationPath(path.join(BASE_RESOURCES, 'config.yaml')),
+            this.answers
+          );
+          break;
+        case 'spring':
+
+          // process and copy application.yaml.ejs file
+          this.fs.copyTpl(
+            this.templatePath(path.join(this.answers.framework, 'application.yaml.ejs')),
+            this.destinationPath(path.join(BASE_RESOURCES, 'application.yaml')),
+            this.answers
+          );
+
+          break;
+      }
+
+      // process and copy template file
+      this.fs.copyTpl(
+        this.templatePath('gif.ftl'),
+        this.destinationPath(path.join(BASE_RESOURCES, 'templates', 'gif.ftl'))
+      );
+      this.fs.copyTpl(
+        this.templatePath('welcome.ftl'),
+        this.destinationPath(path.join(BASE_RESOURCES, 'templates', 'welcome.ftl'))
+      );
+
+      // Process Framework specific files
+      this._copyJavaTemplate(this.answers.framework, basePackage);
+      // Process Common files
+      this._copyJavaTemplate('common', basePackage);
+
+    } else if (this.answers.application === 'ext-app') { // Extension app application
+      // Process application.yaml.ejs file
+      this.fs.copyTpl(
+        this.templatePath('ext-app/application.yaml.ejs'),
+        this.destinationPath(path.join(BASE_RESOURCES, 'application.yaml')),
+        this.answers
+      );
+
+      // Process scripts files
+      ['app.js.ejs', 'controller.js.ejs'].forEach(file => {
         this.fs.copyTpl(
-          this.templatePath(path.join(this.answers.framework, 'config.yaml.ejs')),
-          this.destinationPath(path.join(BASE_RESOURCES, 'config.yaml')),
+          this.templatePath(path.join('ext-app/scripts', file)),
+          this.destinationPath(path.join(BASE_RESOURCES, 'static/scripts', file.substr(0, file.indexOf('.ejs')))),
           this.answers
         );
-        break;
-      case 'spring':
-        this.answers.springBootVersion = SPRING_VERSION_DEFAULT;
+      })
 
-        // process and copy application.yaml file
-        this.fs.copyTpl(
-          this.templatePath(path.join(this.answers.framework, 'application.yaml.ejs')),
-          this.destinationPath(path.join(BASE_RESOURCES, 'application.yaml')),
-          this.answers
-        );
+      this.fs.copyTpl(
+        this.templatePath('ext-app/resources/'),
+        this.destinationPath(BASE_RESOURCES),
+      );
 
-        break;
+      this._copyJavaTemplate('ext-app/java', basePackage);
     }
-
-    // process and copy template file
-    this.fs.copyTpl(
-      this.templatePath('gif.ftl'),
-      this.destinationPath(path.join(BASE_RESOURCES, 'templates', 'gif.ftl'))
-    );
-    this.fs.copyTpl(
-      this.templatePath('welcome.ftl'),
-      this.destinationPath(path.join(BASE_RESOURCES, 'templates', 'welcome.ftl'))
-    );
-
-    // Process Framework specific files
-    this._copyJavaTemplate(this.answers.framework, basePackage);
-    // Process Common files
-    this._copyJavaTemplate('common', basePackage);
 
     // Process build files
     if (this.answers.build === 'Gradle') {
