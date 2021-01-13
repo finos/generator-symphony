@@ -1,11 +1,11 @@
 plugins {
     id 'java-library'
-<% if (framework == 'java') { %>
+<% if (framework == 'java') { -%>
     id 'application'
-<% } %>
-<% if (framework == 'spring' || application == 'ext-app') { %>
-    id 'org.springframework.boot' version "<%= springBootVersion %>"
-<% } %>
+<% } -%>
+<% if (framework == 'spring' || application == 'ext-app') { -%>
+    id 'org.springframework.boot' version "<%= springBootVersion -%>"
+<% } -%>
 }
 
 repositories {
@@ -14,29 +14,29 @@ repositories {
 
 dependencies {
 
-    implementation platform('com.symphony.platformsolutions:symphony-bdk-bom:<%= bdkBomVersion %>')
+    implementation platform('com.symphony.platformsolutions:symphony-bdk-bom:<%= bdkBomVersion -%>')
 
-<% if (framework == 'java') { %>
+<% if (framework == 'java') { -%>
     implementation 'com.symphony.platformsolutions:symphony-bdk-core'
     runtimeOnly 'com.symphony.platformsolutions:symphony-bdk-template-freemarker'
     runtimeOnly 'com.symphony.platformsolutions:symphony-bdk-http-jersey2'
-<% } else if (framework == 'spring') { %>
+<% } else if (framework == 'spring') { -%>
     implementation 'com.symphony.platformsolutions:symphony-bdk-core-spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter'
-<% } else if (application == 'ext-app') { %>
+<% } else if (application == 'ext-app') { -%>
     implementation 'com.symphony.platformsolutions:symphony-bdk-app-spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-<% } %>
+<% } -%>
 
     implementation 'org.slf4j:slf4j-api'
     runtimeOnly 'ch.qos.logback:logback-classic'
 }
 
-<% if (framework == 'java') { %>
+<% if (framework == 'java') { -%>
 application {
     mainClass = '<%= basePackage %>.BotApplication'
 }
-<% } %>
+<% } -%>
 
 version = '0.0.1-SNAPSHOT'

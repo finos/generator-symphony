@@ -21,7 +21,6 @@ let register = data => {
     ).then(res => {
         res["tokenA"] = appToken
         let modulesService = SYMPHONY.services.subscribe("modules")
-        // dialogsService = SYMPHONY.services.subscribe("dialogs")
         navService = SYMPHONY.services.subscribe("applications-nav")
         navService.add('show-module', 'Circle Of Trust', 'app:controller')
         appControllerService.implement({
