@@ -15,16 +15,16 @@ bdk:
 bdk-app:
   auth:
     enabled: true
-    jwtCookie:
+    jwt-cookie:
       enabled: true
-      maxAge: 1d
+      max-age: 1d
   cors:
     "[/**]":
       allowed-origins: "*"
       allowed-credentials: false
   tracing:
     enabled: true
-    urlPatterns:
+    url-patterns:
       - /api/*
 
 logging:
