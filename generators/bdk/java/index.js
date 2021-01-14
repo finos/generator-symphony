@@ -2,8 +2,7 @@ const Generator = require('yeoman-generator');
 const colors = require('colors');
 const path = require('path');
 const fs = require('fs');
-const keyPair = require('keypair');
-const axios = require('axios')
+const keyPair = require('../../lib/certificate-creator/rsa-certificate-creator').keyPair;
 
 const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
