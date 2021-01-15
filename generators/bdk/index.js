@@ -37,15 +37,57 @@ module.exports = class extends Generator {
       },
       {
         type: 'list',
+        name: 'application',
+        message: 'Select your type of application',
+        choices: [
+          {
+            name: 'Bot Application',
+            value: 'bot-app'
+          },
+          {
+            name: 'Extension App Application',
+            value: 'ext-app'
+          }
+        ]
+      },
+      {
+        type: 'list',
         name: 'language',
         message: 'Select your programing language',
         choices: [
-          'Java (beta)'
-        ]
+          {
+            name: 'Java (beta)',
+            value: 'java'
+          }
+        ],
+        when: answer => answer.application === 'bot-app'
+      },
+      {
+        type: 'list',
+        name: 'framework',
+        message: 'Select your framework',
+        choices: [
+          {
+            name: 'Java (no framework)',
+            value: 'java'
+          },
+          {
+            name: 'Spring Boot (experimental)',
+            value: 'spring'
+          }
+        ],
+        when: answer => answer.application === 'bot-app' && answer.language === 'java'
+      },
+      {
+        type: 'input',
+        name: 'appId',
+        message: 'Enter your app id',
+        default: 'app-id',
+        when: answer => answer.application === 'ext-app'
       }
     ]);
 
-    if (this.answers.language === 'Java (beta)') {
+    if (this.answers.language === 'java' || this.answers.application === 'ext-app') {
       this.composeWith(require.resolve('./java'), this.answers);
     }
   }
