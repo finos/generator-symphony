@@ -74,6 +74,8 @@ module.exports = class extends Generator {
             this.answers.botCertPath = '../certificates/';
             this.answers.botCertName = this.answers.botusername;
             this.answers.botCertPassword = 'changeit';
+        } else {
+          this.answers.authType = 'cert'
         }
     }
 
