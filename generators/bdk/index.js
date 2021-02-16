@@ -22,8 +22,8 @@ module.exports = class extends Generator {
     this.log('______________________________________________________________________________________________________'.yellow);
 
     try {
-      const arrayOfFiles = fs.readdirSync(this.destinationRoot());
-      if (arrayOfFiles.length > 0) {
+      const folderFiles = fs.readdirSync(this.destinationRoot());
+      if (folderFiles.length > 0) {
         this.log(`(!) Folder ${this.destinationRoot()} is not empty. Are you sure you want to continue?`.red);
       }
     } catch(e) {
