@@ -32,7 +32,6 @@ module.exports = class extends Generator {
   }
 
   async prompting() {
-    this.log('Application files will be generated in folder: '.gray + `${this.destinationRoot()}`.yellow);
     this.answers = await this.prompt([
       {
         type: 'input',
