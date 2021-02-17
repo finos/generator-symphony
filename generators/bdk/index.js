@@ -1,6 +1,7 @@
 const Generator = require('yeoman-generator');
 const colors = require('colors');
 const packageJson = require('../../package.json');
+const fs = require('fs')
 
 module.exports = class extends Generator {
 
@@ -19,6 +20,15 @@ module.exports = class extends Generator {
     this.log('Welcome to Symphony Generator '.gray + `v${packageJson.version}`.yellow);
     this.log('Application files will be generated in folder: '.gray + `${this.destinationRoot()}`.yellow);
     this.log('______________________________________________________________________________________________________'.yellow);
+
+    try {
+      const folderFiles = fs.readdirSync(this.destinationRoot());
+      if (folderFiles.length > 0) {
+        this.log(`(!) Folder ${this.destinationRoot()} is not empty. Are you sure you want to continue?`.red);
+      }
+    } catch(e) {
+      this.log(e);
+    }
   }
 
   async prompting() {
