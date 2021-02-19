@@ -38,6 +38,13 @@ describe('Python BDK', () => {
         let privateKey = fs.readFileSync(path.join(dir, 'rsa/privatekey.pem'), 'utf-8')
         let generatedPublicKey = fs.readFileSync(path.join(dir, 'rsa/publickey.pem'), 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
+
+        let requirement = fs.readFileSync(path.join(dir, 'requirements.txt'), 'utf-8')
+        let config = fs.readFileSync(path.join(dir, BASE_RESOURCE, 'config.yaml'), 'utf-8')
+        assert(requirement.includes('sym-api-client-python>='))
+        assert(config.includes('host: acme.symphony.com'))
+        assert(config.includes('username: test-bot'))
+        assert(config.includes('path: rsa/privatekey.pem'))
       })
   })
 })

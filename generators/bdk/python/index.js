@@ -44,6 +44,19 @@ module.exports = class extends Generator {
         this.destinationPath(path_pair[1])
       )
     });
+  }
 
+  end() {
+    if (this.pair) {
+      this.log('\nYou can now update the service account '.cyan +
+        `${this.answers.username}`.white.bold +
+        ` with the following public key on https://${this.answers.host}/admin-console : `.cyan);
+
+      this.log('\n' + this.pair.public);
+    }
+
+    this.log(`Your Python project has been successfully generated !`.cyan.bold);
+    this.log(`Install all required packages and run your bot with: `.cyan.bold
+      + `python3 python/main.py`);
   }
 }
