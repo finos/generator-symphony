@@ -66,8 +66,12 @@ module.exports = class extends Generator {
         message: 'Select your programing language',
         choices: [
           {
-            name: 'Java (beta)',
+            name: 'Java',
             value: 'java'
+          },
+          {
+            name: 'Python (beta)',
+            value: 'python'
           }
         ],
         when: answer => answer.application === 'bot-app'
@@ -99,6 +103,8 @@ module.exports = class extends Generator {
 
     if (this.answers.language === 'java' || this.answers.application === 'ext-app') {
       this.composeWith(require.resolve('./java'), this.answers);
+    } else if (this.answers.language === 'python') {
+      this.composeWith(require.resolve('./python'), this.answers);
     }
   }
 }
