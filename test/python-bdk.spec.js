@@ -41,7 +41,8 @@ describe('Python BDK', () => {
 
         let requirement = fs.readFileSync(path.join(dir, 'requirements.txt'), 'utf-8')
         let config = fs.readFileSync(path.join(dir, BASE_RESOURCE, 'config.yaml'), 'utf-8')
-        assert(requirement.includes('sym-api-client-python>='))
+        let version_regex = /sym-api-client-python>=\d.\d+(\w\d+)?/i
+        assert(requirement.match(version_regex))
         assert(config.includes('host: acme.symphony.com'))
         assert(config.includes('username: test-bot'))
         assert(config.includes('path: rsa/privatekey.pem'))

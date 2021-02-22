@@ -1,17 +1,17 @@
-const Generator = require('yeoman-generator')
-const colors = require('colors')
-const keyPair = require('../../lib/certificate-creator/rsa-certificate-creator').keyPair
+const Generator = require('yeoman-generator');
+const colors = require('colors');
+const keyPair = require('../../lib/certificate-creator/rsa-certificate-creator').keyPair;
 
-const BDK_VERSION_DEFAULT = '2.0b0'
+const BDK_VERSION_DEFAULT = '2.0b0';
 
-const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH'
+const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 
 module.exports = class extends Generator {
 
   async writing() {
-    this.answers = this.options
+    this.answers = this.options;
 
-    this.answers.bdkVersion = BDK_VERSION_DEFAULT
+    this.answers.bdkVersion = BDK_VERSION_DEFAULT;
 
     try {
       this.log('Generating RSA keys...'.green.bold);
@@ -25,7 +25,10 @@ module.exports = class extends Generator {
 
     [
       ['config.yaml.ejs', 'resources/config.yaml'],
-      ['requirements.txt.ejs', 'requirements.txt']
+      ['requirements.txt.ejs', 'requirements.txt'],
+      ['python/main.py.ejs', 'python/main.py'],
+      ['logging.conf.ejs', 'logging.conf'],
+      ['.gitignore.tpl', '.gitignore']
     ].forEach(path_pair => {
       this.fs.copyTpl(
         this.templatePath(path_pair[0]),
@@ -34,16 +37,6 @@ module.exports = class extends Generator {
       )
     });
 
-    [
-      ['python/main.py.ejs', 'python/main.py'],
-      ['logging.conf.ejs', 'logging.conf'],
-      ['.gitignore.tpl', '.gitignore']
-    ].forEach(path_pair => {
-      this.fs.copy(
-        this.templatePath(path_pair[0]),
-        this.destinationPath(path_pair[1])
-      )
-    });
   }
 
   end() {
@@ -56,7 +49,7 @@ module.exports = class extends Generator {
     }
 
     this.log(`Your Python project has been successfully generated !`.cyan.bold);
-    this.log(`Install all required packages and run your bot with: `.cyan.bold
-      + `python3 python/main.py`);
+    this.log(`Install all required packages with: `.cyan.bold + `pip3 install -r requirements.txt`);
+    this.log(`And run your bot with: `.cyan.bold + `python3 python/main.py`);
   }
 }
