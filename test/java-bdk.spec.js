@@ -26,7 +26,8 @@ describe('Java BDK', () => {
       .withPrompts({
         host: 'acme.symphony.com',
         username: 'test-bot',
-        language: 'Java (beta)',
+        application: 'bot-app',
+        language: 'java',
         build: 'Gradle',
         framework: 'spring',
         groupId: 'com.mycompany',
@@ -64,7 +65,8 @@ describe('Java BDK', () => {
       .withPrompts({
         host: 'acme.symphony.com',
         username: 'test-bot',
-        language: 'Java (beta)',
+        application: 'bot-app',
+        language: 'java',
         build: 'Gradle',
         framework: 'java',
         groupId: 'com.mycompany',
@@ -98,7 +100,8 @@ describe('Java BDK', () => {
       .withPrompts({
         host: 'acme.symphony.com',
         username: 'test-bot',
-        language: 'Java (beta)',
+        application: 'bot-app',
+        language: 'java',
         build: 'Maven',
         framework: 'spring',
         groupId: 'com.mycompany',
@@ -138,7 +141,8 @@ describe('Java BDK', () => {
       .withPrompts({
         host: 'acme.symphony.com',
         username: 'test-bot',
-        language: 'Java (beta)',
+        application: 'bot-app',
+        language: 'java',
         build: 'Maven',
         framework: 'java',
         groupId: 'com.mycompany',
