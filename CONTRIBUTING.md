@@ -15,7 +15,7 @@ New feature requests on the legacy SDK will not be accepted.
 ## Module and package structure
 
 The code is structured into several generators inside the [generators folder](generators):
-* [2.0](generators/bdk) generating a bot and using the [Java BDK2.0](https://github.com/SymphonyPlatformSolutions/symphony-api-client-java);
+* [2.0](generators/bdk/java) generating a bot and using the [Java BDK2.0](https://github.com/SymphonyPlatformSolutions/symphony-api-client-java);
 * `*-bots` folders generating bots, using the [.NET](https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet),
 [legacy java](https://github.com/SymphonyPlatformSolutions/symphony-api-client-java/tree/master/symphony-bdk-legacy/symphony-api-client-java),
 [node](https://github.com/SymphonyPlatformSolutions/symphony-api-client-node) and
