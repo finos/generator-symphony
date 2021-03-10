@@ -7,7 +7,7 @@ const keyPair = require('../../lib/certificate-creator/rsa-certificate-creator')
 const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
 
-const BDK_VERSION_DEFAULT = '2.0.0';
+const BDK_VERSION_DEFAULT = '2.1.1';
 const SPRING_VERSION_DEFAULT = '2.4.1'
 
 // Make it configurable for faster test execution
