@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const keyPair = require('../../lib/certificate-creator/rsa-certificate-creator').keyPair;
 
+const COMMON_EXT_APP_TEMPLATES = '../../../common-template/circle-of-trust-ext-app'
 const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
 
@@ -124,7 +125,7 @@ module.exports = class extends Generator {
       // Process scripts files
       ['app.js.ejs', 'controller.js.ejs'].forEach(file => {
         this.fs.copyTpl(
-          this.templatePath(path.join('ext-app/scripts', file)),
+          this.templatePath(path.join(COMMON_EXT_APP_TEMPLATES, 'scripts', file)),
           this.destinationPath(path.join(BASE_RESOURCES, 'static/scripts', file.substr(0, file.indexOf('.ejs')))),
           this.answers
         );
@@ -133,6 +134,11 @@ module.exports = class extends Generator {
       this.fs.copyTpl(
         this.templatePath('ext-app/resources/'),
         this.destinationPath(BASE_RESOURCES),
+      );
+
+      this.fs.copyTpl(
+        this.templatePath(path.join(COMMON_EXT_APP_TEMPLATES, 'static')),
+        this.destinationPath(BASE_RESOURCES + '/static'),
       );
 
       this._copyJavaTemplate('ext-app/java', basePackage);
