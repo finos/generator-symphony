@@ -1,7 +1,6 @@
 const helpers = require('yeoman-test')
 const assert = require('yeoman-assert')
 const path = require('path')
-const axios = require('axios')
 const fs = require('fs')
 const forge = require('node-forge')
 
@@ -179,6 +178,7 @@ describe('Java BDK', () => {
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'ext-app',
+        language: 'java',
         build: 'Maven',
         framework: 'java',
         groupId: 'com.mycompany',
@@ -221,6 +221,7 @@ describe('Java BDK', () => {
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'ext-app',
+        language: 'java',
         build: 'Gradle',
         framework: 'java',
         groupId: 'com.mycompany',
