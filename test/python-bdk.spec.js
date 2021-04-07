@@ -30,7 +30,7 @@ describe('Python BDK', () => {
         language: 'python',
         appId: 'app-id'
       }).then((dir) => {
-        assertCommonFilesAreGenerated(dir);
+        assertCommonFilesGenerated(dir);
       })
   })
 
@@ -49,7 +49,7 @@ describe('Python BDK', () => {
         language: 'python',
         appId: appId
       }).then((dir) => {
-        assertCommonFilesAreGenerated(dir)
+        assertCommonFilesGenerated(dir)
         assert.file([
           path.join(BASE_PYTHON, 'ext_app_be.py'),
           path.join(BASE_STATIC, 'app.html'),
@@ -65,7 +65,7 @@ describe('Python BDK', () => {
   })
 })
 
-function assertCommonFilesAreGenerated(dir) {
+function assertCommonFilesGenerated(dir) {
   assert.file([
     path.join(BASE_PYTHON, 'main.py'),
     path.join(BASE_RESOURCE, 'config.yaml'),
