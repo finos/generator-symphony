@@ -73,8 +73,7 @@ module.exports = class extends Generator {
             name: 'Python (beta)',
             value: 'python'
           }
-        ],
-        when: answer => answer.application === 'bot-app'
+        ]
       },
       {
         type: 'list',
@@ -101,7 +100,7 @@ module.exports = class extends Generator {
       }
     ]);
 
-    if (this.answers.language === 'java' || this.answers.application === 'ext-app') {
+    if (this.answers.language === 'java') {
       this.composeWith(require.resolve('./java'), this.answers);
     } else if (this.answers.language === 'python') {
       this.composeWith(require.resolve('./python'), this.answers);

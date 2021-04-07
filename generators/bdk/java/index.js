@@ -1,5 +1,4 @@
 const Generator = require('yeoman-generator');
-const colors = require('colors');
 const path = require('path');
 const fs = require('fs');
 const keyPair = require('../../lib/certificate-creator/rsa-certificate-creator').keyPair;

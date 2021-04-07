@@ -1,8 +1,9 @@
 const Generator = require('yeoman-generator');
-const colors = require('colors');
 const keyPair = require('../../lib/certificate-creator/rsa-certificate-creator').keyPair;
+const path = require('path');
 
-const BDK_VERSION_DEFAULT = '2.0b0';
+const BDK_VERSION_DEFAULT = '2.0b1';
+const COMMON_EXT_APP_TEMPLATES = '../../../common-template/circle-of-trust-ext-app'
 
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 
@@ -24,9 +25,7 @@ module.exports = class extends Generator {
     }
 
     [
-      ['config.yaml.ejs', 'resources/config.yaml'],
       ['requirements.txt.ejs', 'requirements.txt'],
-      ['python/main.py.ejs', 'python/main.py'],
       ['logging.conf.ejs', 'logging.conf'],
       ['.gitignore.tpl', '.gitignore']
     ].forEach(path_pair => {
@@ -37,6 +36,54 @@ module.exports = class extends Generator {
       )
     });
 
+    if (this.answers.application === 'bot-app') {
+      [
+        ['bot-app/config.yaml.ejs', 'resources/config.yaml'],
+        ['bot-app/main.py.ejs', 'python/main.py']
+      ].forEach(path_pair => {
+        this.fs.copyTpl(
+          this.templatePath(path_pair[0]),
+          this.destinationPath(path_pair[1]),
+          this.answers
+        )
+      });
+    }
+    if (this.answers.application === 'ext-app') {
+      [
+        ['ext-app/config.yaml.ejs', 'resources/config.yaml'],
+        ['ext-app/srv.crt', 'resources/srv.crt'],
+        ['ext-app/srv.key', 'resources/srv.key'],
+        ['ext-app/main.py.ejs', 'python/main.py'],
+        ['ext-app/ext_app_be.py.ejs', 'python/ext_app_be.py']
+      ].forEach(path_pair => {
+        this.fs.copyTpl(
+          this.templatePath(path_pair[0]),
+          this.destinationPath(path_pair[1]),
+          this.answers
+        )
+      });
+
+      // Process application.yaml.ejs file
+      this.fs.copyTpl(
+        this.templatePath('ext-app/config.yaml.ejs'),
+        this.destinationPath('resources/config.yaml'),
+        this.answers
+      );
+
+      // Process scripts files
+      ['app.js', 'controller.js'].forEach(file => {
+        this.fs.copyTpl(
+          this.templatePath(path.join(COMMON_EXT_APP_TEMPLATES, 'scripts', file + '.ejs')),
+          this.destinationPath(path.join('resources/static/scripts', file)),
+          this.answers
+        );
+      });
+
+      this.fs.copyTpl(
+        this.templatePath(path.join(COMMON_EXT_APP_TEMPLATES, 'static')),
+        this.destinationPath('resources/static'),
+      );
+    }
   }
 
   end() {
