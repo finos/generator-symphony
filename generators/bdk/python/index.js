@@ -97,6 +97,6 @@ module.exports = class extends Generator {
 
     this.log(`Your Python project has been successfully generated !`.cyan.bold);
     this.log(`Install all required packages with: `.cyan.bold + `pip3 install -r requirements.txt`);
-    this.log(`And run your bot with: `.cyan.bold + `python3 python/main.py`);
+    this.log(`And run your bot with: `.cyan.bold + `python3 -m python.main`);
   }
 }
