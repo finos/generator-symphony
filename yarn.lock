@@ -2999,11 +2999,6 @@ just-extend@^4.0.2:
   resolved "https://registry.npmjs.org/just-extend/-/just-extend-4.1.1.tgz"
   integrity sha512-aWgeGFW67BP3e5181Ep1Fv2v8z//iBJfrvyTnq8wG86vEESwmonn1zPBJ0VfmT9CJq2FIT0VsETtrNFm2a+SHA==
 
-keypair@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/keypair/-/keypair-1.0.1.tgz"
-  integrity sha1-dgNxknCvtlZO04oiCHoG/Jqk6hs=
-
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
   resolved "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz"
