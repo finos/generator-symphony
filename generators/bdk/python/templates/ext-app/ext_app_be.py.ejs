@@ -58,10 +58,7 @@ class CircleOfTrustHandler:
         jwt = body["jwt"]
 
         user_id = await self.circle_of_trust_service.validate_jwt_and_retrieve_user_id(jwt)
-        response = web.json_response({"userId": user_id})
-        response.set_cookie(name="userJwt", value=jwt, path=APP_BASE_PATH, max_age=ONE_DAY_IN_SECONDS, secure=True,
-                            httponly=True, samesite="None")  # samesite to be updated accordingly
-        return response
+        return web.json_response({"userId": user_id})
 
     @web.middleware
     async def add_cors_headers(self, request, handler):
