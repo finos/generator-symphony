@@ -13,7 +13,8 @@ STATIC_FOLDER = os.path.join(RESOURCES_FOLDER, "static")
 
 def run_app():
     ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-    # pass the server SSL certificate and private key
+    # Below are a self-signed certificate with its corresponding private key
+    # Please update them when deploying in production
     cert_file_path = os.path.join(STATIC_FOLDER, "srv.crt")
     key_file_path = os.path.join(STATIC_FOLDER, "srv.key")
     ssl_context.load_cert_chain(cert_file_path, key_file_path)

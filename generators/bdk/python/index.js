@@ -83,7 +83,8 @@ module.exports = class extends Generator {
       ['ext-app/srv.crt', 'resources/srv.crt'],
       ['ext-app/srv.key', 'resources/srv.key'],
       ['ext-app/main.py.ejs', 'python/main.py'],
-      ['ext-app/ext_app_be.py.ejs', 'python/ext_app_be.py']
+      ['ext-app/ext_app_be.py.ejs', 'python/ext_app_be.py'],
+      ['ext-app/config.yaml.ejs', 'resources/config.yaml']
     ].forEach(path_pair => {
       this.fs.copyTpl(
         this.templatePath(path_pair[0]),
@@ -91,12 +92,6 @@ module.exports = class extends Generator {
         this.answers
       )
     });
-
-    this.fs.copyTpl(
-      this.templatePath('ext-app/config.yaml.ejs'),
-      this.destinationPath('resources/config.yaml'),
-      this.answers
-    );
 
     ['app.js', 'controller.js'].forEach(file => {
       this.fs.copyTpl(
