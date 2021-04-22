@@ -2,7 +2,7 @@ const Generator = require('yeoman-generator');
 const keyPair = require('../../lib/certificate-creator/rsa-certificate-creator').keyPair;
 const path = require('path');
 
-const BDK_VERSION_DEFAULT = '2.0b1';
+const BDK_VERSION_DEFAULT = '2.0b2';
 const COMMON_EXT_APP_TEMPLATES = '../../../common-template/circle-of-trust-ext-app'
 
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
