@@ -14,6 +14,8 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 async def run():
+  config = BdkConfigLoader.load_from_file(os.path.join(current_dir, '..', 'resources/config.yaml'))
+
   async with SymphonyBdk(config) as bdk:
     datafeed_loop = bdk.datafeed()
     datafeed_loop.subscribe(RealTimeEventListenerImpl(bdk))
@@ -35,13 +37,12 @@ class RealTimeEventListenerImpl(RealTimeEventListener):
     )
 
 
-config = BdkConfigLoader.load_from_file(os.path.join(current_dir, '..', 'resources/config.yaml'))
 logging.config.fileConfig(os.path.join(current_dir, '..', 'logging.conf'),
                           disable_existing_loggers=False)
 
 try:
   logging.info("Running bot application...")
-  if os.name == "nt" and config.proxy is not None:
+  if os.name == "nt":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
   asyncio.run(run())
 except KeyboardInterrupt:
