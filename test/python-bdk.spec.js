@@ -31,6 +31,10 @@ describe('Python BDK', () => {
         appId: 'app-id'
       }).then((dir) => {
         assertCommonFilesGenerated(dir);
+        assert.file([
+          path.join(BASE_PYTHON, 'activities.py'),
+          path.join(BASE_PYTHON, 'gif_activities.py'),
+          path.join(BASE_RESOURCE, 'gif.xml')]);
       })
   })
 

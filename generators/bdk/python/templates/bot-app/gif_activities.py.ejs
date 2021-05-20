@@ -1,0 +1,39 @@
+import os
+
+from symphony.bdk.core.activity.command import SlashCommandActivity, CommandContext
+from symphony.bdk.core.activity.form import FormReplyActivity, FormReplyContext
+from symphony.bdk.core.service.message.message_service import MessageService
+
+
+class GifSlashCommand(SlashCommandActivity):
+    """Sends a form when sending @bot-name /gif
+    """
+
+    def __init__(self, messages: MessageService):
+        super().__init__("/gif", True, self.display_gif_form)
+        self._messages = messages
+
+        with open(os.path.dirname(__file__) + "/../resources/gif.xml", mode="rt") as file:
+            self._message = file.read()
+
+    async def display_gif_form(self, context: CommandContext):
+        await self._messages.send_message(context.stream_id, self._message)
+
+
+class GifFormReplyActivity(FormReplyActivity):
+    """Sends back the selected value on form submission
+    """
+
+    def __init__(self, messages: MessageService):
+        super().__init__()
+        self._messages = messages
+
+    def matches(self, context: FormReplyContext) -> bool:
+        return context.form_id == "gif-category-form" and context.form_values["action"] == "submit" and \
+               context.form_values[
+                   "category"]
+
+    async def on_activity(self, context: FormReplyContext):
+        category = context.form_values["category"]
+        await self._messages.send_message(context.source_event.stream.stream_id,
+                                          f"<messageML>Category is {category}</messageML>")
