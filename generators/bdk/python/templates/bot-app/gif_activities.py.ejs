@@ -1,5 +1,7 @@
 import os
 
+from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
+
 from symphony.bdk.core.activity.command import SlashCommandActivity, CommandContext
 from symphony.bdk.core.activity.form import FormReplyActivity, FormReplyContext
 from symphony.bdk.core.service.message.message_service import MessageService
@@ -13,11 +15,13 @@ class GifSlashCommand(SlashCommandActivity):
         super().__init__("/gif", True, self.display_gif_form)
         self._messages = messages
 
-        with open(os.path.dirname(__file__) + "/../resources/gif.xml", mode="rt") as file:
-            self._message = file.read()
+        env = Environment(loader=FileSystemLoader(['<%= resourcesFolder %>']),
+                          autoescape=select_autoescape(['html', 'xml']))
+        self.template = env.get_template('gif.xml')
 
     async def display_gif_form(self, context: CommandContext):
-        await self._messages.send_message(context.stream_id, self._message)
+        message = self.template.render(name=context.initiator.user.display_name)
+        await self._messages.send_message(context.stream_id, message)
 
 
 class GifFormReplyActivity(FormReplyActivity):
