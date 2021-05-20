@@ -34,8 +34,7 @@ class GifFormReplyActivity(FormReplyActivity):
 
     def matches(self, context: FormReplyContext) -> bool:
         return context.form_id == "gif-category-form" and context.form_values["action"] == "submit" and \
-               context.form_values[
-                   "category"]
+               context.form_values["category"]
 
     async def on_activity(self, context: FormReplyContext):
         category = context.form_values["category"]
