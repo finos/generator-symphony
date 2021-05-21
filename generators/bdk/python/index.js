@@ -76,7 +76,9 @@ module.exports = class extends Generator {
     let bot_app_folder = 'bot-app';
     [
       [bot_app_folder + '/config.yaml.ejs', RESOURCES_FOLDER + '/config.yaml'],
-      [bot_app_folder + '/main.py.ejs', PYTHON_FOLDER + '/main.py']
+      [bot_app_folder + '/gif.xml.ejs', RESOURCES_FOLDER + '/gif.xml'],
+      [bot_app_folder + '/main.py.ejs', PYTHON_FOLDER + '/main.py'],
+      [bot_app_folder + '/activities.py.ejs', PYTHON_FOLDER + '/activities.py']
     ].forEach(path_pair => {
       this.fs.copyTpl(
         this.templatePath(path_pair[0]),
@@ -84,6 +86,12 @@ module.exports = class extends Generator {
         this.answers
       )
     });
+
+    this.fs.copyTpl(
+      this.templatePath(bot_app_folder + '/gif_activities.py.ejs'),
+      this.destinationPath(PYTHON_FOLDER + '/gif_activities.py'),
+      Object.assign({}, this.answers, {resourcesFolder: this.destinationPath(RESOURCES_FOLDER)})
+    )
   }
 
   _generateExtAppSpecificFiles() {
