@@ -1,4 +1,6 @@
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+import os
+
+from jinja2 import Template
 
 from symphony.bdk.core.activity.command import SlashCommandActivity, CommandContext
 from symphony.bdk.core.activity.form import FormReplyActivity, FormReplyContext
@@ -6,16 +8,12 @@ from symphony.bdk.core.service.message.message_service import MessageService
 
 
 class GifSlashCommand(SlashCommandActivity):
-    """Sends a form when sending @bot-name /gif
-    """
+    # Sends a form when sending @bot-name /gif
 
     def __init__(self, messages: MessageService):
-        super().__init__("/gif", True, self.display_gif_form)
+        super().__init__("/gif", False, self.display_gif_form)
         self._messages = messages
-
-        env = Environment(loader=FileSystemLoader(['<%= resourcesFolder %>']),
-                          autoescape=select_autoescape(['html', 'xml']))
-        self.template = env.get_template('gif.xml')
+        self.template = Template(open('resources/gif.jinja2').read())
 
     async def display_gif_form(self, context: CommandContext):
         message = self.template.render(name=context.initiator.user.display_name)
@@ -23,16 +21,15 @@ class GifSlashCommand(SlashCommandActivity):
 
 
 class GifFormReplyActivity(FormReplyActivity):
-    """Sends back the selected value on form submission
-    """
+    # Sends back the selected value on form submission
 
     def __init__(self, messages: MessageService):
-        super().__init__()
         self._messages = messages
 
     def matches(self, context: FormReplyContext) -> bool:
-        return context.form_id == "gif-category-form" and context.form_values["action"] == "submit" and \
-               context.form_values["category"]
+        return context.form_id == "gif-category-form" \
+            and context.form_values["action"] == "submit" \
+            and context.form_values["category"]
 
     async def on_activity(self, context: FormReplyContext):
         category = context.form_values["category"]

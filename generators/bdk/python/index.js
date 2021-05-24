@@ -3,13 +3,13 @@ const keyPair = require('../../lib/certificate-creator/rsa-certificate-creator')
 const path = require('path');
 
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
-const BDK_VERSION_DEFAULT = '2.0b2';
+const BDK_VERSION_DEFAULT = '2.0b3';
 
 const COMMON_TEMPLATE_FOLDER = '../../../common-template'
 const COMMON_EXT_APP_TEMPLATES = COMMON_TEMPLATE_FOLDER + '/circle-of-trust-ext-app'
 
 const RESOURCES_FOLDER = 'resources' // target resources folder
-const PYTHON_FOLDER = 'python' // target folder containing python sources
+const PYTHON_FOLDER = 'src' // target folder containing python sources
 
 
 module.exports = class extends Generator {
@@ -30,6 +30,10 @@ module.exports = class extends Generator {
     }
   }
 
+  install() {
+    this.spawnCommandSync('python3', [ '-m', 'venv', 'env' ]);
+  }
+
   end() {
     if (this.pair) {
       this.log('\nYou can now update the service account '.cyan +
@@ -40,8 +44,13 @@ module.exports = class extends Generator {
     }
 
     this.log(`Your Python project has been successfully generated !`.cyan.bold);
+    if (process.platform === "win32") {
+      this.log(`Activate virtual environment:`.cyan.bold + ' env\\Scripts\\activate.bat');
+    } else {
+      this.log(`Activate virtual environment:`.cyan.bold + ' source env/bin/activate');
+    }
     this.log(`Install all required packages with: `.cyan.bold + `pip3 install -r requirements.txt`);
-    this.log(`And run your bot with: `.cyan.bold + `python3 -m ${PYTHON_FOLDER}.main`);
+    this.log(`And run your bot with: `.cyan.bold + `python3 -m ${PYTHON_FOLDER}`);
   }
 
   _generateRsaKeys() {
@@ -60,8 +69,9 @@ module.exports = class extends Generator {
   _generateCommonFiles() {
     [
       ['requirements.txt.ejs', 'requirements.txt'],
-      ['logging.conf.ejs', 'logging.conf'],
+      ['logging.conf.ejs', RESOURCES_FOLDER + '/logging.conf'],
       ['.gitignore.tpl', '.gitignore'],
+      ['readme.md.ejs', 'readme.md'],
       [COMMON_TEMPLATE_FOLDER + '/truststore/all_symphony_certs.pem', RESOURCES_FOLDER + '/all_symphony_certs.pem']
     ].forEach(path_pair => {
       this.fs.copyTpl(
@@ -76,8 +86,8 @@ module.exports = class extends Generator {
     let bot_app_folder = 'bot-app';
     [
       [bot_app_folder + '/config.yaml.ejs', RESOURCES_FOLDER + '/config.yaml'],
-      [bot_app_folder + '/gif.xml.ejs', RESOURCES_FOLDER + '/gif.xml'],
-      [bot_app_folder + '/main.py.ejs', PYTHON_FOLDER + '/main.py'],
+      [bot_app_folder + '/gif.jinja2.ejs', RESOURCES_FOLDER + '/gif.jinja2'],
+      [bot_app_folder + '/__main__.py.ejs', PYTHON_FOLDER + '/__main__.py'],
       [bot_app_folder + '/activities.py.ejs', PYTHON_FOLDER + '/activities.py']
     ].forEach(path_pair => {
       this.fs.copyTpl(
@@ -100,7 +110,7 @@ module.exports = class extends Generator {
       [ext_app_folder + '/config.yaml.ejs', RESOURCES_FOLDER + '/config.yaml'],
       [ext_app_folder + '/srv.crt', RESOURCES_FOLDER + '/srv.crt'],
       [ext_app_folder + '/srv.key', RESOURCES_FOLDER + '/srv.key'],
-      [ext_app_folder + '/main.py.ejs', PYTHON_FOLDER + '/main.py'],
+      [ext_app_folder + '/__main__.py.ejs', PYTHON_FOLDER + '/__main__.py'],
       [ext_app_folder + '/ext_app_be.py.ejs', PYTHON_FOLDER + '/ext_app_be.py'],
       [ext_app_folder + '/config.yaml.ejs', RESOURCES_FOLDER + '/config.yaml']
     ].forEach(path_pair => {
