@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import asyncio
 import logging.config
-import os
+from pathlib import Path
 
 from symphony.bdk.core.activity.command import CommandContext
 from symphony.bdk.core.config.loader import BdkConfigLoader
@@ -10,27 +10,21 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 
-from python.activities import EchoCommandActivity, GreetUserJoinedActivity
-from python.gif_activities import GifSlashCommand, GifFormReplyActivity
+from .activities import EchoCommandActivity, GreetUserJoinedActivity
+from .gif_activities import GifSlashCommand, GifFormReplyActivity
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-
-class RealTimeEventListenerImpl(RealTimeEventListener):
-
-    def __init__(self, bdk: SymphonyBdk):
-        self._bdk = bdk
-
-    async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
-        logging.debug("Message received from %s", initiator.user.display_name)
+# Configure logging
+current_dir = Path(__file__).parent.parent
+logging_conf = Path.joinpath(current_dir, 'resources', 'logging.conf')
+logging.config.fileConfig(logging_conf, disable_existing_loggers=False)
 
 
 async def run():
-    config = BdkConfigLoader.load_from_file(os.path.join(current_dir, '..', 'resources/config.yaml'))
+    config = BdkConfigLoader.load_from_file(Path.joinpath(current_dir, 'resources', 'config.yaml'))
 
     async with SymphonyBdk(config) as bdk:
         datafeed_loop = bdk.datafeed()
-        datafeed_loop.subscribe(RealTimeEventListenerImpl(bdk))
+        datafeed_loop.subscribe(MessageListener())
 
         activities = bdk.activities()
         activities.register(EchoCommandActivity(bdk.messages()))
@@ -40,18 +34,21 @@ async def run():
 
         @activities.slash("/hello")
         async def hello(context: CommandContext):
-            await bdk.messages().send_message(
-                context.stream_id,
-                f"<messageML>Hello {context.initiator.user.display_name}, hope you are doing well!</messageML>"
-            )
+            name = context.initiator.user.display_name
+            response = f"<messageML>Hello {name}, hope you are doing well!</messageML>"
+            await bdk.messages().send_message(context.stream_id, response)
 
-        logging.info("Start datafeed...")
+        # Start the datafeed read loop
         await datafeed_loop.start()
 
 
-logging.config.fileConfig(os.path.join(current_dir, '..', 'logging.conf'),
-                          disable_existing_loggers=False)
+class MessageListener(RealTimeEventListener):
+    async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
+        logging.debug("Message received from %s: %s",
+            initiator.user.display_name, event.message.message)
 
+
+# Start the main asyncio run
 try:
     logging.info("Running bot application...")
     asyncio.run(run())
