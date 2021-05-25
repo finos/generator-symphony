@@ -4,7 +4,7 @@ const path = require('path')
 const fs = require('fs')
 const forge = require('node-forge')
 
-const BASE_PYTHON = 'python'
+const BASE_PYTHON = 'src'
 const BASE_RESOURCE = 'resources'
 
 const BASE_STATIC = BASE_RESOURCE + '/static'
@@ -31,6 +31,10 @@ describe('Python BDK', () => {
         appId: 'app-id'
       }).then((dir) => {
         assertCommonFilesGenerated(dir);
+        assert.file([
+          path.join(BASE_PYTHON, 'activities.py'),
+          path.join(BASE_PYTHON, 'gif_activities.py'),
+          path.join(BASE_RESOURCE, 'gif.jinja2')]);
       })
   })
 
@@ -67,12 +71,13 @@ describe('Python BDK', () => {
 
 function assertCommonFilesGenerated(dir) {
   assert.file([
-    path.join(BASE_PYTHON, 'main.py'),
+    path.join(BASE_PYTHON, '__main__.py'),
     path.join(BASE_RESOURCE, 'config.yaml'),
+    path.join(BASE_RESOURCE, 'all_symphony_certs.pem'),
+    path.join(BASE_RESOURCE, 'logging.conf'),
     'rsa/privatekey.pem',
     'rsa/publickey.pem',
     'requirements.txt',
-    'logging.conf',
     '.gitignore'
   ]);
 
@@ -87,6 +92,7 @@ function assertCommonFilesGenerated(dir) {
   assert(config.includes('host: acme.symphony.com'))
   assert(config.includes('username: test-bot'))
   assert(config.includes('path: rsa/privatekey.pem'))
+  assert(config.includes(`path: ${BASE_RESOURCE}/all_symphony_certs.pem`))
 }
 
 function assertKeyPair(generatedPrivateKey, generatedPublicKey) {

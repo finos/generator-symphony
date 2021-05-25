@@ -1,30 +1,30 @@
 #!/usr/bin/env python3
 import logging.config
-import os
 import ssl
+from pathlib import Path
 
 from aiohttp import web
 from symphony.bdk.core.config.loader import BdkConfigLoader
 
-from python.ext_app_be import CircleOfTrustService, CircleOfTrustHandler, APP_BASE_PATH
+from .ext_app_be import CircleOfTrustService, CircleOfTrustHandler, APP_BASE_PATH
 
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-RESOURCES_FOLDER = os.path.join(CURRENT_DIR, "../resources")
-STATIC_FOLDER = os.path.join(RESOURCES_FOLDER, "static")
+CURRENT_DIR = Path(__file__).parent.parent
+RESOURCES_FOLDER = Path.joinpath(CURRENT_DIR, "resources")
+STATIC_FOLDER = Path.joinpath(CURRENT_DIR, "static")
 
 def run_app():
     ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
     # Below are a self-signed certificate with its corresponding private key
     # Please update them when deploying in production
-    cert_file_path = os.path.join(RESOURCES_FOLDER, "srv.crt")
-    key_file_path = os.path.join(RESOURCES_FOLDER, "srv.key")
+    cert_file_path = Path.joinpath(RESOURCES_FOLDER, "srv.crt")
+    key_file_path = Path.joinpath(RESOURCES_FOLDER, "srv.key")
     ssl_context.load_cert_chain(cert_file_path, key_file_path)
 
     web.run_app(create_app(), ssl_context=ssl_context, port=10443)  # set the desired port to listen to
 
 
 def create_app():
-    config = BdkConfigLoader.load_from_file(os.path.join(RESOURCES_FOLDER, 'config.yaml'))
+    config = BdkConfigLoader.load_from_file(Path.joinpath(RESOURCES_FOLDER, 'config.yaml'))
     cot_service = CircleOfTrustService(config)
     cot_handler = CircleOfTrustHandler(cot_service)
 
@@ -38,6 +38,6 @@ def create_app():
     return app
 
 
-logging.config.fileConfig(os.path.join(RESOURCES_FOLDER, '..', 'logging.conf'), disable_existing_loggers=False)
+logging.config.fileConfig(Path.joinpath(RESOURCES_FOLDER, 'logging.conf'), disable_existing_loggers=False)
 
 run_app()

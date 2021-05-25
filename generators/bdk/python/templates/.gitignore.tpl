@@ -6,3 +6,7 @@
 .DS_Store
 
 rsa/
+env/
+bdk.log
+datafeed.id
+**/__pycache__
