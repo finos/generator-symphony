@@ -13,7 +13,7 @@ class GifSlashCommand(SlashCommandActivity):
     def __init__(self, messages: MessageService):
         super().__init__("/gif", False, self.display_gif_form)
         self._messages = messages
-        self.template = Template(open('resources/gif.jinja2').read())
+        self.template = Template(open('resources/gif.jinja2').read(), autoescape=True)
 
     async def display_gif_form(self, context: CommandContext):
         message = self.template.render(name=context.initiator.user.display_name)
