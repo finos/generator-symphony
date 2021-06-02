@@ -10,7 +10,7 @@ from .ext_app_be import CircleOfTrustService, CircleOfTrustHandler, APP_BASE_PAT
 
 CURRENT_DIR = Path(__file__).parent.parent
 RESOURCES_FOLDER = Path.joinpath(CURRENT_DIR, "resources")
-STATIC_FOLDER = Path.joinpath(CURRENT_DIR, "static")
+STATIC_FOLDER = Path.joinpath(RESOURCES_FOLDER, "static")
 
 def run_app():
     ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
