@@ -3,7 +3,7 @@ const keyPair = require('../../lib/certificate-creator/rsa-certificate-creator')
 const path = require('path');
 
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
-const BDK_VERSION_DEFAULT = '2.0b3';
+const BDK_VERSION_DEFAULT = '2.0b4';
 
 const COMMON_TEMPLATE_FOLDER = '../../../common-template'
 const COMMON_EXT_APP_TEMPLATES = COMMON_TEMPLATE_FOLDER + '/circle-of-trust-ext-app'
