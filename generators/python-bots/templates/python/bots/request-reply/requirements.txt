@@ -1,1 +1,1 @@
-sym-api-client-python>=1.1.2
+sym-api-client-python>=1.3.6
