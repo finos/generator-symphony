@@ -87,7 +87,7 @@ function assertCommonFilesGenerated(dir) {
 
   let requirement = fs.readFileSync(path.join(dir, 'requirements.txt'), 'utf-8')
   let config = fs.readFileSync(path.join(dir, BASE_RESOURCE, 'config.yaml'), 'utf-8')
-  let version_regex = /sym-api-client-python>=\d.\d+(\w\d+)?/i
+  let version_regex = /symphony-bdk-python>=\d.\d+(\w\d+)?/i
   assert(requirement.match(version_regex))
   assert(config.includes('host: acme.symphony.com'))
   assert(config.includes('username: test-bot'))
