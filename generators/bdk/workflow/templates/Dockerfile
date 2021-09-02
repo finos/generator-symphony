@@ -1,0 +1,11 @@
+FROM eclipse-temurin:11
+
+RUN useradd -m -d /opt/symphony symphony
+USER symphony
+
+COPY . /opt/symphony
+
+WORKDIR /opt/symphony
+EXPOSE 8080
+
+CMD ["java", "-jar", "workflow-bot-app.jar"]

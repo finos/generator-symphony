@@ -2,7 +2,7 @@ const helpers = require('yeoman-test')
 const assert = require('yeoman-assert')
 const path = require('path')
 const fs = require('fs')
-const forge = require('node-forge')
+const {assertKeyPair} = require('./test-utils')
 
 const BASE_PYTHON = 'src'
 const BASE_RESOURCE = 'resources'
@@ -93,13 +93,6 @@ function assertCommonFilesGenerated(dir) {
   assert(config.includes('username: test-bot'))
   assert(config.includes('path: rsa/privatekey.pem'))
   assert(config.includes(`path: ${BASE_RESOURCE}/all_symphony_certs.pem`))
-}
-
-function assertKeyPair(generatedPrivateKey, generatedPublicKey) {
-  let forgePrivateKey = forge.pki.privateKeyFromPem(generatedPrivateKey);
-  let forgePublicKey = forge.pki.setRsaPublicKey(forgePrivateKey.n, forgePrivateKey.e);
-  let publicKey = forge.pki.publicKeyToRSAPublicKeyPem(forgePublicKey).toString();
-  assert.textEqual(generatedPublicKey.split("\n").join(""), publicKey.split("\n").join(""))
 }
 
 function assertJsFileReplacedWithAppId(dir, file, appId) {

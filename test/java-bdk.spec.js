@@ -2,7 +2,7 @@ const helpers = require('yeoman-test')
 const assert = require('yeoman-assert')
 const path = require('path')
 const fs = require('fs')
-const forge = require('node-forge')
+const {assertKeyPair} = require('./test-utils')
 
 const BASE_JAVA = 'src/main/java'
 const BASE_RESOURCE = 'src/main/resources'
@@ -252,10 +252,3 @@ describe('Java BDK', () => {
       })
   })
 })
-
-function assertKeyPair(generatedPrivateKey, generatedPublicKey) {
-  let forgePrivateKey = forge.pki.privateKeyFromPem(generatedPrivateKey);
-  let forgePublicKey = forge.pki.setRsaPublicKey(forgePrivateKey.n, forgePrivateKey.e);
-  let publicKey = forge.pki.publicKeyToRSAPublicKeyPem(forgePublicKey).toString();
-  assert.textEqual(generatedPublicKey.split("\n").join(""), publicKey.split("\n").join(""))
-}
