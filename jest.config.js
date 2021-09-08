@@ -1,7 +1,7 @@
 module.exports = {
   reporters: [ "default", "jest-junit" ],
   coverageThreshold: {
-    "./generators/bdk/**/*.js": {
+    "./generators/**/*.js": {
       "lines": 90
     },
     global: {

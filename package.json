@@ -1,6 +1,6 @@
 {
   "name": "generator-symphony",
-  "version": "1.7.0",
+  "version": "2.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SymphonyPlatformSolutions/generator-symphony.git"
@@ -23,10 +23,11 @@
     "node-openssl-p12": "^0.1.8",
     "selfsigned": "^1.10.8",
     "upath": "^1.1.2",
-    "yeoman-generator": "^4.0.2"
+    "yeoman-generator": "^4.13.0"
   },
   "devDependencies": {
-    "fs-extra": "^9.0.1",
+    "decamelize": "^5.0.0",
+    "fs-extra": "^9.1.0",
     "jest": "^25.5.4",
     "jest-junit": "^12.0.0",
     "jest-mock-axios": "^3.2.0",
@@ -40,7 +41,7 @@
   "homepage": "https://github.com/SymphonyPlatformSolutions/generator-symphony#readme",
   "main": "index.js",
   "scripts": {
-    "test:gen:2.0": "rm -rf dist && mkdir dist && cd dist && yo symphony 2.0",
+    "test:gen": "rm -rf dist && mkdir dist && cd dist && yo symphony",
     "test": "jest --ci --runInBand --reporters=default --reporters=jest-junit --collectCoverage"
   },
   "jest-junit": {

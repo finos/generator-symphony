@@ -17,7 +17,7 @@ describe('Java BDK', () => {
   afterAll(() => process.chdir(currentDir))
 
   it('Generate 2.0 spring boot gradle', () => {
-    return helpers.run(path.join(__dirname, '../generators/bdk'))
+    return helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir()
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
@@ -56,7 +56,7 @@ describe('Java BDK', () => {
   })
 
   it('Generate 2.0 java gradle', () => {
-    return helpers.run(path.join(__dirname, '../generators/bdk'))
+    return helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir()
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
@@ -92,7 +92,7 @@ describe('Java BDK', () => {
   })
 
   it('Generate 2.0 spring boot maven', async () => {
-    return helpers.run(path.join(__dirname, '../generators/bdk'))
+    return helpers.run(path.join(__dirname, '../generators/app'))
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
@@ -133,7 +133,7 @@ describe('Java BDK', () => {
   })
 
   it('Generate 2.0 java maven', () => {
-    return helpers.run(path.join(__dirname, '../generators/bdk'))
+    return helpers.run(path.join(__dirname, '../generators/app'))
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
@@ -170,7 +170,7 @@ describe('Java BDK', () => {
   })
 
   it('Generate 2.0 ext app maven', () => {
-    return helpers.run(path.join(__dirname, '../generators/bdk'))
+    return helpers.run(path.join(__dirname, '../generators/app'))
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
@@ -212,7 +212,7 @@ describe('Java BDK', () => {
   })
 
   it('Generate 2.0 ext app gradle', () => {
-    return helpers.run(path.join(__dirname, '../generators/bdk'))
+    return helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir()
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH

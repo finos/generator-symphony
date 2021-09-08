@@ -86,3 +86,6 @@ junit.xml
 out/
 target/
 dist/
+
+# we use yarn
+package-lock.json

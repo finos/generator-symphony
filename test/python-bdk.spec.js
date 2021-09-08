@@ -18,7 +18,7 @@ describe('Python BDK', () => {
   afterAll(() => process.chdir(currentDir))
 
   it('Generate 2.0 python bot', () => {
-    return helpers.run(path.join(__dirname, '../generators/bdk'))
+    return helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir()
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
@@ -41,7 +41,7 @@ describe('Python BDK', () => {
   it('Generate 2.0 python ext-app', () => {
     const appId = 'app-id';
 
-    return helpers.run(path.join(__dirname, '../generators/bdk'))
+    return helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir()
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
