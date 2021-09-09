@@ -31,7 +31,6 @@ module.exports = class extends Generator {
   }
 
   install() {
-    this.spawnCommandSync('python3', [ '-m', 'venv', 'env' ]);
   }
 
   end() {
@@ -44,6 +43,7 @@ module.exports = class extends Generator {
     }
 
     this.log(`Your Python project has been successfully generated !`.cyan.bold);
+    this.log(`Install environment: `.cyan.bold + `python3 -m venv env`);
     if (process.platform === "win32") {
       this.log(`Activate virtual environment:`.cyan.bold + ' env\\Scripts\\activate.bat');
     } else {

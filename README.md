@@ -40,8 +40,9 @@ then please try to downgrade to node 15 or node 14 (seems to be linked with
 https://github.com/electron-userland/electron-builder/issues/5668).
 
 ## Legacy generators
+> :warning: It is not recommended using the legacy generators, as the underlying libraries are not maintained anymore.
 
-To generate legacy projects (not recommended), please run the following command:
+To generate legacy projects (.NET, NodeJS and legacy Java/Python SDKs), please run the following command:
 ```shell
 npm install generator-symphony@1.7.7
 ```
