@@ -2,11 +2,9 @@
 [![npm version](https://badge.fury.io/js/generator-symphony.svg)](https://badge.fury.io/js/generator-symphony)
 [![CircleCI](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony.svg?style=shield)](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony)
 
-Yeoman based generator for Symphony Bots and Applications in 4 different languages:
-- Java
-- Node.js
-- Python
-- C#
+Yeoman based generator for Symphony Bots and Applications in 2 different languages:
+- [Java](https://github.com/finos/symphony-bdk-java)
+- [Python](https://github.com/finos/symphony-bdk-python)
 
 ## Quick Start
 
@@ -14,11 +12,6 @@ Yeoman based generator for Symphony Bots and Applications in 4 different languag
 2. Install Symphony BDK Generator `npm i -g generator-symphony`
 3. Create a new directory and go into it `mkdir myBot && cd myBot`
 4. Run Symphony BDK Generator and follow instructions on screen `yo symphony`
-
-## BDK2.0
-
-It is now possible to create Java BDK2.0 projects through a revamped developer experience of the existing generator.
-To access to the new menu you just have to run `yo symphony 2.0`
 
 ## Known issues
 
@@ -45,3 +38,12 @@ at Function.Module._load (node:internal/modules/cjs/loader:828:14)
 ```
 then please try to downgrade to node 15 or node 14 (seems to be linked with
 https://github.com/electron-userland/electron-builder/issues/5668).
+
+## Legacy generators
+> :warning: It is not recommended using the legacy generators, as the underlying libraries are not maintained anymore.
+
+To generate legacy projects (.NET, NodeJS and legacy Java/Python SDKs), please run the following command:
+```shell
+npm install generator-symphony@1.7.7
+```
+or build your own version from the [`legacy`](https://github.com/SymphonyPlatformSolutions/generator-symphony/tree/legacy) branch.
