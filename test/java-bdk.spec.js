@@ -49,8 +49,8 @@ describe('Java BDK', () => {
           path.join(BASE_RESOURCE, 'templates/gif.ftl'),
           path.join(BASE_RESOURCE, 'application.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join(dir, 'rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join(dir, 'rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
+        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })
@@ -85,8 +85,8 @@ describe('Java BDK', () => {
           path.join(BASE_RESOURCE, 'templates/gif.ftl'),
           path.join(BASE_RESOURCE, 'config.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join(dir, 'rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join(dir, 'rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
+        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })
@@ -125,8 +125,8 @@ describe('Java BDK', () => {
           path.join(BASE_RESOURCE, 'templates/gif.ftl'),
           path.join(BASE_RESOURCE, 'application.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join(dir, 'rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join(dir, 'rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
+        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
 
       })
@@ -163,8 +163,8 @@ describe('Java BDK', () => {
           path.join(BASE_RESOURCE, 'templates/gif.ftl'),
           path.join(BASE_RESOURCE, 'config.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join(dir, 'rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join(dir, 'rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
+        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })
@@ -205,8 +205,8 @@ describe('Java BDK', () => {
           path.join(BASE_RESOURCE, 'keystore.p12'),
           path.join(BASE_RESOURCE, 'application.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join(dir, 'rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join(dir, 'rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
+        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })
@@ -246,8 +246,8 @@ describe('Java BDK', () => {
           path.join(BASE_RESOURCE, 'keystore.p12'),
           path.join(BASE_RESOURCE, 'application.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join(dir, 'rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join(dir, 'rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
+        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })

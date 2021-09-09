@@ -173,7 +173,6 @@ module.exports = class extends Generator {
 
     if (buildResult.status !== 0) {
       this.log.error(buildResult.stderr);
-      this.env.error("Failed to build generated project");
     }
   }
 
