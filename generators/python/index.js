@@ -3,7 +3,7 @@ const keyPair = require('../_lib/rsa').keyPair;
 const path = require('path');
 
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
-const BDK_VERSION_DEFAULT = '2.0b6';
+const BDK_VERSION_DEFAULT = '2.0.0';
 
 const COMMON_TEMPLATE_FOLDER = '../../_common'
 const COMMON_EXT_APP_TEMPLATES = COMMON_TEMPLATE_FOLDER + '/circle-of-trust-ext-app'
