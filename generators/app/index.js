@@ -70,7 +70,7 @@ module.exports = class extends Generator {
             value: 'java'
           },
           {
-            name: 'Python (beta)',
+            name: 'Python',
             value: 'python'
           }
         ]
