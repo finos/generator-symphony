@@ -59,7 +59,7 @@ module.exports = class extends Generator {
             value: 'ext-app'
           },
           {
-            name: 'Workflow Application',
+            name: 'Workflow Application (WDK)',
             value: 'workflow-bot-app'
           }
         ]
@@ -106,9 +106,9 @@ module.exports = class extends Generator {
     ]);
 
     if (this.answers.application === 'workflow-bot-app') {
-      this.composeWith(require.resolve('./workflow'), this.answers);
+      this.composeWith(require.resolve('../workflow'), this.answers);
     } else if (this.answers.language === 'java') {
-      this.composeWith(require.resolve('./java'), this.answers);
+      this.composeWith(require.resolve('../java'), this.answers);
     } else if (this.answers.language === 'python') {
       this.composeWith(require.resolve('../python'), this.answers);
     }

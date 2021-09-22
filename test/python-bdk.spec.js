@@ -81,11 +81,11 @@ function assertCommonFilesGenerated(dir) {
     '.gitignore'
   ]);
 
-  let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
-  let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
+  let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+  let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
   assertKeyPair(privateKey, generatedPublicKey)
 
-  let requirement = fs.readFileSync(path.join('requirements.txt'), 'utf-8')
+  let requirement = fs.readFileSync('requirements.txt', 'utf-8')
   let config = fs.readFileSync(path.join(BASE_RESOURCE, 'config.yaml'), 'utf-8')
   let version_regex = /symphony-bdk-python>=\d.\d+(\w\d+)?/i
   assert(requirement.match(version_regex))

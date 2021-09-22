@@ -1,4 +1,4 @@
-name: ping-pong-workflow
+id: ping-pong-workflow
 activities:
   - send-message:
       id: pingPong

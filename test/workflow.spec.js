@@ -13,7 +13,7 @@ describe('Workflow bot', () => {
   afterAll(() => process.chdir(currentDir))
 
   it('Generate workflow bot', () => {
-    return helpers.run(path.join(__dirname, '../generators/bdk'))
+    return helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir()
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
@@ -29,9 +29,11 @@ describe('Workflow bot', () => {
           'workflow-bot-app.jar',
           'lib',
           'workflows/ping.swadl.yaml',
+          'README.md',
+          'Dockerfile'
         ]);
-        let privateKey = fs.readFileSync(path.join(dir, 'rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join(dir, 'rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })

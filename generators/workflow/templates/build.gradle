@@ -1,0 +1,50 @@
+plugins {
+  id 'java-library'
+}
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(11)
+  }
+}
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  maven {
+    url "https://oss.sonatype.org/content/repositories/snapshots"
+    mavenContent {
+      snapshotsOnly()
+    }
+  }
+}
+
+configurations {
+  botJar
+}
+
+dependencies {
+  // this will be provided by the workflow-bot application at runtime
+  compileOnly 'com.symphony.platformsolutions:workflow-language:0.0.1-SNAPSHOT'
+
+  implementation 'org.apache.commons:commons-text:1.9'
+
+  // used to download the standalone WDK bot jar
+  botJar 'com.symphony.platformsolutions:workflow-bot-app:0.0.1-SNAPSHOT'
+}
+
+tasks.register('botJar', Copy) {
+  description "Downloads WDK jar."
+  from configurations.botJar
+  into project.projectDir
+  rename { f -> "workflow-bot-app.jar" }
+}
+
+tasks.register('customActivityLibs', Copy) {
+  description "Copies custom activity dependencies in lib folder."
+  from jar
+  from configurations.runtimeClasspath
+  into "lib"
+}
+
+tasks.build.dependsOn tasks.customActivityLibs
