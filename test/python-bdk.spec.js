@@ -2,7 +2,7 @@ const helpers = require('yeoman-test')
 const assert = require('yeoman-assert')
 const path = require('path')
 const fs = require('fs')
-const forge = require('node-forge')
+const {assertKeyPair} = require('./test-utils')
 
 const BASE_PYTHON = 'src'
 const BASE_RESOURCE = 'resources'
@@ -81,11 +81,11 @@ function assertCommonFilesGenerated(dir) {
     '.gitignore'
   ]);
 
-  let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
-  let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
+  let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+  let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
   assertKeyPair(privateKey, generatedPublicKey)
 
-  let requirement = fs.readFileSync(path.join('requirements.txt'), 'utf-8')
+  let requirement = fs.readFileSync('requirements.txt', 'utf-8')
   let config = fs.readFileSync(path.join(BASE_RESOURCE, 'config.yaml'), 'utf-8')
   let version_regex = /symphony-bdk-python>=\d.\d+(\w\d+)?/i
   assert(requirement.match(version_regex))
@@ -93,13 +93,6 @@ function assertCommonFilesGenerated(dir) {
   assert(config.includes('username: test-bot'))
   assert(config.includes('path: rsa/privatekey.pem'))
   assert(config.includes(`path: ${BASE_RESOURCE}/all_symphony_certs.pem`))
-}
-
-function assertKeyPair(generatedPrivateKey, generatedPublicKey) {
-  let forgePrivateKey = forge.pki.privateKeyFromPem(generatedPrivateKey);
-  let forgePublicKey = forge.pki.setRsaPublicKey(forgePrivateKey.n, forgePrivateKey.e);
-  let publicKey = forge.pki.publicKeyToRSAPublicKeyPem(forgePublicKey).toString();
-  assert.textEqual(generatedPublicKey.split("\n").join(""), publicKey.split("\n").join(""))
 }
 
 function assertJsFileReplacedWithAppId(dir, file, appId) {

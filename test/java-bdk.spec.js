@@ -2,7 +2,7 @@ const helpers = require('yeoman-test')
 const assert = require('yeoman-assert')
 const path = require('path')
 const fs = require('fs')
-const forge = require('node-forge')
+const {assertKeyPair} = require('./test-utils')
 
 const BASE_JAVA = 'src/main/java'
 const BASE_RESOURCE = 'src/main/resources'
@@ -42,15 +42,15 @@ describe('Java BDK', () => {
           path.join(BASE_JAVA, PACKAGE_DIR, 'GifFormActivity.java'),
           path.join(BASE_JAVA, PACKAGE_DIR, 'OnUserJoinedRoomListener.java'),
           path.join(BASE_JAVA, PACKAGE_DIR, 'GifSlashHandler.java'),
-          path.join('rsa/privatekey.pem'),
-          path.join('rsa/publickey.pem'),
-          path.join('.gitignore'),
+          'rsa/privatekey.pem',
+          'rsa/publickey.pem',
+          '.gitignore',
           path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
           path.join(BASE_RESOURCE, 'templates/gif.ftl'),
           path.join(BASE_RESOURCE, 'application.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })
@@ -78,15 +78,15 @@ describe('Java BDK', () => {
           'gradlew.bat',
           'build.gradle',
           path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
-          path.join('rsa/privatekey.pem'),
-          path.join('rsa/publickey.pem'),
-          path.join('.gitignore'),
+          'rsa/privatekey.pem',
+          'rsa/publickey.pem',
+          '.gitignore',
           path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
           path.join(BASE_RESOURCE, 'templates/gif.ftl'),
           path.join(BASE_RESOURCE, 'config.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })
@@ -118,15 +118,15 @@ describe('Java BDK', () => {
           path.join(BASE_JAVA, PACKAGE_DIR, 'GifFormActivity.java'),
           path.join(BASE_JAVA, PACKAGE_DIR, 'OnUserJoinedRoomListener.java'),
           path.join(BASE_JAVA, PACKAGE_DIR, 'GifSlashHandler.java'),
-          path.join('rsa/privatekey.pem'),
-          path.join('rsa/publickey.pem'),
-          path.join('.gitignore'),
+          'rsa/privatekey.pem',
+          'rsa/publickey.pem',
+          '.gitignore',
           path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
           path.join(BASE_RESOURCE, 'templates/gif.ftl'),
           path.join(BASE_RESOURCE, 'application.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
 
       })
@@ -156,15 +156,15 @@ describe('Java BDK', () => {
           'mvnw.cmd',
           'pom.xml',
           path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
-          path.join('rsa/privatekey.pem'),
-          path.join('rsa/publickey.pem'),
-          path.join('.gitignore'),
+          'rsa/privatekey.pem',
+          'rsa/publickey.pem',
+          '.gitignore',
           path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
           path.join(BASE_RESOURCE, 'templates/gif.ftl'),
           path.join(BASE_RESOURCE, 'config.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })
@@ -194,9 +194,9 @@ describe('Java BDK', () => {
           'pom.xml',
           path.join(BASE_JAVA, PACKAGE_DIR, 'ExtensionAppApplication.java'),
           path.join(BASE_JAVA, PACKAGE_DIR, 'SecurityConfig.java'),
-          path.join('rsa/privatekey.pem'),
-          path.join('rsa/publickey.pem'),
-          path.join('.gitignore'),
+          'rsa/privatekey.pem',
+          'rsa/publickey.pem',
+          '.gitignore',
           path.join(BASE_RESOURCE, 'static/css/app.css'),
           path.join(BASE_RESOURCE, 'static/app.html'),
           path.join(BASE_RESOURCE, 'static/controller.html'),
@@ -205,8 +205,8 @@ describe('Java BDK', () => {
           path.join(BASE_RESOURCE, 'keystore.p12'),
           path.join(BASE_RESOURCE, 'application.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })
@@ -235,9 +235,9 @@ describe('Java BDK', () => {
           'build.gradle',
           path.join(BASE_JAVA, PACKAGE_DIR, 'ExtensionAppApplication.java'),
           path.join(BASE_JAVA, PACKAGE_DIR, 'SecurityConfig.java'),
-          path.join('rsa/privatekey.pem'),
-          path.join('rsa/publickey.pem'),
-          path.join('.gitignore'),
+          'rsa/privatekey.pem',
+          'rsa/publickey.pem',
+          '.gitignore',
           path.join(BASE_RESOURCE, 'static/css/app.css'),
           path.join(BASE_RESOURCE, 'static/app.html'),
           path.join(BASE_RESOURCE, 'static/controller.html'),
@@ -246,16 +246,9 @@ describe('Java BDK', () => {
           path.join(BASE_RESOURCE, 'keystore.p12'),
           path.join(BASE_RESOURCE, 'application.yaml')
         ]);
-        let privateKey = fs.readFileSync(path.join('rsa/privatekey.pem'), 'utf-8')
-        let generatedPublicKey = fs.readFileSync(path.join('rsa/publickey.pem'), 'utf-8')
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
       })
   })
 })
-
-function assertKeyPair(generatedPrivateKey, generatedPublicKey) {
-  let forgePrivateKey = forge.pki.privateKeyFromPem(generatedPrivateKey);
-  let forgePublicKey = forge.pki.setRsaPublicKey(forgePrivateKey.n, forgePrivateKey.e);
-  let publicKey = forge.pki.publicKeyToRSAPublicKeyPem(forgePublicKey).toString();
-  assert.textEqual(generatedPublicKey.split("\n").join(""), publicKey.split("\n").join(""))
-}

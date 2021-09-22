@@ -1,0 +1,8 @@
+id: ping-pong-workflow
+activities:
+  - send-message:
+      id: pingPong
+      on:
+        message-received:
+          content: /ping
+      content: "Pong"
