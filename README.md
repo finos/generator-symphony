@@ -2,9 +2,10 @@
 [![npm version](https://badge.fury.io/js/generator-symphony.svg)](https://badge.fury.io/js/generator-symphony)
 [![CircleCI](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony.svg?style=shield)](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony)
 
-Yeoman based generator for Symphony Bots and Applications in 2 different languages:
-- [Java](https://github.com/finos/symphony-bdk-java)
-- [Python](https://github.com/finos/symphony-bdk-python)
+Yeoman based generator for Symphony Bots and Applications:
+- [Java bot](https://github.com/finos/symphony-bdk-java)
+- [Python bot](https://github.com/finos/symphony-bdk-python)
+- [WDK (Symphony Worklfow Developer Kit)](https://github.com/SymphonyPlatformSolutions/symphony-wdk)
 
 ## Quick Start
 

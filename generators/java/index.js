@@ -7,7 +7,7 @@ const COMMON_EXT_APP_TEMPLATES = '../../_common/circle-of-trust-ext-app'
 const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
 
-const BDK_VERSION_DEFAULT = '2.2.1';
+const BDK_VERSION_DEFAULT = '2.3.0';
 const SPRING_VERSION_DEFAULT = '2.5.3'
 
 // Make it configurable for faster test execution
