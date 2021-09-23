@@ -11,9 +11,8 @@ Yeoman based generator for Symphony Bots and Applications:
 
 1. Install Yeoman command line utility `npm install -g yo`
 2. Install Symphony BDK Generator `npm i -g generator-symphony`
-3. Link generator `npm link` _(required after development in the project)_
-4. Create a new directory and go into it `mkdir myBot && cd myBot`
-5. Run Symphony BDK Generator and follow instructions on screen `yo symphony`
+3. Create a new directory and go into it `mkdir myBot && cd myBot`
+4. Run Symphony BDK Generator and follow instructions on screen `yo symphony`
 
 ## Known issues
 
