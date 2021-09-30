@@ -12,18 +12,6 @@ will have to approve before it is merged and eventually released.
 If you want to request an enhancement or feature, please open a Github issue if none has been opened before.
 New feature requests on the legacy SDK will not be accepted.
 
-## Module and package structure
-
-The code is structured into several generators inside the [generators folder](generators):
-* [2.0](generators/java) generating a bot and using the [Java BDK2.0](https://github.com/finos/symphony-bdk-java);
-* `*-bots` folders generating bots, using the [.NET](https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet),
-[legacy java](https://github.com/SymphonyPlatformSolutions/symphony-api-client-java/tree/master/symphony-bdk-legacy/symphony-api-client-java),
-[node](https://github.com/SymphonyPlatformSolutions/symphony-api-client-node) and
-[python](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python) SDKs;
-* `*-ext-apps` folders generating extension apps, using the
-[legacy java](https://github.com/SymphonyPlatformSolutions/symphony-api-client-java/tree/master/symphony-bdk-legacy/symphony-api-client-java)
-and [node](https://github.com/SymphonyPlatformSolutions/symphony-api-client-node) SDKs.
-
 ## Documentation
 
 Packages and public methods should be properly commented with relevant information.
