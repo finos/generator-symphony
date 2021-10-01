@@ -1,7 +1,7 @@
 # Symphony Workflow Developer Kit (WDK)
 
 ## Getting started
-Check out the [Getting starting guide](https://github.com/SymphonyPlatformSolutions/symphony-wdk/blob/master/docs/getting-started.md) for an introduction.
+Check out the [Getting starting guide](https://github.com/finos/symphony-wdk/blob/master/docs/getting-started.md) for an introduction.
 
 ## Project's structure
 The generated project has 4 folders:

@@ -5,7 +5,7 @@
 Yeoman based generator for Symphony Bots and Applications:
 - [Java bot](https://github.com/finos/symphony-bdk-java)
 - [Python bot](https://github.com/finos/symphony-bdk-python)
-- [WDK (Symphony Workflow Developer Kit)](https://github.com/SymphonyPlatformSolutions/symphony-wdk)
+- [WDK (Symphony Workflow Developer Kit)](https://github.com/finos/symphony-wdk)
 
 ## Quick Start
 
