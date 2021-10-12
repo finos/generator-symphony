@@ -1,6 +1,7 @@
 const Generator = require('yeoman-generator');
 const path = require('path');
 const fs = require('fs');
+const axios = require('axios');
 const keyPair = require('../_lib/rsa').keyPair;
 
 const COMMON_EXT_APP_TEMPLATES = '../../_common/circle-of-trust-ext-app'
@@ -13,11 +14,13 @@ const SPRING_VERSION_DEFAULT = '2.5.3'
 // Make it configurable for faster test execution
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 
+const _getVersion = () => {
+  return axios.get('http://search.maven.org/solrsearch/select?q=g:org.finos.symphony.bdk')
+    .then(res => res.data)
+    .catch(err => console.log(err));
+}
+
 module.exports = class extends Generator {
-
-  initializing() {
-
-  }
 
   async prompting() {
     this.answers = await this.prompt([
@@ -63,6 +66,14 @@ module.exports = class extends Generator {
 
     this.answers.bdkBomVersion = BDK_VERSION_DEFAULT;
     this.answers.springBootVersion = SPRING_VERSION_DEFAULT;
+
+    await _getVersion().then(response => {
+      if (response['response']['docs'].length === 0) {
+        console.log(`Failed to fetch latest Java BDK version from Maven Central, ${this.answers.bdkBomVersion} will be used.`);
+      } else {
+        this.answers.bdkBomVersion = response['response']['docs'][0]['latestVersion'];
+      }
+    });
 
     try {
       this.log('Generating RSA keys...'.green.bold);
@@ -154,7 +165,7 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath('.gitignore.tpl'),
       this.destinationPath('.gitignore')
-    )
+    );
   }
 
   /**
