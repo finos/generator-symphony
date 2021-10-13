@@ -1,6 +1,7 @@
 const Generator = require('yeoman-generator');
 const keyPair = require('../_lib/rsa').keyPair;
 const path = require('path');
+const axios = require("axios");
 
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 const BDK_VERSION_DEFAULT = '2.0.0';
@@ -11,6 +12,11 @@ const COMMON_EXT_APP_TEMPLATES = COMMON_TEMPLATE_FOLDER + '/circle-of-trust-ext-
 const RESOURCES_FOLDER = 'resources' // target resources folder
 const PYTHON_FOLDER = 'src' // target folder containing python sources
 
+const _getVersion = () => {
+  return axios.get('https://pypi.org/pypi/symphony-bdk-python/json')
+    .then(res =>  res.data)
+    .catch(err => {});
+}
 
 module.exports = class extends Generator {
 
@@ -18,6 +24,14 @@ module.exports = class extends Generator {
     this.answers = this.options;
     this.answers.bdkVersion = BDK_VERSION_DEFAULT;
     this.answers.trustStorePath = RESOURCES_FOLDER + '/all_symphony_certs.pem';
+
+    await _getVersion().then(response => {
+      if (response === undefined) {
+        console.log(`Failed to fetch latest Python BDK version from Pypi, ${this.answers.bdkVersion} will be used.`);
+      } else {
+        this.answers.bdkVersion = response['info']['version'];
+      }
+    });
 
     this._generateRsaKeys();
     this._generateCommonFiles();
