@@ -11,10 +11,20 @@ const PACKAGE_DIR = 'com/mycompany/bot'
 
 const SMALL_KEY_PAIR_LENGTH = 512;
 
+const axios = require("axios");
+jest.mock('axios');
+
 describe('Java BDK', () => {
   const currentDir = process.cwd()
 
-  afterAll(() => process.chdir(currentDir))
+  beforeAll(() => {
+    axios.get.mockResolvedValue({"data": {"response": {"docs": [{"latestVersion": "2.3.0"}]}}});
+  })
+
+  afterAll(() => {
+    process.chdir(currentDir);
+    jest.resetAllMocks();
+  })
 
   it('Generate 2.0 spring boot gradle', () => {
     return helpers.run(path.join(__dirname, '../generators/app'))

@@ -27,7 +27,7 @@ module.exports = class extends Generator {
 
     await _getVersion().then(response => {
       if (response === undefined) {
-        console.log(`Failed to fetch latest Python BDK version from Maven Central, ${this.answers.bdkVersion} will be used.`);
+        console.log(`Failed to fetch latest Python BDK version from Pypi, ${this.answers.bdkVersion} will be used.`);
       } else {
         this.answers.bdkVersion = response['info']['version'];
       }

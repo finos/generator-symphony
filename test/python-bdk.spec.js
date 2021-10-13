@@ -12,10 +12,20 @@ const BASE_SCRIPTS = BASE_STATIC + '/scripts'
 
 const SMALL_KEY_PAIR_LENGTH = 512;
 
+const axios = require("axios");
+jest.mock('axios');
+
 describe('Python BDK', () => {
   const currentDir = process.cwd()
 
-  afterAll(() => process.chdir(currentDir))
+  beforeAll(() => {
+    axios.get.mockResolvedValue({"data": {"info": {"version": "2.3.0"}}});
+  })
+
+  afterAll(() => {
+    process.chdir(currentDir);
+    jest.resetAllMocks();
+  })
 
   it('Generate 2.0 python bot', () => {
     return helpers.run(path.join(__dirname, '../generators/app'))
