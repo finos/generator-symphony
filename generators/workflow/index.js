@@ -3,13 +3,34 @@ const fs = require('fs');
 const http = require('https'); // or 'https' for https:// URLs
 const keyPair = require('../_lib/rsa').keyPair;
 const path = require('path');
+const axios = require('axios');
 
 // Make it configurable for faster test execution
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 
+const WDK_VERSION_DEFAULT = '0.0.1-SNAPSHOT';
+
+const _getVersion = () => {
+  return axios.get('http://search.maven.org/solrsearch/select?q=g:org.finos.symphony.wdk')
+    .then(res => res.data)
+    .catch(err => console.log(err));
+}
+
 module.exports = class extends Generator {
 
   async writing() {
+
+    this.templateSettings = {}
+    this.templateSettings.wdkVersion = WDK_VERSION_DEFAULT;
+
+    await _getVersion().then(response => {
+      if (response['response']['docs'].length === 0) {
+        console.log(`Failed to fetch latest Symphony WDK version from Maven Central, ${this.templateSettings.wdkVersion} will be used.`);
+      } else {
+        this.templateSettings.wdkVersion = response['response']['docs'][0]['latestVersion'];
+      }
+    });
+
     try {
       this.log('Generating RSA keys...'.green.bold);
       this.pair = keyPair(this.config.get(KEY_PAIR_LENGTH) || 4096);
@@ -20,7 +41,7 @@ module.exports = class extends Generator {
       this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
     }
 
-    this._copy(["gradle", "lib", "src", "build.gradle", "Dockerfile", "gradlew", "gradlew.bat", "README.md", "workflows"])
+    this._copy(["gradle", "lib", "src", "Dockerfile", "gradlew", "gradlew.bat", "README.md", "workflows"])
 
     this.fs.copyTpl(
       this.templatePath(`application.yaml.ejs`),
@@ -30,11 +51,11 @@ module.exports = class extends Generator {
   }
 
   install() {
-      this.log('Running '.green.bold + './gradlew botJar'.white.bold + ' in your project'.green.bold);
-      let buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['botJar']);
-      if (buildResult.status !== 0) {
-          this.log.error(buildResult.stderr);
-      }
+    this.log('Running '.green.bold + './gradlew botJar'.white.bold + ' in your project'.green.bold);
+    let buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['botJar']);
+    if (buildResult.status !== 0) {
+      this.log.error(buildResult.stderr);
+    }
   }
 
   _copy(files) {
@@ -42,6 +63,12 @@ module.exports = class extends Generator {
         this.templatePath(f),
         this.destinationPath(f)
       )
+    )
+
+    this.fs.copyTpl(
+      this.templatePath('build.gradle.ejs'),
+      this.destinationPath('build.gradle'),
+      this.templateSettings
     )
   }
 

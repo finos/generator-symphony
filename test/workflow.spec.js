@@ -3,6 +3,8 @@ const assert = require('yeoman-assert')
 const path = require('path')
 const fs = require('fs')
 const {assertKeyPair} = require('./test-utils')
+const axios = require("axios");
+jest.mock('axios');
 
 
 const SMALL_KEY_PAIR_LENGTH = 512;
@@ -10,7 +12,14 @@ const SMALL_KEY_PAIR_LENGTH = 512;
 describe('Workflow bot', () => {
   const currentDir = process.cwd()
 
-  afterAll(() => process.chdir(currentDir))
+  beforeAll(() => {
+    axios.get.mockResolvedValue({"data": {"response": {"docs": [{"latestVersion": "0.0.6-SNAPSHOT"}]}}});
+  })
+
+  afterAll(() => {
+    process.chdir(currentDir);
+    jest.resetAllMocks();
+  })
 
   it('Generate workflow bot', () => {
     return helpers.run(path.join(__dirname, '../generators/app'))

@@ -24,16 +24,17 @@ configurations {
 
 dependencies {
   // this will be provided by the workflow-bot application at runtime
-  compileOnly 'org.finos.symphony.wdk:workflow-language:0.0.1-SNAPSHOT'
+  compileOnly 'org.finos.symphony.wdk:workflow-language:<%= wdkVersion -%>'
 
   implementation 'org.apache.commons:commons-text:1.9'
 
   // used to download the standalone WDK bot jar
-  botJar 'org.finos.symphony.wdk:workflow-bot-app:0.0.1-SNAPSHOT'
+  botJar 'org.finos.symphony.wdk:workflow-bot-app:<%= wdkVersion -%>:boot'
 }
 
 tasks.register('botJar', Copy) {
   description "Downloads WDK jar."
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   from configurations.botJar
   into project.projectDir
   rename { f -> "workflow-bot-app.jar" }
