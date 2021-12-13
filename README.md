@@ -1,7 +1,7 @@
 [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
 [![npm version](https://badge.fury.io/js/generator-symphony.svg)](https://badge.fury.io/js/generator-symphony)
 [![CircleCI](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony.svg?style=shield)](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony)
-# Symphony BDK Generator
+# Symphony Generator
 
 Yeoman based generator for Symphony Bots and Applications:
 - [Java bot](https://github.com/finos/symphony-bdk-java)
@@ -13,7 +13,7 @@ Install Yeoman command line utility
 ```shell
 npm install -g yo
 ```
-Install Symphony BDK Generator
+Install Symphony Generator
 ```shell
 npm i -g generator-symphony
 ```
@@ -23,7 +23,7 @@ Create a new directory and go into it
 ```shell
 mkdir myBot && cd myBot
 ```
-Run Symphony BDK Generator and follow instructions on screen
+Run Symphony Generator and follow instructions on screen
 ```shell
 yo symphony
 ```

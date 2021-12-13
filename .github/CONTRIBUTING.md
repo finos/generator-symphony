@@ -1,4 +1,4 @@
-# Symphony BDK Generator Contribution and Governance Policies
+# Symphony Generator Contribution and Governance Policies
 
 This document describes the contribution process and governance policies of the FINOS symphony-bdk-java project.
 The project is also governed by the [Linux Foundation Antitrust Policy](https://www.linuxfoundation.org/antitrust-policy/),
