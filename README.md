@@ -78,6 +78,11 @@ npm install generator-symphony@1.7.7
 ```
 or build your own version from the [`legacy`](https://github.com/SymphonyPlatformSolutions/generator-symphony/tree/legacy) branch.
 
+## Security
+The code is continuously scanned using Snyk. This section outlines the different security CVEs that are affecting the project:
+
+- CVE-2021-3807: Regular Expression Denial of Service (ReDoS) in ansi-regex@3.0.0
+This issue is introduced by `yeoman-environment` and is not relevant because the generator is only used to generate code for a specific project.
 ## License
 
 Copyright 2021 Symphony LLC
