@@ -19,6 +19,7 @@ npm i -g generator-symphony
 ```
 ## Usage example
 ![](./docs/gifs/generator-demo.gif)
+
 Create a new directory and go into it
 ```shell
 mkdir myBot && cd myBot
