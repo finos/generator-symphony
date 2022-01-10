@@ -5,7 +5,7 @@ defaults: &defaults
   docker:
       # Using a pre-built docker image with both of NodeJs and Java are installed
       # https://circleci.com/developer/images/image/cimg/node
-    - image: cimg/node:15.0.1-browsers
+    - image: cimg/node:17.3.0-browsers
 
 jobs:
   build:
