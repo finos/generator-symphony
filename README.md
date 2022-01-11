@@ -29,7 +29,6 @@ Run Symphony Generator and follow instructions on screen
 yo symphony
 ```
 
-
 ## Known issues
 
 If you are using node 16.0.0 and encounter the following error when trying to run `yo symphony` or `yo symphony 2.0`:
