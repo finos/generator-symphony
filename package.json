@@ -3,7 +3,7 @@
   "version": "2.4.1",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SymphonyPlatformSolutions/generator-symphony.git"
+    "url": "git+https://github.com/finos/generator-symphony.git"
   },
   "license": "MIT",
   "description": "Generator to create Symphony BOT and Applications",
@@ -36,9 +36,9 @@
     "yeoman-test": "^6.2.0"
   },
   "bugs": {
-    "url": "https://github.com/SymphonyPlatformSolutions/generator-symphony/issues"
+    "url": "https://github.com/finos/generator-symphony/issues"
   },
-  "homepage": "https://github.com/SymphonyPlatformSolutions/generator-symphony#readme",
+  "homepage": "https://github.com/finos/generator-symphony#readme",
   "main": "index.js",
   "scripts": {
     "test:gen": "rm -rf dist && mkdir dist && cd dist && yo symphony",

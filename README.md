@@ -1,6 +1,7 @@
 [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
 [![npm version](https://badge.fury.io/js/generator-symphony.svg)](https://badge.fury.io/js/generator-symphony)
-[![CircleCI](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony.svg?style=shield)](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony)
+[![Build](https://github.com/finos/symphony-bdk-java/actions/workflows/build.yml/badge.svg)](https://github.com/finos/symphony-bdk-java/actions/workflows/build.yml)
+
 # Symphony Generator
 
 Yeoman based generator for Symphony Bots and Applications:
@@ -58,7 +59,7 @@ https://github.com/electron-userland/electron-builder/issues/5668).
 
 ## Contributing
 
-1. Fork it (<https://github.com/SymphonyPlatformSolutions/generator-symphony/fork>)
+1. Fork it (<https://github.com/finos/generator-symphony/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Read our [contribution guidelines](.github/CONTRIBUTING.md) and [Community Code of Conduct](https://www.finos.org/code-of-conduct)
 4. Commit your changes (`git commit -am 'Add some fooBar'`)
@@ -77,7 +78,7 @@ To generate legacy projects (.NET, NodeJS and legacy Java/Python SDKs), please r
 ```shell
 npm install generator-symphony@1.7.7
 ```
-or build your own version from the [`legacy`](https://github.com/SymphonyPlatformSolutions/generator-symphony/tree/legacy) branch.
+or build your own version from the [`legacy`](https://github.com/finos/generator-symphony/tree/legacy) branch.
 
 ## License
 
