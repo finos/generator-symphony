@@ -1,5 +1,5 @@
 {
-  "name": "generator-symphony",
+  "name": "@finos/generator-symphony",
   "version": "2.4.1",
   "repository": {
     "type": "git",
