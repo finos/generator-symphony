@@ -16,7 +16,7 @@ npm install -g yo
 ```
 Install Symphony Generator
 ```shell
-npm i -g generator-symphony
+npm i -g @finos/generator-symphony
 ```
 ## Usage example
 ![](./docs/gifs/generator-demo.gif)
