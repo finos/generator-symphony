@@ -27,13 +27,13 @@ mkdir myBot && cd myBot
 ```
 Run Symphony Generator and follow instructions on screen
 ```shell
-yo symphony
+yo @finos/symphony
 ```
 
 
 ## Known issues
 
-If you are using node 16.0.0 and encounter the following error when trying to run `yo symphony` or `yo symphony 2.0`:
+If you are using node 16.0.0 and encounter the following error when trying to run `yo @finos/symphony` or `yo @finos/symphony 2.0`:
 ```
 /usr/local/lib/node_modules/yo/node_modules/editions/edition-es5/index.js:317
 
