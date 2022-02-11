@@ -1,5 +1,5 @@
 [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
-[![npm version](https://badge.fury.io/js/generator-symphony.svg)](https://badge.fury.io/js/generator-symphony)
+[![npm version](https://badge.fury.io/js/@finos%2Fgenerator-symphony.svg)](https://badge.fury.io/js/@finos%2Fgenerator-symphony)
 [![Build](https://github.com/finos/symphony-bdk-java/actions/workflows/build.yml/badge.svg)](https://github.com/finos/symphony-bdk-java/actions/workflows/build.yml)
 
 # Symphony Generator
@@ -82,7 +82,7 @@ or build your own version from the [`legacy`](https://github.com/finos/generator
 
 ## License
 
-Copyright 2021 Symphony LLC
+Copyright 2022 Symphony LLC
 
 Distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
