@@ -23,7 +23,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@finos/generator-symphony@latest":
+"@finos/generator-symphony@^2.5.2":
   version "2.5.2"
   resolved "https://registry.npmjs.org/@finos/generator-symphony/-/generator-symphony-2.5.2.tgz#92487ce2bbf1cb4328f5feb7ba77ecff99e1dc30"
   integrity sha512-g2y7OkyUO69GLTA9YiWUGsnmNL+Gk8Ot0ddUCjYVnELBcho9UCF/WVNMdB3aGSx2q1+QFQNvZEWptP10VzOGXg==
