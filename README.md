@@ -1,6 +1,14 @@
 [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
 [![npm version](https://badge.fury.io/js/generator-symphony.svg)](https://badge.fury.io/js/generator-symphony)
 [![CircleCI](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony.svg?style=shield)](https://circleci.com/gh/SymphonyPlatformSolutions/generator-symphony)
+
+## ⚠️ Important notice ⚠️
+Symphony generator has been moved under Finos scope, check out the new location https://www.npmjs.com/package/@finos/generator-symphony.
+
+This package is now a wrapper if the @finos generator, it will be used to redirect to the latest version of the new package.
+
+Consider installing the new package executing `npm i -g @finos/generator-symphony` and then run it by using the command `yo @finos/symphony`.
+
 # Symphony Generator
 
 Yeoman based generator for Symphony Bots and Applications:
