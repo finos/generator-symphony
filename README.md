@@ -19,7 +19,7 @@ Install Symphony Generator
 npm i -g @finos/generator-symphony
 ```
 ## Usage example
-![](./docs/gifs/generator-demo.gif)
+![](./docs/gifs/demo.gif)
 
 Create a new directory and go into it
 ```shell
