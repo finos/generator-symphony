@@ -24,7 +24,8 @@
     "node-forge": "^1.0.0",
     "upath": "^2.0.1",
     "yeoman-environment": "^3.6.0",
-    "yeoman-generator": "^5.4.2"
+    "yeoman-generator": "^5.4.2",
+    "yeoman-option-or-prompt": "^2.0.1"
   },
   "devDependencies": {
     "decamelize": "^5.0.0",

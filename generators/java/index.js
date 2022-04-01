@@ -2,6 +2,7 @@ const Generator = require('yeoman-generator');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
+const optionOrPrompt = require("yeoman-option-or-prompt");
 const keyPair = require('../_lib/rsa').keyPair;
 
 const COMMON_EXT_APP_TEMPLATES = '../../_common/circle-of-trust-ext-app'
@@ -21,9 +22,13 @@ const _getVersion = () => {
 }
 
 module.exports = class extends Generator {
-
+  constructor(args, opts) {
+    super(args, opts);
+    this._optionOrPrompt = optionOrPrompt;
+  }
   async prompting() {
-    this.answers = await this.prompt([
+    console.log(this.options)
+    this.answers = await this._optionOrPrompt([
       {
         type: 'list',
         name: 'build',
@@ -133,7 +138,7 @@ module.exports = class extends Generator {
       );
 
       // Process scripts files
-      ['app.js.ejs', 'controller.js.ejs'].forEach(file => {
+      [ 'app.js.ejs', 'controller.js.ejs' ].forEach(file => {
         this.fs.copyTpl(
           this.templatePath(path.join(COMMON_EXT_APP_TEMPLATES, 'scripts', file)),
           this.destinationPath(path.join(BASE_RESOURCES, 'static/scripts', file.substr(0, file.indexOf('.ejs')))),
@@ -172,19 +177,19 @@ module.exports = class extends Generator {
    * Build Maven or Gradle project
    */
   install() {
-    let buildResult;
-
-    if (this.answers.build === 'Maven') {
-      this.log('Running '.green.bold + './mvnw package'.white.bold + ' in your project'.green.bold);
-      buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'mvnw'), ['package']);
-    } else {
-      this.log('Running '.green.bold + './gradlew build'.white.bold + ' in your project'.green.bold);
-      buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['build']);
-    }
-
-    if (buildResult.status !== 0) {
-      this.log.error(buildResult.stderr);
-    }
+    // let buildResult;
+    //
+    // if (this.answers.build === 'Maven') {
+    //   this.log('Running '.green.bold + './mvnw package'.white.bold + ' in your project'.green.bold);
+    //   buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'mvnw'), [ 'package' ]);
+    // } else {
+    //   this.log('Running '.green.bold + './gradlew build'.white.bold + ' in your project'.green.bold);
+    //   buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), [ 'build' ]);
+    // }
+    //
+    // if (buildResult.status !== 0) {
+    //   this.log.error(buildResult.stderr);
+    // }
   }
 
   end() {

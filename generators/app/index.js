@@ -2,12 +2,15 @@ const Generator = require('yeoman-generator');
 const colors = require('colors');
 const packageJson = require('../../package.json');
 const fs = require('fs')
+const optionOrPrompt = require('yeoman-option-or-prompt');
 
 module.exports = class extends Generator {
 
   constructor(args, opts) {
     super(args, opts);
+    this._optionOrPrompt = optionOrPrompt;
   }
+
 
   initializing() {
 
@@ -26,13 +29,13 @@ module.exports = class extends Generator {
       if (folderFiles.length > 0) {
         this.log(`(!) Folder ${this.destinationRoot()} is not empty. Are you sure you want to continue?`.red);
       }
-    } catch(e) {
+    } catch (e) {
       this.log(e);
     }
   }
 
   async prompting() {
-    this.answers = await this.prompt([
+    this.answers = await this._optionOrPrompt([
       {
         type: 'input',
         name: 'host',
@@ -106,11 +109,11 @@ module.exports = class extends Generator {
     ]);
 
     if (this.answers.application === 'workflow-bot-app') {
-      this.composeWith(require.resolve('../workflow'), this.answers);
+      this.composeWith(require.resolve('../workflow'), this.options);
     } else if (this.answers.language === 'java') {
-      this.composeWith(require.resolve('../java'), this.answers);
+      this.composeWith(require.resolve('../java'), this.options);
     } else if (this.answers.language === 'python') {
-      this.composeWith(require.resolve('../python'), this.answers);
+      this.composeWith(require.resolve('../python'), this.options);
     }
   }
 }

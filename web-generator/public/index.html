@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #generators {
+      display: flex;
+    }
+  </style>
+
+  <title>Title of Page</title>
+  <!--stylesheet-->
+  <link rel="stylesheet" href="https://cdn.symphony.com/resources/ui-toolkit/v3.0.2/css/uitoolkit.css">
+
+</head>
+<body>
+<form action="/generate">
+  <div id="generators">
+    <div class="tk-card">
+      <div style="height:30px; background-color:cadetblue;" class="tk-card--header"></div>
+      <div style="display:flex">
+        <div class="tk-mx-1 tk-mt-1 tk-typography--bold">Bot</div>
+      </div>
+    </div>
+
+    <div class="tk-card">
+      <div style="height:30px; background-color:cadetblue;" class="tk-card--header"></div>
+      <div style="display:flex">
+        <div class="tk-mx-1 tk-mt-1 tk-typography--bold">Extension app</div>
+      </div>
+    </div>
+
+    <div class="tk-card">
+      <div style="height:30px; background-color:cadetblue;" class="tk-card--header"></div>
+      <div style="display:flex">
+        <div class="tk-mx-1 tk-mt-1 tk-typography--bold">Workflow</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="tk-divider"/>
+
+  <div id="languages">
+    <button class="tk-button tk-button--primary tk-button--large">Java</button>
+    <button class="tk-button tk-button--primary tk-button--large">Python</button>
+  </div>
+
+  <h2>Choose your build tool</h2>
+  <div id="buildtool">
+    <div class="tk-radio" tabindex="0">
+      <div class="tk-radio__inputContainer" tab-index="-1">
+        <input id="radio-Z8WAd6dSl" class="tk-radio__input" type="radio" name="active-radio" value="active-radio-1" checked>
+        <span class="tk-radio__icon" aria-hidden="true"></span>
+      </div>
+      <label class="tk-radio__label tk-radio__label--right" for="radio-Z8WAd6dSl" tab-index="-1">Gradle</label>
+    </div>
+    <div class="tk-radio" tabindex="0">
+      <div class="tk-radio__inputContainer" tab-index="-1">
+        <input id="radio-ELnmbr5DtP" class="tk-radio__input" type="radio" name="active-radio" value="active-radio-2">
+        <span class="tk-radio__icon" aria-hidden="true"></span>
+      </div>
+      <label class="tk-radio__label tk-radio__label--right" for="radio-ELnmbr5DtP" tab-index="-1">Maven</label>
+    </div>
+  </div>
+
+  <h2>Choose your framework</h2>
+  <span class="tk-radio"
+        tabindex="0">
+                <div class="tk-radio__inputContainer" tab-index="-1">
+                    <input class="tk-radio__input"
+                           type="radio" id="radio-x8ESD33S3W" name="disabled-radio" tabindex="-1"
+                           value="disabled-radio-1" checked>
+                    <span class="tk-radio__icon" aria-hidden></span>
+                </div>
+                <label class="tk-radio__label" for="radio-x8ESD33S3W"
+                       tabindex="-1">No Framework</label>
+            </span>
+  <span class="tk-radio"
+        tabindex="0">
+                <div class="tk-radio__inputContainer" tab-index="-1">
+                    <input class="tk-radio__input"
+                           type="radio" id="radio-2rgjiQCh_S" name="disabled-radio"tabindex="-1"
+                           value="disabled-radio-3">
+                    <span class="tk-radio__icon" aria-hidden></span>
+                </div>
+                <label class="tk-radio__label" for="radio-2rgjiQCh_S"
+                       tabindex="-1">Spring Boot</label>
+            </span>
+
+
+
+
+  <h3>Base Package</h3>
+  <input name="base-package" type="text" class="tk-input tk-input--medium" placeholder="Type base package.." />
+
+  <h3>Group id</h3>
+  <input name="group-id" type="text" class="tk-input tk-input--medium" placeholder="Type group id.." />
+
+  <h3>Artifact id</h3>
+  <input name="artifact-id" type="text" class="tk-input tk-input--medium" placeholder="Type artifact id.." />
+
+
+  <hr class="tk-divider"/>
+
+  <h3>Pod URL</h3>
+  <input name="host" type="text" class="tk-input tk-input--medium" placeholder="Type Pod URL.." />
+
+  <h3>Bot username</h3>
+  <input name="bot-username" type="text" class="tk-input tk-input--medium" placeholder="Type Bot username.." />
+
+  <input type="submit" value="Generate"/>
+</form>
+
+</body>
+
+</html>

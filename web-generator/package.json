@@ -1,0 +1,11 @@
+{
+  "name": "web-generator",
+  "dependencies": {
+    "@finos/generator-symphony": "2.5.2",
+    "express": "^4.17.3",
+    "express-zip": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
