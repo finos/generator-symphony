@@ -3,7 +3,6 @@
 [![Build](https://github.com/finos/symphony-bdk-java/actions/workflows/build.yml/badge.svg)](https://github.com/finos/symphony-bdk-java/actions/workflows/build.yml)
 
 # Symphony Generator
-
 Yeoman based generator for Symphony Bots and Applications:
 - [Java bot](https://github.com/finos/symphony-bdk-java)
 - [Python bot](https://github.com/finos/symphony-bdk-python)
@@ -12,13 +11,13 @@ Yeoman based generator for Symphony Bots and Applications:
 ## Installation
 Install Yeoman command line utility
 ```shell
-npm install -g yo
+npm i -g yo
 ```
 Install Symphony Generator
 ```shell
 npm i -g @finos/generator-symphony
 ```
-## Usage example
+## Usage
 ![](./docs/gifs/demo.gif)
 
 Create a new directory and go into it
@@ -29,7 +28,10 @@ Run Symphony Generator and follow instructions on screen
 ```shell
 yo @finos/symphony
 ```
-
+If you are behind a web proxy, use the `https_proxy` environment variable to configure the address of your proxy server and port.
+```shell
+export https_proxy=http://localhost:3128
+```
 
 ## Known issues
 
