@@ -9,14 +9,11 @@ Yeoman based generator for Symphony Bots and Applications:
 - [WDK (Symphony Workflow Developer Kit)](https://github.com/finos/symphony-wdk)
 
 ## Installation
-Install Yeoman command line utility
+Install the Yeoman utility and Symphony Generator
 ```shell
-npm i -g yo
+npm install -g yo @finos/generator-symphony
 ```
-Install Symphony Generator
-```shell
-npm i -g @finos/generator-symphony
-```
+
 ## Usage
 ![](./docs/gifs/demo.gif)
 
