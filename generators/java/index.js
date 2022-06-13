@@ -15,7 +15,7 @@ const SPRING_VERSION_DEFAULT = '2.6.8'
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 
 const _getVersion = () => {
-  return axios.get('https://seasfrch.maven.org/solrsearch/select?q=g:org.finos.symphony.bdk')
+  return axios.get('https://search.maven.org/solrsearch/select?q=g:org.finos.symphony.bdk')
     .then(res => res.data);
 }
 
