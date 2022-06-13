@@ -24,7 +24,7 @@ describe('Python BDK error scenarios', () => {
   })
 
   it('Python BDK default version should be used when maven search query fails', () => {
-    axios.get.mockRejectedValueOnce();
+    axios.get.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
 
     return helpers.run(path.join(__dirname, '../generators/app'))
     .inTmpDir()

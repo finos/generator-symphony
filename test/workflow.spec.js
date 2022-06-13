@@ -10,7 +10,7 @@ jest.mock('axios');
 const SMALL_KEY_PAIR_LENGTH = 512;
 
 describe('WDK error scenarios', () => {
-  axios.get.mockRejectedValueOnce();
+  axios.get.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
 
   it('WDK default version should be used when maven search query fails', () => {
     return helpers.run(path.join(__dirname, '../generators/app'))
