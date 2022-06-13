@@ -29,6 +29,7 @@ If you are behind a web proxy, use the `https_proxy` environment variable to con
 ```shell
 export https_proxy=http://localhost:3128
 ```
+Symphony Generator will automatically fetch the latest version of BDKs/WDK and use it to generate your project. In case the request fails, it will fallback on a default version.
 
 ## Known issues
 
