@@ -47,7 +47,7 @@ describe('Python BDK error scenarios', () => {
   })
 
   it('Python BDK default version should be used when maven search does not return latest version', () => {
-    axios.get.mockResolvedValue({"data": {"response": {"docs": []}}});
+    axios.get.mockResolvedValue(undefined);
 
     return helpers.run(path.join(__dirname, '../generators/app'))
     .inTmpDir()
