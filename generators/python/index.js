@@ -4,7 +4,7 @@ const path = require('path');
 const axios = require("axios");
 
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
-const BDK_VERSION_DEFAULT = '2.0.0';
+const BDK_VERSION_DEFAULT = '2.2.0';
 
 const COMMON_TEMPLATE_FOLDER = '../../_common'
 const COMMON_EXT_APP_TEMPLATES = COMMON_TEMPLATE_FOLDER + '/circle-of-trust-ext-app'
@@ -14,8 +14,7 @@ const PYTHON_FOLDER = 'src' // target folder containing python sources
 
 const _getVersion = () => {
   return axios.get('https://pypi.org/pypi/symphony-bdk-python/json')
-    .then(res =>  res.data)
-    .catch(err => {});
+    .then(res =>  res.data);
 }
 
 module.exports = class extends Generator {
@@ -31,6 +30,9 @@ module.exports = class extends Generator {
       } else {
         this.answers.bdkVersion = response['info']['version'];
       }
+    }).catch(err => {
+      console.log(`Failed to fetch latest Python BDK version from Pypi, ${this.answers.bdkVersion} will be used.`);
+      console.log(`The request failed because of: {errno: ${err.errno}, code: ${err.code}}`);
     });
 
     this._generateRsaKeys();
