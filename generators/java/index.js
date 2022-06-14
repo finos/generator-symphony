@@ -8,16 +8,15 @@ const COMMON_EXT_APP_TEMPLATES = '../../_common/circle-of-trust-ext-app'
 const BASE_JAVA = 'src/main/java';
 const BASE_RESOURCES = 'src/main/resources';
 
-const BDK_VERSION_DEFAULT = '2.3.0';
-const SPRING_VERSION_DEFAULT = '2.5.3'
+const BDK_VERSION_DEFAULT = '2.6.0';
+const SPRING_VERSION_DEFAULT = '2.6.8'
 
 // Make it configurable for faster test execution
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 
 const _getVersion = () => {
-  return axios.get('http://search.maven.org/solrsearch/select?q=g:org.finos.symphony.bdk')
-    .then(res => res.data)
-    .catch(err => console.log(err));
+  return axios.get('https://search.maven.org/solrsearch/select?q=g:org.finos.symphony.bdk')
+    .then(res => res.data);
 }
 
 module.exports = class extends Generator {
@@ -73,6 +72,9 @@ module.exports = class extends Generator {
       } else {
         this.answers.bdkBomVersion = response['response']['docs'][0]['latestVersion'];
       }
+    }).catch(err => {
+      console.log(`Failed to fetch latest Java BDK version from Maven Central, ${this.answers.bdkBomVersion} will be used.`);
+      console.log(`The request failed because of: {errno: ${err.errno}, code: ${err.code}}`);
     });
 
     try {

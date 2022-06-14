@@ -8,12 +8,11 @@ const axios = require('axios');
 // Make it configurable for faster test execution
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 
-const WDK_VERSION_DEFAULT = '0.0.1-SNAPSHOT';
+const WDK_VERSION_DEFAULT = '1.0.0';
 
 const _getVersion = () => {
-  return axios.get('http://search.maven.org/solrsearch/select?q=g:org.finos.symphony.wdk')
-    .then(res => res.data)
-    .catch(err => console.log(err));
+  return axios.get('https://search.maven.org/solrsearch/select?q=g:org.finos.symphony.wdk')
+    .then(res => res.data);
 }
 
 module.exports = class extends Generator {
@@ -29,6 +28,9 @@ module.exports = class extends Generator {
       } else {
         this.templateSettings.wdkVersion = response['response']['docs'][0]['latestVersion'];
       }
+    }).catch(err => {
+      console.log(`Failed to fetch latest Symphony WDK version from Maven Central, ${this.templateSettings.wdkVersion} will be used.`);
+      console.log(`The request failed because of: {errno: ${err.errno}, code: ${err.code}}`);
     });
 
     try {

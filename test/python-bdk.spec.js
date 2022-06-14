@@ -15,6 +15,61 @@ const SMALL_KEY_PAIR_LENGTH = 512;
 const axios = require("axios");
 jest.mock('axios');
 
+describe('Python BDK error scenarios', () => {
+  const currentDir = process.cwd()
+
+  afterAll(() => {
+    process.chdir(currentDir);
+    jest.resetAllMocks();
+  })
+
+  it('Python BDK default version should be used when maven search query fails', () => {
+    axios.get.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
+
+    return helpers.run(path.join(__dirname, '../generators/app'))
+    .inTmpDir()
+    .withLocalConfig({
+      KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+    })
+    .withPrompts({
+      host: 'acme.symphony.com',
+      username: 'test-bot',
+      application: 'bot-app',
+      language: 'python',
+      appId: 'app-id'
+    }).then((dir) => {
+      assertCommonFilesGenerated(dir);
+      assert.file([
+        path.join(BASE_PYTHON, 'activities.py'),
+        path.join(BASE_PYTHON, 'gif_activities.py'),
+        path.join(BASE_RESOURCE, 'gif.jinja2')]);
+    })
+  })
+
+  it('Python BDK default version should be used when maven search does not return latest version', () => {
+    axios.get.mockResolvedValue(undefined);
+
+    return helpers.run(path.join(__dirname, '../generators/app'))
+    .inTmpDir()
+    .withLocalConfig({
+      KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+    })
+    .withPrompts({
+      host: 'acme.symphony.com',
+      username: 'test-bot',
+      application: 'bot-app',
+      language: 'python',
+      appId: 'app-id'
+    }).then((dir) => {
+      assertCommonFilesGenerated(dir);
+      assert.file([
+        path.join(BASE_PYTHON, 'activities.py'),
+        path.join(BASE_PYTHON, 'gif_activities.py'),
+        path.join(BASE_RESOURCE, 'gif.jinja2')]);
+    })
+  })
+})
+
 describe('Python BDK', () => {
   const currentDir = process.cwd()
 

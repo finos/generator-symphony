@@ -9,6 +9,64 @@ jest.mock('axios');
 
 const SMALL_KEY_PAIR_LENGTH = 512;
 
+describe('WDK error scenarios', () => {
+  axios.get.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
+
+  it('WDK default version should be used when maven search query fails', () => {
+    return helpers.run(path.join(__dirname, '../generators/app'))
+      .inTmpDir()
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
+      .withPrompts({
+        host: 'acme.symphony.com',
+        username: 'test-bot',
+        application: 'workflow-bot-app',
+      })
+      .then((dir) => {
+        assert.file([
+          'application.yaml',
+          'workflow-bot-app.jar',
+          'lib',
+          'workflows/ping.swadl.yaml',
+          'README.md',
+          'Dockerfile'
+        ]);
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
+        assertKeyPair(privateKey, generatedPublicKey)
+      })
+  })
+
+  it('WDK default version should be used when maven search does not return latest version', () => {
+    axios.get.mockResolvedValue({"data": {"response": {"docs": []}}});
+
+    return helpers.run(path.join(__dirname, '../generators/app'))
+      .inTmpDir()
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
+      .withPrompts({
+        host: 'acme.symphony.com',
+        username: 'test-bot',
+        application: 'workflow-bot-app',
+      })
+      .then((dir) => {
+        assert.file([
+          'application.yaml',
+          'workflow-bot-app.jar',
+          'lib',
+          'workflows/ping.swadl.yaml',
+          'README.md',
+          'Dockerfile'
+        ]);
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
+        assertKeyPair(privateKey, generatedPublicKey)
+      })
+  })
+})
+
 describe('Workflow bot', () => {
   const currentDir = process.cwd()
 

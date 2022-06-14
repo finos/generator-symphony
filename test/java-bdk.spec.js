@@ -14,6 +14,95 @@ const SMALL_KEY_PAIR_LENGTH = 512;
 const axios = require("axios");
 jest.mock('axios');
 
+describe('Java BDK error scenarios', () => {
+  const currentDir = process.cwd()
+
+  afterAll(() => {
+    process.chdir(currentDir);
+    jest.resetAllMocks();
+  })
+
+  it('Java BDK default version should be used when maven search query fails', () => {
+    axios.get.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
+
+    return helpers.run(path.join(__dirname, '../generators/app'))
+      .inTmpDir()
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
+      .withPrompts({
+        host: 'acme.symphony.com',
+        username: 'test-bot',
+        application: 'bot-app',
+        language: 'java',
+        build: 'Gradle',
+        framework: 'spring',
+        groupId: 'com.mycompany',
+        artifactId: 'bot-application',
+        basePackage: BASE_PACKAGE
+      }).then((dir) => {
+        assert.file([
+          'gradlew',
+          'gradlew.bat',
+          'build.gradle',
+          path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
+          path.join(BASE_JAVA, PACKAGE_DIR, 'GifFormActivity.java'),
+          path.join(BASE_JAVA, PACKAGE_DIR, 'OnUserJoinedRoomListener.java'),
+          path.join(BASE_JAVA, PACKAGE_DIR, 'GifSlashHandler.java'),
+          'rsa/privatekey.pem',
+          'rsa/publickey.pem',
+          '.gitignore',
+          path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
+          path.join(BASE_RESOURCE, 'templates/gif.ftl'),
+          path.join(BASE_RESOURCE, 'application.yaml')
+        ]);
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
+        assertKeyPair(privateKey, generatedPublicKey)
+      })
+  })
+
+  it('Java BDK default version should be used when maven search does not return latest version', () => {
+    axios.get.mockResolvedValue({"data": {"response": {"docs": []}}});
+    
+    return helpers.run(path.join(__dirname, '../generators/app'))
+      .inTmpDir()
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
+      .withPrompts({
+        host: 'acme.symphony.com',
+        username: 'test-bot',
+        application: 'bot-app',
+        language: 'java',
+        build: 'Gradle',
+        framework: 'spring',
+        groupId: 'com.mycompany',
+        artifactId: 'bot-application',
+        basePackage: BASE_PACKAGE
+      }).then((dir) => {
+        assert.file([
+          'gradlew',
+          'gradlew.bat',
+          'build.gradle',
+          path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
+          path.join(BASE_JAVA, PACKAGE_DIR, 'GifFormActivity.java'),
+          path.join(BASE_JAVA, PACKAGE_DIR, 'OnUserJoinedRoomListener.java'),
+          path.join(BASE_JAVA, PACKAGE_DIR, 'GifSlashHandler.java'),
+          'rsa/privatekey.pem',
+          'rsa/publickey.pem',
+          '.gitignore',
+          path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
+          path.join(BASE_RESOURCE, 'templates/gif.ftl'),
+          path.join(BASE_RESOURCE, 'application.yaml')
+        ]);
+        let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
+        let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
+        assertKeyPair(privateKey, generatedPublicKey)
+      })
+  })
+})
+
 describe('Java BDK', () => {
   const currentDir = process.cwd()
 
