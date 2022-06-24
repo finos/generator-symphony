@@ -31,6 +31,10 @@ export https_proxy=http://localhost:3128
 ```
 Symphony Generator will automatically fetch the latest version of BDKs/WDK and use it to generate your project. In case the request fails, it will fallback on a default version.
 
+In case of a Java bot application, once the project is generated, the generator will try to download the chosen package manager wrapper to build the project. If for any reason (e.g. network constraint) the build fails, the generator will then try to build the project again by using local package manager.
+
+_NOTE:_ The generation process will continue no matter what the build status is.  
+
 ## Known issues
 
 If you are using node 16.0.0 and encounter the following error when trying to run `yo @finos/symphony` or `yo @finos/symphony 2.0`:

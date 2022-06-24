@@ -174,18 +174,41 @@ module.exports = class extends Generator {
    * Build Maven or Gradle project
    */
   install() {
-    let buildResult;
-
     if (this.answers.build === 'Maven') {
-      this.log('Running '.green.bold + './mvnw package'.white.bold + ' in your project'.green.bold);
-      buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'mvnw'), ['package']);
+      try {        
+        this.log('Running '.green.bold + './mvnw package'.white.bold + ' in your project'.green.bold);
+        this.spawnCommandSync(path.join(this.destinationPath(), 'mvnw'), ['package']);
+      } catch(e) {
+        this._localInstall();
+      }
     } else {
-      this.log('Running '.green.bold + './gradlew build'.white.bold + ' in your project'.green.bold);
-      buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['build']);
+      try {
+        this.log('Running '.green.bold + './gradlew build'.white.bold + ' in your project'.green.bold);
+        buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['build']);
+      } catch(e) {        
+        this._localInstall();
+      }
     }
+  }
 
-    if (buildResult.status !== 0) {
-      this.log.error(buildResult.stderr);
+  _localInstall() {    
+    let errorMessage = 'Failed to build the generated project.';  
+    if (this.answers.build === 'Maven') {
+      try {
+        this.log('Running '.green.bold + 'mvn package'.white.bold + ' in your project'.green.bold);
+        this.spawnCommandSync('mvn', ['package']);
+      } catch(e) {          
+        this.log(`${e}`.green.bold);
+        console.log(errorMessage);
+      }
+    } else {        
+      try {
+        this.log('Running '.green.bold + 'gradle build'.white.bold + ' in your project'.green.bold);
+        this.spawnCommandSync('gradle', ['build']);
+      } catch(e) {                   
+        this.log(`${e}`.green.bold);
+        console.log(errorMessage);
+      }
     }
   }
 
