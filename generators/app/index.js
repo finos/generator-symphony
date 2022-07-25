@@ -37,7 +37,7 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'host',
         message: 'Enter your pod host',
-        default: 'acme.symphony.com'
+        default: 'develop2.symphony.com'
       },
       {
         type: 'input',
