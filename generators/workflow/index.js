@@ -8,7 +8,7 @@ const axios = require('axios');
 // Make it configurable for faster test execution
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 
-const WDK_VERSION_DEFAULT = '1.3.0';
+const WDK_VERSION_DEFAULT = '1.4.0';
 
 const _getVersion = () => {
   return axios.get('https://search.maven.org/solrsearch/select?q=g:org.finos.symphony.wdk')

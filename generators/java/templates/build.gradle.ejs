@@ -4,7 +4,7 @@ plugins {
     id 'application'
 <% } -%>
 <% if (framework == 'spring' || application == 'ext-app') { -%>
-    id 'org.springframework.boot' version "<%= springBootVersion -%>"
+    id 'org.springframework.boot' version '<%= springBootVersion -%>'
 <% } -%>
 }
 
@@ -13,30 +13,31 @@ repositories {
 }
 
 dependencies {
-
     implementation platform('org.finos.symphony.bdk:symphony-bdk-bom:<%= bdkBomVersion -%>')
-
 <% if (framework == 'java') { -%>
     implementation 'org.finos.symphony.bdk:symphony-bdk-core'
     runtimeOnly 'org.finos.symphony.bdk:symphony-bdk-template-freemarker'
     runtimeOnly 'org.finos.symphony.bdk:symphony-bdk-http-jersey2'
-<% } else if (framework == 'spring') { -%>
-    implementation 'org.finos.symphony.bdk:symphony-bdk-core-spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter'
-<% } else if (application == 'ext-app') { -%>
-    implementation 'org.finos.symphony.bdk:symphony-bdk-app-spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-<% } -%>
-
     implementation 'org.slf4j:slf4j-api'
     runtimeOnly 'ch.qos.logback:logback-classic'
+<% } else if (framework == 'spring') { -%>
+    implementation 'org.finos.symphony.bdk:symphony-bdk-core-spring-boot-starter'
+    compileOnly 'org.springframework.boot:spring-boot-starter'
+<% } else if (application == 'ext-app') { -%>
+    implementation 'org.finos.symphony.bdk:symphony-bdk-app-spring-boot-starter'
+    compileOnly 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.springframework.boot:spring-boot-starter-security'
+<% } -%>
 }
 
 <% if (framework == 'java') { -%>
 application {
     mainClass = '<%= basePackage %>.BotApplication'
 }
+<% } -%>
+
+<% if (framework == 'spring' || application == 'ext-app') { -%>
+jar { enabled = false }
 <% } -%>
 
 version = '0.0.1-SNAPSHOT'
