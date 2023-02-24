@@ -18,7 +18,6 @@ const _getVersion = () => {
 }
 
 module.exports = class extends Generator {
-
   async writing() {
     this.answers = this.options;
     this.answers.bdkVersion = BDK_VERSION_DEFAULT;
@@ -52,10 +51,12 @@ module.exports = class extends Generator {
   end() {
     if (this.pair) {
       this.log('\nYou can now update the service account '.cyan +
-        `${this.answers.username}`.white.bold +
-        ` with the following public key on https://${this.answers.host}/admin-console : `.cyan);
-
+        `${this.answers.username}`.white.bold + ` with the following public key: `.cyan);
       this.log('\n' + this.pair.public);
+      this.log(`Please submit these details to your pod administrator.`.yellow);
+      this.log(`If you are a pod administrator, visit https://${this.answers.host}/admin-console\n`.yellow);
+    } else {
+      this.log('\nYou can now place the private key you received in the '.yellow + 'rsa'.white + ' directory\n'.yellow);
     }
 
     this.log(`Your Python project has been successfully generated !`.cyan.bold);
@@ -70,16 +71,17 @@ module.exports = class extends Generator {
   }
 
   _generateRsaKeys() {
-    try {
-      let rsa_folder = 'rsa';
-      this.log('Generating RSA keys...'.green.bold);
-      this.pair = keyPair(this.config.get(KEY_PAIR_LENGTH) || 4096);
-      this.fs.write(this.destinationPath(rsa_folder + '/publickey.pem'), this.pair.public, err => this.log.error(err));
-      this.fs.write(this.destinationPath(rsa_folder + '/privatekey.pem'), this.pair.private, err => this.log.error(err));
-      this.answers.privateKeyPath = rsa_folder + '/privatekey.pem';
-    } catch (e) {
-      this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
+    if (this.answers.host !== 'develop2.symphony.com') {
+      try {
+        this.log('Generating RSA keys...'.green.bold);
+        this.pair = keyPair(this.config.get(KEY_PAIR_LENGTH) || 4096);
+        this.fs.write(this.destinationPath('rsa/publickey.pem'), this.pair.public, err => this.log.error(err));
+        this.fs.write(this.destinationPath('rsa/privatekey.pem'), this.pair.private, err => this.log.error(err));
+      } catch (e) {
+        this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
+      }
     }
+    this.answers.privateKeyPath = 'rsa/privatekey.pem';
   }
 
   _generateCommonFiles() {

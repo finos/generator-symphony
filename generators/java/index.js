@@ -20,7 +20,6 @@ const _getVersion = () => {
 }
 
 module.exports = class extends Generator {
-
   async prompting() {
     this.answers = await this.prompt([
       {
@@ -77,18 +76,19 @@ module.exports = class extends Generator {
       console.log(`The request failed because of: {errno: ${err.errno}, code: ${err.code}}`);
     });
 
-    try {
-      this.log('Generating RSA keys...'.green.bold);
-      this.pair = keyPair(this.config.get(KEY_PAIR_LENGTH) || 4096);
-      this.fs.write(this.destinationPath('rsa/publickey.pem'), this.pair.public, err => this.log.error(err));
-      this.fs.write(this.destinationPath('rsa/privatekey.pem'), this.pair.private, err => this.log.error(err));
-      this.answers.privateKeyPath = 'rsa/privatekey.pem';
-    } catch (e) {
-      this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
+    if (this.answers.host !== 'develop2.symphony.com') {
+      try {
+        this.log('Generating RSA keys...'.green.bold);
+        this.pair = keyPair(this.config.get(KEY_PAIR_LENGTH) || 4096);
+        this.fs.write(this.destinationPath('rsa/publickey.pem'), this.pair.public, err => this.log.error(err));
+        this.fs.write(this.destinationPath('rsa/privatekey.pem'), this.pair.private, err => this.log.error(err));
+      } catch (e) {
+        this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
+      }
     }
+    this.answers.privateKeyPath = 'rsa/privatekey.pem';
 
     if (this.answers.application === 'bot-app') { // Bot application
-
       // check if framework is setup or not
       switch (this.answers.framework) {
         case 'java':
@@ -100,14 +100,12 @@ module.exports = class extends Generator {
           );
           break;
         case 'spring':
-
           // process and copy application.yaml.ejs file
           this.fs.copyTpl(
             this.templatePath(path.join(this.answers.framework, 'application.yaml.ejs')),
             this.destinationPath(path.join(BASE_RESOURCES, 'application.yaml')),
             this.answers
           );
-
           break;
       }
 
@@ -184,35 +182,24 @@ module.exports = class extends Generator {
         this.log('Running '.green.bold + './mvnw package'.white.bold + ' in your project'.green.bold);
         this.spawnCommandSync(path.join(this.destinationPath(), 'mvnw'), ['package']);
       } catch(e) {
-        this._localInstall();
+        try {
+          this.log('Running '.green.bold + 'mvn package'.white.bold + ' in your project'.green.bold);
+          this.spawnCommandSync('mvn', ['package']);
+        } catch(e) {
+          this.log(`${e}`.green.bold);
+        }
       }
     } else {
       try {
         this.log('Running '.green.bold + './gradlew build'.white.bold + ' in your project'.green.bold);
-        buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['build']);
+        this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['build']);
       } catch(e) {
-        this._localInstall();
-      }
-    }
-  }
-
-  _localInstall() {
-    let errorMessage = 'Failed to build the generated project.';
-    if (this.answers.build === 'Maven') {
-      try {
-        this.log('Running '.green.bold + 'mvn package'.white.bold + ' in your project'.green.bold);
-        this.spawnCommandSync('mvn', ['package']);
-      } catch(e) {
-        this.log(`${e}`.green.bold);
-        console.log(errorMessage);
-      }
-    } else {
-      try {
-        this.log('Running '.green.bold + 'gradle build'.white.bold + ' in your project'.green.bold);
-        this.spawnCommandSync('gradle', ['build']);
-      } catch(e) {
-        this.log(`${e}`.green.bold);
-        console.log(errorMessage);
+        try {
+          this.log('Running '.green.bold + 'gradle build'.white.bold + ' in your project'.green.bold);
+          this.spawnCommandSync('gradle', ['build']);
+        } catch(e) {
+          this.log(`${e}`.green.bold);
+        }
       }
     }
   }
@@ -220,12 +207,13 @@ module.exports = class extends Generator {
   end() {
     if (this.pair) {
       this.log('\nYou can now update the service account '.cyan +
-        `${this.answers.username}`.white.bold +
-        ` with the following public key on https://${this.answers.host}/admin-console : `.cyan);
-
+        `${this.answers.username}`.white.bold + ` with the following public key: `.cyan);
       this.log('\n' + this.pair.public);
+      this.log(`Please submit these details to your pod administrator.`.yellow);
+      this.log(`If you are a pod administrator, visit https://${this.answers.host}/admin-console\n`.yellow);
+    } else {
+      this.log('\nYou can now place the private key you received in the '.yellow + 'rsa'.white + ' directory\n'.yellow);
     }
-
     this.log(`Your Java project has been successfully generated !`.cyan.bold);
   }
 
