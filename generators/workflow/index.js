@@ -33,15 +33,17 @@ module.exports = class extends Generator {
       console.log(`The request failed because of: {errno: ${err.errno}, code: ${err.code}}`);
     });
 
-    try {
-      this.log('Generating RSA keys...'.green.bold);
-      this.pair = keyPair(this.config.get(KEY_PAIR_LENGTH) || 4096);
-      this.fs.write(this.destinationPath('rsa/publickey.pem'), this.pair.public, err => this.log.error(err));
-      this.fs.write(this.destinationPath('rsa/privatekey.pem'), this.pair.private, err => this.log.error(err));
-      this.options.privateKeyPath = 'rsa/privatekey.pem';
-    } catch (e) {
-      this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
+    if (this.options.host !== 'develop2.symphony.com') {
+      try {
+        this.log('Generating RSA keys...'.green.bold);
+        this.pair = keyPair(this.config.get(KEY_PAIR_LENGTH) || 4096);
+        this.fs.write(this.destinationPath('rsa/publickey.pem'), this.pair.public, err => this.log.error(err));
+        this.fs.write(this.destinationPath('rsa/privatekey.pem'), this.pair.private, err => this.log.error(err));
+      } catch (e) {
+        this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
+      }
     }
+    this.options.privateKeyPath = 'rsa/privatekey.pem';
 
     this._copy(["gradle", "lib", "src", "Dockerfile", "gradlew", "gradlew.bat", "README.md", "workflows"])
 
@@ -54,10 +56,7 @@ module.exports = class extends Generator {
 
   install() {
     this.log('Running '.green.bold + './gradlew botJar'.white.bold + ' in your project'.green.bold);
-    let buildResult = this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['botJar']);
-    if (buildResult.status !== 0) {
-      this.log.error(buildResult.stderr);
-    }
+    this.spawnCommandSync(path.join(this.destinationPath(), 'gradlew'), ['botJar']);
   }
 
   _copy(files) {
@@ -77,10 +76,12 @@ module.exports = class extends Generator {
   end() {
     if (this.pair) {
       this.log('\nYou can now update the service account '.cyan +
-        `${this.options.username}`.white.bold +
-        ` with the following public key on https://${this.options.host}/admin-console : `.cyan);
-
+        `${this.options.username}`.white.bold + ` with the following public key: `.cyan);
       this.log('\n' + this.pair.public);
+      this.log(`Please submit these details to your pod administrator.`.yellow);
+      this.log(`If you are a pod administrator, visit https://${this.options.host}/admin-console\n`.yellow);
+    } else {
+      this.log('\nYou can now place the private key you received in the '.yellow + 'rsa'.white + ' directory\n'.yellow);
     }
 
     this.log(`Your workflow bot has been successfully generated !`.cyan.bold);

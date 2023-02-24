@@ -64,7 +64,7 @@ describe('Java BDK error scenarios', () => {
 
   it('Java BDK default version should be used when maven search does not return latest version', () => {
     axios.get.mockResolvedValue({"data": {"response": {"docs": []}}});
-    
+
     return helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir()
       .withLocalConfig({
@@ -187,6 +187,37 @@ describe('Java BDK', () => {
         let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
         let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
         assertKeyPair(privateKey, generatedPublicKey)
+      })
+  })
+
+  it('Generate 2.0 java gradle sandbox', () => {
+    return helpers.run(path.join(__dirname, '../generators/app'))
+      .inTmpDir()
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
+      .withPrompts({
+        host: 'develop2.symphony.com',
+        username: 'test-bot',
+        application: 'bot-app',
+        language: 'java',
+        build: 'Gradle',
+        framework: 'java',
+        groupId: 'com.mycompany',
+        artifactId: 'bot-application',
+        basePackage: BASE_PACKAGE
+      })
+      .then((dir) => {
+        assert.file([
+          'gradlew',
+          'gradlew.bat',
+          'build.gradle',
+          path.join(BASE_JAVA, PACKAGE_DIR, 'BotApplication.java'),
+          '.gitignore',
+          path.join(BASE_RESOURCE, 'templates/welcome.ftl'),
+          path.join(BASE_RESOURCE, 'templates/gif.ftl'),
+          path.join(BASE_RESOURCE, 'config.yaml')
+        ]);
       })
   })
 
