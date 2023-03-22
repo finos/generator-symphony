@@ -43,13 +43,14 @@ module.exports = class extends Generator {
       this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
     }
 
-    this._copy(["gradle", "lib", "src", "Dockerfile", "gradlew", "gradlew.bat", "README.md", "workflows"])
+    this._copy(["gradle", "lib", "src", "gradlew", "gradlew.bat", "README.md", "workflows"])
 
     this.fs.copyTpl(
       this.templatePath(`application.yaml.ejs`),
       this.destinationPath(`application.yaml`),
       this.options
     )
+
   }
 
   install() {

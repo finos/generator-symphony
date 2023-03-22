@@ -61,6 +61,10 @@ module.exports = class extends Generator {
           {
             name: 'Workflow Application (WDK)',
             value: 'workflow-bot-app'
+          },
+          {
+            name: 'Workflow Application (WDK) Docker',
+            value: 'workflow-bot-app-docker'
           }
         ]
       },
@@ -78,7 +82,7 @@ module.exports = class extends Generator {
             value: 'python'
           }
         ],
-        when: answer => answer.application !== 'workflow-bot-app'
+        when: answer => answer.application !== 'workflow-bot-app' && answer.application !== 'workflow-bot-app-docker'
       },
       {
         type: 'list',
@@ -107,6 +111,8 @@ module.exports = class extends Generator {
 
     if (this.answers.application === 'workflow-bot-app') {
       this.composeWith(require.resolve('../workflow'), this.answers);
+    } else if (this.answers.application === 'workflow-bot-app-docker') {
+      this.composeWith(require.resolve('../workflow-docker'), this.answers);
     } else if (this.answers.language === 'java') {
       this.composeWith(require.resolve('../java'), this.answers);
     } else if (this.answers.language === 'python') {

@@ -29,8 +29,7 @@ describe('WDK error scenarios', () => {
           'workflow-bot-app.jar',
           'lib',
           'workflows/ping.swadl.yaml',
-          'README.md',
-          'Dockerfile'
+          'README.md'
         ]);
         let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
         let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
@@ -57,8 +56,7 @@ describe('WDK error scenarios', () => {
           'workflow-bot-app.jar',
           'lib',
           'workflows/ping.swadl.yaml',
-          'README.md',
-          'Dockerfile'
+          'README.md'
         ]);
         let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
         let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
@@ -96,8 +94,7 @@ describe('Workflow bot', () => {
           'workflow-bot-app.jar',
           'lib',
           'workflows/ping.swadl.yaml',
-          'README.md',
-          'Dockerfile'
+          'README.md'
         ]);
         let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
         let generatedPublicKey = fs.readFileSync('rsa/publickey.pem', 'utf-8')
