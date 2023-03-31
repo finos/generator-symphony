@@ -6,8 +6,7 @@ const axios = require("axios");
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 const BDK_VERSION_DEFAULT = '2.5.0';
 
-const COMMON_TEMPLATE_FOLDER = '../../_common'
-const COMMON_EXT_APP_TEMPLATES = COMMON_TEMPLATE_FOLDER + '/circle-of-trust-ext-app'
+const COMMON_EXT_APP_TEMPLATES = '../../_common/circle-of-trust-ext-app'
 
 const RESOURCES_FOLDER = 'resources' // target resources folder
 const PYTHON_FOLDER = 'src' // target folder containing python sources
@@ -22,7 +21,6 @@ module.exports = class extends Generator {
   async writing() {
     this.answers = this.options;
     this.answers.bdkVersion = BDK_VERSION_DEFAULT;
-    this.answers.trustStorePath = RESOURCES_FOLDER + '/all_symphony_certs.pem';
 
     await _getVersion().then(response => {
       if (response === undefined) {
@@ -87,8 +85,7 @@ module.exports = class extends Generator {
       ['requirements.txt.ejs', 'requirements.txt'],
       ['logging.conf.ejs', RESOURCES_FOLDER + '/logging.conf'],
       ['.gitignore.tpl', '.gitignore'],
-      ['readme.md.ejs', 'readme.md'],
-      [COMMON_TEMPLATE_FOLDER + '/truststore/all_symphony_certs.pem', RESOURCES_FOLDER + '/all_symphony_certs.pem']
+      ['readme.md.ejs', 'readme.md']
     ].forEach(path_pair => {
       this.fs.copyTpl(
         this.templatePath(path_pair[0]),

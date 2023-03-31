@@ -138,12 +138,12 @@ function assertCommonFilesGenerated(dir) {
   assert.file([
     path.join(BASE_PYTHON, '__main__.py'),
     path.join(BASE_RESOURCE, 'config.yaml'),
-    path.join(BASE_RESOURCE, 'all_symphony_certs.pem'),
     path.join(BASE_RESOURCE, 'logging.conf'),
     'rsa/privatekey.pem',
     'rsa/publickey.pem',
     'requirements.txt',
-    '.gitignore'
+    '.gitignore',
+    'readme.md'
   ]);
 
   let privateKey = fs.readFileSync('rsa/privatekey.pem', 'utf-8')
@@ -157,7 +157,6 @@ function assertCommonFilesGenerated(dir) {
   assert(config.includes('host: acme.symphony.com'))
   assert(config.includes('username: test-bot'))
   assert(config.includes('path: rsa/privatekey.pem'))
-  assert(config.includes(`path: ${BASE_RESOURCE}/all_symphony_certs.pem`))
 }
 
 function assertJsFileReplacedWithAppId(dir, file, appId) {
