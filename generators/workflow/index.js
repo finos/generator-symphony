@@ -8,7 +8,7 @@ const axios = require('axios');
 // Make it configurable for faster test execution
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
 
-const WDK_VERSION_DEFAULT = '1.4.0';
+const WDK_VERSION_DEFAULT = '1.5.0';
 
 const _getVersion = () => {
   return axios.get('https://search.maven.org/solrsearch/select?q=g:org.finos.symphony.wdk')
@@ -45,13 +45,14 @@ module.exports = class extends Generator {
     }
     this.options.privateKeyPath = 'rsa/privatekey.pem';
 
-    this._copy(["gradle", "lib", "src", "Dockerfile", "gradlew", "gradlew.bat", "README.md", "workflows"])
+    this._copy(["gradle", "lib", "src", "gradlew", "gradlew.bat", "README.md", "workflows"])
 
     this.fs.copyTpl(
       this.templatePath(`application.yaml.ejs`),
       this.destinationPath(`application.yaml`),
       this.options
     )
+
   }
 
   install() {
