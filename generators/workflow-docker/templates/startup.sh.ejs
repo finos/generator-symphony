@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 echo 'Starting new container'
-docker run --rm -v symphony:./symphony --pull=always -d --name wdk-bot-app -p 8080:8080 -p 8081:8081 finos/symphony-wdk:latest
+docker run --rm -v symphony:/symphony --pull=always -d --name wdk-bot-app -p 8080:8080 -p 8081:8081 finos/symphony-wdk:latest
