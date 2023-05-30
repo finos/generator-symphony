@@ -1,7 +1,7 @@
 const Generator = require('yeoman-generator');
-const fs = require('fs');
 const keyPair = require('../_lib/rsa').keyPair;
 const mkdirp = require('mkdirp');
+const crypto = require('crypto');
 
 // Make it configurable for faster test execution
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
@@ -19,6 +19,7 @@ module.exports = class extends Generator {
       this.fs.write(this.destinationPath('symphony/publickey.pem'), this.pair.public, err => this.log.error(err));
       this.fs.write(this.destinationPath('symphony/privatekey.pem'), this.pair.private, err => this.log.error(err));
       this.options.privateKeyPath = 'symphony/privatekey.pem';
+      this.options.randomKey = crypto.randomBytes(16).toString('hex');
     } catch (e) {
       this.log.error(`Oups, something went wrong when generating RSA key pair`, e);
     }
