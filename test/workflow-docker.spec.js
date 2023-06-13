@@ -29,8 +29,7 @@ describe('Workflow bot', () => {
       .then((dir) => {
         assert.file([
           'symphony/application.yaml',
-          'symphony/libs',
-          'symphony/workflows',
+          'symphony/workflows/hello.swadl.yaml',
           'symphony/privatekey.pem',
           'symphony/publickey.pem',
           'startup.sh'

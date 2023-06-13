@@ -4,7 +4,7 @@ const path = require('path');
 const axios = require("axios");
 
 const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH';
-const BDK_VERSION_DEFAULT = '2.6.0';
+const BDK_VERSION_DEFAULT = '2.6.1';
 
 const COMMON_EXT_APP_TEMPLATES = '../../_common/circle-of-trust-ext-app'
 
