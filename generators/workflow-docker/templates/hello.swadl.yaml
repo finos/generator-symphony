@@ -1,0 +1,8 @@
+id: hello
+activities:
+  - send-message:
+      id: aloha
+      on:
+        message-received:
+          content: /hi
+      content: Hello there!
