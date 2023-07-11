@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+docker run --rm -p 8080:8080 --name wdk-studio \
+  -v ./application-prod.yaml:/symphony/application-prod.yaml \
+  -v ./rsa:/symphony/rsa \
+  -v ./data:/symphony/data \
+  -u $(id -u):$(id -g) \
+  finos/symphony-wdk-studio:<%= wdkVersion %>

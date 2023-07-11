@@ -1,7 +1,9 @@
-# For more information, please refer to deployment documentation: https://github.com/finos/symphony-wdk/blob/master/docs/deployment.md
+# For more information, please refer to deployment documentation:
+# https://docs.developers.symphony.com/bots/getting-started/wdk#configuration
+
 bdk:
-  host: <%= host%>
+  host: <%= host %>
   bot:
     username: <%= username %>
-    privateKey:
-      path: <%= privateKeyPath %>
+    privateKey.path: rsa/privatekey.pem
+wdk.encrypt.passphrase: <%= randomKey %>
