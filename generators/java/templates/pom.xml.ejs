@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId><%= groupId %></groupId>
+    <groupId><%= basePackage %></groupId>
     <artifactId><%= artifactId %></artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
@@ -25,7 +25,20 @@
     </dependencyManagement>
 
     <dependencies>
-<% if (framework == 'java') { -%>
+<% if (application == 'ext-app') { -%>
+        <dependency>
+            <groupId>org.finos.symphony.bdk</groupId>
+            <artifactId>symphony-bdk-app-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+<% } else if (framework == 'java') { -%>
         <dependency>
             <groupId>org.finos.symphony.bdk</groupId>
             <artifactId>symphony-bdk-core</artifactId>
@@ -57,19 +70,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-<% } else if (application == 'ext-app') { -%>
-        <dependency>
-            <groupId>org.finos.symphony.bdk</groupId>
-            <artifactId>symphony-bdk-app-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 <% } -%>
     </dependencies>

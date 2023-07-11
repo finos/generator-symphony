@@ -23,7 +23,7 @@ describe('Java BDK error scenarios', () => {
   })
 
   it('Java BDK default version should be used when maven search query fails', () => {
-    axios.get.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
+    axios.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
 
     return helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir()
@@ -37,7 +37,6 @@ describe('Java BDK error scenarios', () => {
         language: 'java',
         build: 'Gradle',
         framework: 'spring',
-        groupId: 'com.mycompany',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       }).then((dir) => {
@@ -63,7 +62,7 @@ describe('Java BDK error scenarios', () => {
   })
 
   it('Java BDK default version should be used when maven search does not return latest version', () => {
-    axios.get.mockResolvedValue({"data": {"response": {"docs": []}}});
+    axios.mockResolvedValue({"data": {"response": {"docs": []}}});
 
     return helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir()
@@ -77,7 +76,6 @@ describe('Java BDK error scenarios', () => {
         language: 'java',
         build: 'Gradle',
         framework: 'spring',
-        groupId: 'com.mycompany',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       }).then((dir) => {
@@ -107,7 +105,7 @@ describe('Java BDK', () => {
   const currentDir = process.cwd()
 
   beforeAll(() => {
-    axios.get.mockResolvedValue({"data": {"response": {"docs": [{"latestVersion": "2.3.0"}]}}});
+    axios.mockResolvedValue({"data": {"response": {"docs": [{"latestVersion": "2.3.0"}]}}});
   })
 
   afterAll(() => {
@@ -128,7 +126,6 @@ describe('Java BDK', () => {
         language: 'java',
         build: 'Gradle',
         framework: 'spring',
-        groupId: 'com.mycompany',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
@@ -167,7 +164,6 @@ describe('Java BDK', () => {
         language: 'java',
         build: 'Gradle',
         framework: 'java',
-        groupId: 'com.mycompany',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
@@ -203,7 +199,6 @@ describe('Java BDK', () => {
         language: 'java',
         build: 'Gradle',
         framework: 'java',
-        groupId: 'com.mycompany',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
@@ -233,7 +228,6 @@ describe('Java BDK', () => {
         language: 'java',
         build: 'Maven',
         framework: 'spring',
-        groupId: 'com.mycompany',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
@@ -274,7 +268,6 @@ describe('Java BDK', () => {
         language: 'java',
         build: 'Maven',
         framework: 'java',
-        groupId: 'com.mycompany',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
@@ -311,7 +304,6 @@ describe('Java BDK', () => {
         language: 'java',
         build: 'Maven',
         framework: 'java',
-        groupId: 'com.mycompany',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
@@ -354,7 +346,6 @@ describe('Java BDK', () => {
         language: 'java',
         build: 'Gradle',
         framework: 'java',
-        groupId: 'com.mycompany',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })

@@ -24,7 +24,7 @@ describe('Python BDK error scenarios', () => {
   })
 
   it('Python BDK default version should be used when maven search query fails', () => {
-    axios.get.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
+    axios.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
 
     return helpers.run(path.join(__dirname, '../generators/app'))
     .inTmpDir()
@@ -47,7 +47,7 @@ describe('Python BDK error scenarios', () => {
   })
 
   it('Python BDK default version should be used when maven search does not return latest version', () => {
-    axios.get.mockResolvedValue(undefined);
+    axios.mockResolvedValue(undefined);
 
     return helpers.run(path.join(__dirname, '../generators/app'))
     .inTmpDir()
@@ -74,7 +74,7 @@ describe('Python BDK', () => {
   const currentDir = process.cwd()
 
   beforeAll(() => {
-    axios.get.mockResolvedValue({"data": {"info": {"version": "2.3.0"}}});
+    axios.mockResolvedValue({"data": {"info": {"version": "2.3.0"}}});
   })
 
   afterAll(() => {

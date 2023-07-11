@@ -1,33 +1,31 @@
-const Generator = require('yeoman-generator');
-const colors = require('colors');
-const packageJson = require('../../package.json');
+const Generator = require('yeoman-generator')
+const colors = require('colors')
+const packageJson = require('../../package.json')
 const fs = require('fs')
 
 module.exports = class extends Generator {
-
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { customInstallTask: true })
   }
 
   initializing() {
-
     this.log(` __   __     ___                 _
  \\ \\ / /__  / __|_  _ _ __  _ __| |_  ___ _ _ _  _
   \\ V / _ \\ \\__ \\ || | '  \\| '_ \\ ' \\/ _ \\ ' \\ || |
    |_|\\___/ |___/\\_, |_|_|_| .__/_||_\\___/_||_\\_, |
-                 |__/      |_|                |__/ `.blue);
-    this.log('\thttps://developers.symphony.com\n');
-    this.log('Welcome to Symphony Generator '.gray + `v${packageJson.version}`.yellow);
-    this.log('Application files will be generated in folder: '.gray + `${this.destinationRoot()}`.yellow);
-    this.log('______________________________________________________________________________________________________'.yellow);
+                 |__/      |_|                |__/ `.blue)
+    this.log('\thttps://developers.symphony.com\n')
+    this.log('Welcome to Symphony Generator '.gray + `v${packageJson.version}`.yellow)
+    this.log('Project files will be generated in folder: '.gray + `${this.destinationRoot()}`.yellow)
+    this.log('______________________________________________________________________________________________________'.yellow)
 
     try {
-      const folderFiles = fs.readdirSync(this.destinationRoot());
+      const folderFiles = fs.readdirSync(this.destinationRoot())
       if (folderFiles.length > 0) {
-        this.log(`(!) Folder ${this.destinationRoot()} is not empty. Are you sure you want to continue?`.red);
+        this.log(`(!) Folder ${this.destinationRoot()} is not empty. Are you sure you want to continue?`.red)
       }
     } catch(e) {
-      this.log(e);
+      this.log(e)
     }
   }
 
@@ -48,24 +46,20 @@ module.exports = class extends Generator {
       {
         type: 'list',
         name: 'application',
-        message: 'Select your type of application',
+        message: 'Select your project type',
         choices: [
           {
-            name: 'Bot Application',
+            name: 'Bot (BDK)',
             value: 'bot-app'
           },
           {
-            name: 'Extension App Application',
+            name: 'Extension App (BDK)',
             value: 'ext-app'
           },
           {
-            name: 'Workflow Application (WDK)',
-            value: 'workflow-bot-app'
+            name: 'Workflow (WDK)',
+            value: 'workflow'
           },
-          {
-            name: 'Workflow Application (WDK) Docker',
-            value: 'workflow-bot-app-docker'
-          }
         ]
       },
       {
@@ -82,7 +76,7 @@ module.exports = class extends Generator {
             value: 'python'
           }
         ],
-        when: answer => answer.application !== 'workflow-bot-app' && answer.application !== 'workflow-bot-app-docker'
+        when: answer => answer.application !== 'workflow'
       },
       {
         type: 'list',
@@ -107,16 +101,14 @@ module.exports = class extends Generator {
         default: 'app-id',
         when: answer => answer.application === 'ext-app'
       }
-    ]);
+    ])
 
-    if (this.answers.application === 'workflow-bot-app') {
-      this.composeWith(require.resolve('../workflow'), this.answers);
-    } else if (this.answers.application === 'workflow-bot-app-docker') {
-      this.composeWith(require.resolve('../workflow-docker'), this.answers);
+    if (this.answers.application === 'workflow') {
+      this.composeWith(require.resolve('../workflow'), this.answers)
     } else if (this.answers.language === 'java') {
-      this.composeWith(require.resolve('../java'), this.answers);
+      this.composeWith(require.resolve('../java'), this.answers)
     } else if (this.answers.language === 'python') {
-      this.composeWith(require.resolve('../python'), this.answers);
+      this.composeWith(require.resolve('../python'), this.answers)
     }
   }
 }
