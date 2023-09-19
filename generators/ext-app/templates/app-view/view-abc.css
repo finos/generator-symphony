@@ -1,0 +1,11 @@
+.main-view {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  margin: 1rem;
+}
+.main-view header .header-icon { margin-right: 1rem }
+.main-view main {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.main-view main hr { width: 100% }

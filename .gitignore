@@ -65,7 +65,6 @@ typings/
 .DS_Store
 
 .idea/
-maven-wrapper.jar
 
 .gradle
 **/build/

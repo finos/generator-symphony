@@ -1,0 +1,56 @@
+import * as ADK from '@symphony-ui/adk';
+
+ADK.start({ id: '<%= appId %>' }).then(() => {
+  // Add left navigation item that opens view
+  ADK.navigation.add('ADK View ABC', () => {
+    ADK.modules.open('view-abc', { title: 'ADK View' });
+  });
+
+  // Store any context and expose method to retrieve context from views
+  let context;
+  ADK.expose({
+    getContext: () => context,
+    setContext: (c) => context = c,
+  });
+
+  // Add a 'Launch View' button to hashtag hovercards
+  ADK.buttons.add('Launch View', 'hashtag', (payload) => {
+    // Store hashtag to context on click
+    context = payload;
+    // Launch module and add hashtag to title
+    ADK.modules.open('view-abc', { title: `ADK View with ${payload.entity.name}` });
+  });
+
+  // Full list of possible target zones to inject buttons
+  const targets = [ 'hashtag', 'cashtag', 'single-user-im', 'profile', 'room' ];
+  // Add a button into each target zone
+  targets.forEach((target) => {
+    ADK.buttons.add(
+      `Launch Dialog from ${target}`,
+      target,
+      (payload) => {
+        // Debug the payload for inspection (not every target has a payload)
+        console.log(`You clicked on ${target}`, payload);
+        // Pop a dialog
+        const dialog = ADK.dialogs.show(
+          `<dialog>
+            <div class="container">
+              <h1>Dialog for ${target}</h1>
+              <p>You clicked on a button</p>
+              <p><action id="ok" class="tk-button tk-button--primary" /></p>
+            </div>
+          </dialog>`,
+          {
+            actions: {
+              ok: {
+                label: 'Close Dialog',
+                action: () => dialog.close()
+              },
+            },
+            size: 'small',
+          },
+        )
+      }
+    );
+  });
+});

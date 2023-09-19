@@ -22,7 +22,7 @@ module.exports = class extends Generator {
     try {
       const folderFiles = fs.readdirSync(this.destinationRoot())
       if (folderFiles.length > 0) {
-        this.log(`(!) Folder ${this.destinationRoot()} is not empty. Are you sure you want to continue?`.red)
+        console.log(`(!) Folder ${this.destinationRoot()} is not empty. Are you sure you want to continue?`.red)
       }
     } catch(e) {
       this.log(e)
@@ -38,12 +38,6 @@ module.exports = class extends Generator {
         default: 'develop2.symphony.com'
       },
       {
-        type: 'input',
-        name: 'username',
-        message: 'Enter your bot username',
-        default: 'my-bot'
-      },
-      {
         type: 'list',
         name: 'application',
         message: 'Select your project type',
@@ -53,14 +47,25 @@ module.exports = class extends Generator {
             value: 'bot-app'
           },
           {
-            name: 'Extension App (BDK)',
-            value: 'ext-app'
-          },
-          {
             name: 'Workflow (WDK)',
             value: 'workflow'
           },
+          {
+            name: 'Extension App (ADK)',
+            value: 'ext-app'
+          },
+          {
+            name: 'Extension App + Circle of Trust (ADK + BDK)',
+            value: 'ext-app-bdk'
+          },
         ]
+      },
+      {
+        type: 'input',
+        name: 'username',
+        message: 'Enter your bot username',
+        default: 'my-bot',
+        when: answer => answer.application.indexOf('ext-app') === -1
       },
       {
         type: 'list',
@@ -76,7 +81,7 @@ module.exports = class extends Generator {
             value: 'python'
           }
         ],
-        when: answer => answer.application !== 'workflow'
+        when: answer => answer.application === 'bot-app'
       },
       {
         type: 'list',
@@ -99,16 +104,20 @@ module.exports = class extends Generator {
         name: 'appId',
         message: 'Enter your app id',
         default: 'app-id',
-        when: answer => answer.application === 'ext-app'
+        when: answer => answer.application === 'ext-app' || (answer.application === 'ext-app-bdk' && answer.host !== 'develop2.symphony.com')
       }
     ])
 
-    if (this.answers.application === 'workflow') {
-      this.composeWith(require.resolve('../workflow'), this.answers)
-    } else if (this.answers.language === 'java') {
+    if (this.answers.language === 'java') {
       this.composeWith(require.resolve('../java'), this.answers)
     } else if (this.answers.language === 'python') {
       this.composeWith(require.resolve('../python'), this.answers)
+    } else if (this.answers.application === 'workflow') {
+      this.composeWith(require.resolve('../workflow'), this.answers)
+    } else if (this.answers.application === 'ext-app') {
+      this.composeWith(require.resolve('../ext-app'), this.answers)
+    } else if (this.answers.application === 'ext-app-bdk') {
+      this.composeWith(require.resolve('../ext-app-bdk'), this.answers)
     }
   }
 }

@@ -3,9 +3,15 @@ plugins {
 <% if (framework == 'java') { -%>
     id 'application'
 <% } -%>
-<% if (framework == 'spring' || application == 'ext-app') { -%>
+<% if (framework == 'spring') { -%>
     id 'org.springframework.boot' version '<%= springBootVersion -%>'
 <% } -%>
+}
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
 }
 
 repositories {
@@ -13,12 +19,8 @@ repositories {
 }
 
 dependencies {
-    implementation platform('org.finos.symphony.bdk:symphony-bdk-bom:<%= bdkBomVersion -%>')
-<% if (application == 'ext-app') { -%>
-    implementation 'org.finos.symphony.bdk:symphony-bdk-app-spring-boot-starter'
-    compileOnly 'org.springframework.boot:spring-boot-starter'
-    compileOnly 'org.springframework.boot:spring-boot-starter-security'
-<% } else if (framework == 'java') { -%>
+    implementation platform('org.finos.symphony.bdk:symphony-bdk-bom:<%= bdkVersion -%>')
+<% if (framework == 'java') { -%>
     implementation 'org.finos.symphony.bdk:symphony-bdk-core'
     runtimeOnly 'org.finos.symphony.bdk:symphony-bdk-template-freemarker'
     runtimeOnly 'org.finos.symphony.bdk:symphony-bdk-http-jersey2'
@@ -36,7 +38,7 @@ application {
 }
 <% } -%>
 
-<% if (framework == 'spring' || application == 'ext-app') { -%>
+<% if (framework == 'spring') { -%>
 jar { enabled = false }
 <% } -%>
 

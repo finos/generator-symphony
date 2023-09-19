@@ -1,0 +1,16 @@
+bdk:
+  host: <%= host %>
+  app:
+    appId: <%= appId %>
+    privateKey:
+      path: rsa/privatekey.pem
+
+bdk-app:
+  auth:
+    enabled: true
+  cors:
+    "[/**]":
+      allowed-origins: "*"
+      allowed-headers: "*"
+      allowed-credentials: false
+      allowed-methods: [ "POST", "GET" ]
