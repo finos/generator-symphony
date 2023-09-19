@@ -102,36 +102,6 @@ describe('Python BDK', () => {
           path.join(BASE_RESOURCE, 'gif.jinja2')]);
       })
   })
-
-  it('Generate 2.0 python ext-app', () => {
-    const appId = 'app-id';
-
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
-      .withLocalConfig({
-        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
-      })
-      .withPrompts({
-        host: 'acme.symphony.com',
-        username: 'test-bot',
-        application: 'ext-app',
-        language: 'python',
-        appId: appId
-      }).then((dir) => {
-        assertCommonFilesGenerated(dir)
-        assert.file([
-          path.join(BASE_PYTHON, 'ext_app_be.py'),
-          path.join(BASE_STATIC, 'app.html'),
-          path.join(BASE_STATIC, 'controller.html'),
-          path.join(BASE_STATIC, 'css/app.css'),
-          path.join(BASE_SCRIPTS, 'app.js'),
-          path.join(BASE_SCRIPTS, 'controller.js'),
-        ]);
-        // assert scripts with correct app-id
-        assertJsFileReplacedWithAppId(dir, 'app.js', appId)
-        assertJsFileReplacedWithAppId(dir, 'controller.js', appId)
-      })
-  })
 })
 
 function assertCommonFilesGenerated(dir) {

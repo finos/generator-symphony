@@ -1,23 +1,9 @@
 const Generator = require('yeoman-generator')
 const path = require('path')
 const fs = require('fs')
-const axios = require('axios')
-const keyPair = require('../_lib/rsa').keyPair
-
-const COMMON_EXT_APP_TEMPLATES = '../../_common/circle-of-trust-ext-app'
+const { keyPair, getJavaBdkVersion, getSpringVersion } = require('../_lib/util')
 const BASE_JAVA = 'src/main/java'
 const BASE_RESOURCES = 'src/main/resources'
-
-const BDK_VERSION_DEFAULT = '2.14.1'
-const SPRING_VERSION_DEFAULT = '2.7.12'
-
-// Make it configurable for faster test execution
-const KEY_PAIR_LENGTH = 'KEY_PAIR_LENGTH'
-
-const _getVersion = () => {
-  const uri = 'https://search.maven.org/solrsearch/select?q=g:org.finos.symphony.bdk+AND+a:symphony-bdk-bom&core=gav'
-  return axios(uri, { timeout: 5000 }).then(res => res.data)
-}
 
 module.exports = class extends Generator {
   async prompting() {
@@ -55,30 +41,20 @@ module.exports = class extends Generator {
       framework: 'java',
       ...this.options,
       ...this.answers,
-      bdkBomVersion: BDK_VERSION_DEFAULT,
-      springBootVersion: SPRING_VERSION_DEFAULT,
+      bdkVersion: await getJavaBdkVersion(),
+      springBootVersion: getSpringVersion(),
     }
 
-    await _getVersion().then(response => {
-      if (response['response']['docs'].length === 0) {
-        console.log(`Failed to fetch latest Java BDK version from Maven Central, ${this.answers.bdkBomVersion} will be used.`)
-      } else {
-        this.answers.bdkBomVersion = response['response']['docs'].filter(d => !d.id.match(/(RC|alpha)/g))[0].v
-      }
-    }).catch(err => {
-      console.log(`Failed to fetch latest Java BDK version from Maven Central, ${this.answers.bdkBomVersion} will be used.`)
-      console.log(`The request failed because of: {errno: ${err.errno}, code: ${err.code}}`)
-    })
-    this.log(`BDK Version: ${this.answers.bdkBomVersion}`)
+    this.log(`Using BDK Version: ${this.answers.bdkVersion}`)
 
     if (this.answers.host !== 'develop2.symphony.com') {
       try {
         this.log('Generating RSA keys...'.green)
-        this.pair = keyPair(this.config.get(KEY_PAIR_LENGTH) || 4096)
+        this.pair = keyPair(this.config.get('KEY_PAIR_LENGTH'))
         this.fs.write(this.destinationPath('rsa/publickey.pem'), this.pair.public, err => this.log.error(err))
         this.fs.write(this.destinationPath('rsa/privatekey.pem'), this.pair.private, err => this.log.error(err))
       } catch (e) {
-        this.log.error(`Oups, something went wrong when generating RSA key pair`, e)
+        this.log.error(`Oops, something went wrong when generating RSA key pair`, e)
       }
     }
     this.answers.privateKeyPath = 'rsa/privatekey.pem'
@@ -108,20 +84,6 @@ module.exports = class extends Generator {
       // Process Common files
       this._copyJavaTemplate('common', basePackage)
 
-    } else if (this.answers.application === 'ext-app') { // Extension app application
-      // Process application.yaml.ejs file
-      this._copyTpl('ext-app/application.yaml', path.join(BASE_RESOURCES, 'application.yaml'));
-
-      // Process scripts files
-      [ 'app.js', 'controller.js' ].forEach(f => this._copyTpl(
-        path.join(COMMON_EXT_APP_TEMPLATES, 'scripts', f),
-        path.join(BASE_RESOURCES, 'static', 'scripts', f)
-      ));
-
-      this._copy('ext-app/resources/', BASE_RESOURCES)
-      this._copy(path.join(COMMON_EXT_APP_TEMPLATES, 'static'), BASE_RESOURCES + '/static')
-      this._copyJavaTemplate('ext-app/java', basePackage)
-      this._copy('ext-app/README.md', 'README.md')
     }
 
     // Process build files
@@ -150,9 +112,9 @@ module.exports = class extends Generator {
     try {
       this.log('Running '.green + `${proc} ${arg}`.white + ' in your project'.green)
       this.spawnCommandSync(path.join(this.destinationPath(), proc), [ arg ])
-    } catch(e) {
+    } catch (e1) {
       if (proc === 'gradle' || proc === 'mvn') {
-        this.log(`${e}`.red)
+        this.log('Unable to complete build process')
       } else {
         this._spawn(proc.indexOf('gradle') > -1 ? 'gradle' : 'mvn', arg)
       }
@@ -167,7 +129,8 @@ module.exports = class extends Generator {
       this.log(`Please submit these details to your pod administrator.`.yellow)
       this.log(`If you are a pod administrator, visit https://${this.answers.host}/admin-console\n`.yellow)
     } else {
-      this.log('\nYou can now place the private key you received in the '.yellow + 'rsa'.white + ' directory\n'.yellow)
+      this.log('\nYou can now place the private key you received in the '.yellow + 'rsa'.white + ' directory'.yellow)
+      this.log('If you do not have credentials, please register at https://developers.symphony.com\n')
     }
     this.log(`Your Java project has been successfully generated !`.cyan)
   }

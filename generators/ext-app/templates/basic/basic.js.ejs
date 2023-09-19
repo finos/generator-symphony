@@ -1,0 +1,18 @@
+import * as ADK from '@symphony-ui/adk';
+
+ADK.start({ id: '<%= appId %>' }).then(() => {
+  ADK.navigation.add('ADK Example', () => alert('Navigate!'));
+
+  const targets = [
+    'hashtag', 'cashtag', 'single-user-im',
+    'multi-user-im', 'profile', 'room'
+  ];
+
+  targets.forEach((target) => {
+    ADK.buttons.add(
+      `Button on ${target}`,
+      target,
+      (payload) => { console.log(`You clicked on ${target}`, payload) }
+    );
+  });
+});

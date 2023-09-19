@@ -1,0 +1,38 @@
+import * as ADK from '@symphony-ui/adk';
+
+ADK.start({ id: '<%= appId %>' }).then(() => {
+  const quoteRenderer = (data) => ({
+    template: `<entity><action class="tk-button tk-button--primary" id="quote" /></entity>`,
+    actions: {
+      quote: {
+        label: 'Show Quote for ' + data.ticker,
+        data: data.ticker
+      },
+    },
+    extraData: '1h'
+  });
+
+  const actionHandler = (action, payload) => {
+    const dialog = ADK.dialogs.show(
+      `<dialog>
+        <div class="container">
+          <h1>Price Quote</h1>
+          <p>You asked for <text id='data' /> with <text id='extraData' /> expiry</p>
+          <p><action id="ok" class="tk-button tk-button--secondary" /></p>
+        </div>
+      </dialog>`,
+      {
+        data: payload,
+        actions: {
+          ok: {
+            label: 'OK ' + action,
+            action: () => dialog.close(),
+          }
+        },
+        size: 'small'
+      }
+    );
+  };
+
+  ADK.messages.registerRenderer('adk.entity.quote', quoteRenderer, actionHandler);
+});

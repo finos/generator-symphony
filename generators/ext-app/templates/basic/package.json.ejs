@@ -1,0 +1,22 @@
+{
+  "name": "<%= appId %>",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --mode=development",
+    "build": "webpack --mode=production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@symphony-ui/adk": "^<%= adkVersion %>"
+  },
+  "devDependencies": {
+    "@symphony-ui/adk-webpack": "^<%= adkVersion %>",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}

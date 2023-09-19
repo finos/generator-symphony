@@ -1,7 +1,5 @@
-const keyPair = require('../../generators/_lib/rsa').keyPair;
+const keyPair = require('../../generators/_lib/util').keyPair;
 const forge = require('node-forge')
-const assert = require('yeoman-assert')
-
 
 test('keyPair generates public and private keys', () => {
   let generated = keyPair(4096);

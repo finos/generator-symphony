@@ -1,0 +1,30 @@
+{
+  "name": "<%= appId %>",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "webpack-dev-server --mode=development",
+    "build": "webpack --mode=production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@symphony-ui/adk": "^<%= adkVersion %>",
+    "@symphony-ui/adk-react": "^<%= adkVersion %>",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@symphony-ui/adk-webpack": "^<%= adkVersion %>",
+    "@symphony-ui/uitoolkit-components": "^3.6.7",
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}

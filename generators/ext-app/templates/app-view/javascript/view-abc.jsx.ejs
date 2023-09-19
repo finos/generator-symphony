@@ -1,0 +1,50 @@
+import * as React from 'react';
+import * as ADKReact from '@symphony-ui/adk-react';
+import { Badge, Icon } from '@symphony-ui/uitoolkit-components';
+import { useClientTheme, useUserReferenceId } from '@symphony-ui/adk-react';
+import { useEffect, useState } from 'react';
+import './view-abc.css';
+
+const ViewAbc = () => {
+  const { name: theme, layout } = useClientTheme();
+  const userId = useUserReferenceId();
+
+  // Store context retrieved from controller via remoteExecutor
+  const [ context, setContext ] = useState();
+  const remoteExecutor = ADKReact.useRemoteExecutor();
+  useEffect(() => {
+    remoteExecutor.getContext().then((result) => {
+      setContext(result);
+      remoteExecutor.setContext(undefined); // reset context
+    });
+  }, []);
+
+  return (
+    <div className="main-view">
+      <header>
+        <h1>
+          <Icon iconName="market-place" className="header-icon" />
+          Welcome to ADK View ABC!
+        </h1>
+      </header>
+      <main>
+        <hr className='tk-my-2' />
+        <h3>Meta Information</h3>
+        <div>
+          <strong>Theme</strong>: current theme is <Badge variant='positive'>{theme}</Badge> and <Badge variant='positive'>{layout}</Badge>
+        </div>
+        <div>
+          <strong>User Reference Id</strong>: <Badge variant='positive'>{userId}</Badge>
+        </div>
+        { context && (
+          <div>
+            <strong>Context</strong>: {context.entity.name}
+          </div>
+        )}
+        <hr className='tk-my-2' />
+      </main>
+    </div>
+  );
+};
+
+ADKReact.createView(<ViewAbc />, { id: '<%= appId %>' });
