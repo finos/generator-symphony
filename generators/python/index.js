@@ -1,6 +1,7 @@
 const Generator = require('yeoman-generator')
 const { keyPair, getPythonBdkVersion }= require('../_lib/util')
 const path = require('path')
+const fs = require("fs")
 
 const BOT_APP_FOLDER = 'bot-app' // source folder for bot resources
 const RESOURCES_FOLDER = 'resources' // target resources folder
@@ -20,7 +21,8 @@ module.exports = class extends Generator {
 
   install() {
     this.spawnCommandSync('python3', [ '-m', 'venv', 'env' ])
-    this.spawnCommandSync(path.join(this.destinationPath(), 'env', 'bin', 'pip3'), [ 'install', '-r', 'requirements.txt' ])
+    this.binDir = fs.existsSync(path.join(this.destinationPath(), 'env', 'bin')) ? 'bin' : 'Scripts'
+    this.spawnCommandSync(path.join(this.destinationPath(), 'env', this.binDir, 'pip3'), [ 'install', '-r', 'requirements.txt' ])
   }
 
   end() {
@@ -36,7 +38,7 @@ module.exports = class extends Generator {
 
     this.log(`Your Python project has been successfully generated !`.cyan)
     this.log(`A virtual environment has been created in:`.cyan + ' ./env')
-    this.log(`You can now run your bot with: `.cyan + `env/bin/python3 -m ${PYTHON_FOLDER}`)
+    this.log(`You can now run your bot with: `.cyan + `env/${this.binDir}/python3 -m ${PYTHON_FOLDER}`)
   }
 
   _generateRsaKeys() {
