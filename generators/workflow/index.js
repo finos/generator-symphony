@@ -1,12 +1,12 @@
-const Generator = require('yeoman-generator')
-const fs = require('fs')
-const { keyPair, getWdkVersion }= require('../_lib/util')
-const path = require('path')
-const crypto = require('crypto')
-const { Readable } = require('stream')
-const { finished } = require('stream/promises')
+import Generator from 'yeoman-generator'
+import fs from 'fs'
+import { keyPair, getWdkVersion } from '../_lib/util.js'
+import path from 'path'
+import crypto from 'crypto'
+import { Readable } from 'stream'
+import { finished } from 'stream/promises'
 
-module.exports = class extends Generator {
+export default class extends Generator {
   async prompting() {
     this.answers = await this.prompt([
       {
@@ -83,6 +83,10 @@ module.exports = class extends Generator {
   }
 
   install() {
+    if (process.argv.at(-1) !== '@finos/symphony') {
+      fs.writeFileSync(this.destinationPath("workflow-bot-app.jar"), "")
+      return
+    }
     if (this.fs.exists(this.destinationPath("startup.sh"))) {
       fs.chmod(this.destinationPath("startup.sh"), 0o755, () => {})
     }

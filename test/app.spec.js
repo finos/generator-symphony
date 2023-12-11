@@ -1,39 +1,36 @@
-const helpers = require('yeoman-test')
-const path = require('path')
-const fs = require('fs')
+import helpers from 'yeoman-test';
+import * as fs from 'fs';
+import axios from 'axios'
+import sinon from 'sinon'
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { expect } from 'chai';
 
 const SMALL_KEY_PAIR_LENGTH = 512;
 
-const axios = require("axios");
-jest.mock('axios');
+const dir = dirname(dirname(fileURLToPath(import.meta.url)))
 
 describe('Generator scenarios', () => {
-  const currentDir = process.cwd()
-
-  afterAll(() => {
-    process.chdir(currentDir);
-  })
-
   it('Directory is not empty', () => {
-    const logSpy = jest.spyOn(console, 'log');
-    axios.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
-      .doInDir((dir) => fs.mkdirSync(dir + '/abc'))
+    sinon.stub(axios, 'get').rejects({errno: -3008, code: 'ENOTFOUND'})
+    const consoleStub = sinon.stub(console, 'log').returns('a');
+
+    return helpers.run(dir + '/generators/app')
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
-        host: 'acme.symphony.com',
-        username: 'test-bot',
+      .doInDir((dir) => fs.mkdirSync(dir + '/abc'))
+      .withAnswers({
+        host: 'develop2.symphony.com',
         application: 'bot-app',
+        username: 'test-bot',
         language: 'java',
-        build: 'Gradle',
         framework: 'spring',
+        build: 'Gradle',
         artifactId: 'bot-application',
         basePackage: 'com.mycompany.bot'
       }).then(({ cwd }) => {
-        expect(logSpy).toHaveBeenCalledWith(`(!) Folder ${cwd} is not empty. Are you sure you want to continue?`.red);
+        expect(consoleStub.firstCall.args[0]).to.be.eq(`(!) Folder ${cwd} is not empty. Are you sure you want to continue?`.red)
       })
   })
 })

@@ -1,7 +1,7 @@
-const Generator = require('yeoman-generator')
-const { getAdkVersion } = require('../_lib/util')
+import Generator from 'yeoman-generator'
+import { getAdkVersion } from '../_lib/util.js'
 
-module.exports = class extends Generator {
+export default class extends Generator {
   async prompting() {
     this.answers = await this.prompt([
       {
@@ -69,6 +69,9 @@ module.exports = class extends Generator {
   }
 
   _spawn() {
+    if (process.argv.at(-1) !== '@finos/symphony') {
+      return
+    }
     if (this.runtimeIndex === this.runtimes.length) {
       this.log.error('Error: No node runtime found')
       return;

@@ -1,13 +1,14 @@
-const Generator = require('yeoman-generator')
-const fs = require('fs')
-const { Readable } = require('stream')
-const { finished } = require('stream/promises')
-const { getAdkVersion, getJavaBdkVersion, getPythonBdkVersion, getSpringVersion } = require('../_lib/util')
+import Generator from 'yeoman-generator'
+import fs from 'fs'
+import { Readable } from 'stream'
+import { finished } from 'stream/promises'
+import { getAdkVersion, getJavaBdkVersion, getPythonBdkVersion, getSpringVersion } from '../_lib/util.js'
+
 const EXT_APP_PREFIX = '../../ext-app/templates'
 const JAVA_PREFIX = '../../java/templates'
 const PYTHON_PREFIX = '../../python/templates'
 
-module.exports = class extends Generator {
+export default class extends Generator {
   async prompting() {
     this.answers = await this.prompt([
       {
@@ -132,7 +133,9 @@ module.exports = class extends Generator {
     }
     const { command, args } = this.runtimes[this.runtimeIndex]
     try {
-      this.spawnCommandSync(command, args, { cwd: './web' })
+      if (this._isProd()) {
+        this.spawnCommandSync(command, args, { cwd: './web' })
+      }
       this.answers.runtime = command
     } catch (e) {
       this.runtimeIndex++
@@ -143,7 +146,9 @@ module.exports = class extends Generator {
   _spawnJava(proc, arg) {
     try {
       this.log('Running '.green + `${proc} ${arg}`.white + ' in your project'.green)
-      this.spawnCommandSync(proc, [ arg ], { cwd: './backend' })
+      if (this._isProd()) {
+        this.spawnCommandSync(proc, [ arg ], { cwd: './backend' })
+      }
       const launchArg = (proc.indexOf('gradle') > -1) ? 'bootRun' : 'spring-boot:run'
       this.answers.launchCommand = `${proc} ${launchArg}`
     } catch (e1) {
@@ -173,8 +178,10 @@ module.exports = class extends Generator {
         this._spawnJava('./gradlew', 'build')
       }
     } else {
-      this.spawnCommandSync('python3', [ '-m', 'venv', 'env' ], { cwd: './backend' })
-      this.spawnCommandSync('./env/bin/pip3', [ 'install', '-r', 'requirements.txt' ], { cwd: './backend' })
+      if (this._isProd()) {
+        this.spawnCommandSync('python3', [ '-m', 'venv', 'env' ], { cwd: './backend' })
+        this.spawnCommandSync('./env/bin/pip3', [ 'install', '-r', 'requirements.txt' ], { cwd: './backend' })
+      }
       this.answers.launchCommand = 'env/bin/python3 -m src'
     }
   }
@@ -201,5 +208,9 @@ module.exports = class extends Generator {
       this.templatePath(fileName),
       this.destinationPath(destFileName || fileName)
     )
+  }
+
+  _isProd() {
+    return process.argv.at(-1) === '@finos/symphony'
   }
 }

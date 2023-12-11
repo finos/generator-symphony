@@ -1,36 +1,30 @@
-const helpers = require('yeoman-test')
-const assert = require('yeoman-assert')
-const path = require('path')
-const fs = require('fs')
-const {assertKeyPair} = require('./test-utils')
+import helpers from 'yeoman-test'
+import assert from 'yeoman-assert'
+import path from 'path'
+import fs from 'fs'
+import axios from 'axios'
+import { getGenerator, assertKeyPair } from './test-utils.js'
+import sinon from 'sinon'
 
 const BASE_JAVA = 'src/main/java'
 const BASE_RESOURCE = 'src/main/resources'
 const BASE_PACKAGE = 'com.mycompany.bot'
 const PACKAGE_DIR = 'com/mycompany/bot'
 
-const SMALL_KEY_PAIR_LENGTH = 512;
-
-const axios = require("axios");
-jest.mock('axios');
+const SMALL_KEY_PAIR_LENGTH = 512
 
 describe('Java BDK error scenarios', () => {
-  const currentDir = process.cwd()
-
-  afterAll(() => {
-    process.chdir(currentDir);
-    jest.resetAllMocks();
-  })
+  beforeEach(sinon.restore)
+  afterEach(sinon.restore)
 
   it('Java BDK default version should be used when maven search query fails', () => {
-    axios.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
+    sinon.stub(axios, 'get').rejects({errno: -3008, code: 'ENOTFOUND'})
 
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'bot-app',
@@ -39,7 +33,7 @@ describe('Java BDK error scenarios', () => {
         framework: 'spring',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
-      }).then((dir) => {
+      }).then(() => {
         assert.file([
           'gradlew',
           'gradlew.bat',
@@ -62,14 +56,13 @@ describe('Java BDK error scenarios', () => {
   })
 
   it('Java BDK default version should be used when maven search does not return latest version', () => {
-    axios.mockResolvedValue({"data": {"response": {"docs": []}}});
+    sinon.stub(axios, 'get').resolves({"data": {"response": {"docs": []}}})
 
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'bot-app',
@@ -78,7 +71,7 @@ describe('Java BDK error scenarios', () => {
         framework: 'spring',
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
-      }).then((dir) => {
+      }).then(() => {
         assert.file([
           'gradlew',
           'gradlew.bat',
@@ -102,24 +95,18 @@ describe('Java BDK error scenarios', () => {
 })
 
 describe('Java BDK', () => {
-  const currentDir = process.cwd()
+  before(() =>
+    sinon.stub(axios, 'get').resolves({"data": {"response": {"docs": [{"id": "2.3.0", "v": "2.3.0"}]}}})
+  )
 
-  beforeAll(() => {
-    axios.mockResolvedValue({"data": {"response": {"docs": [{"id": "2.3.0", "v": "2.3.0"}]}}});
-  })
-
-  afterAll(() => {
-    process.chdir(currentDir);
-    jest.resetAllMocks();
-  })
+  after(sinon.restore)
 
   it('Generate 2.0 spring boot gradle', () => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'bot-app',
@@ -129,7 +116,7 @@ describe('Java BDK', () => {
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
-      .then((dir) => {
+      .then(() => {
         assert.file([
           'gradlew',
           'gradlew.bat',
@@ -152,12 +139,11 @@ describe('Java BDK', () => {
   })
 
   it('Generate 2.0 java gradle', () => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'bot-app',
@@ -167,7 +153,7 @@ describe('Java BDK', () => {
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
-      .then((dir) => {
+      .then(() => {
         assert.file([
           'gradlew',
           'gradlew.bat',
@@ -187,12 +173,11 @@ describe('Java BDK', () => {
   })
 
   it('Generate 2.0 java gradle sandbox', () => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'develop2.symphony.com',
         username: 'test-bot',
         application: 'bot-app',
@@ -202,7 +187,7 @@ describe('Java BDK', () => {
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
-      .then((dir) => {
+      .then(() => {
         assert.file([
           'gradlew',
           'gradlew.bat',
@@ -217,11 +202,11 @@ describe('Java BDK', () => {
   })
 
   it('Generate 2.0 spring boot maven', async () => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'bot-app',
@@ -231,7 +216,7 @@ describe('Java BDK', () => {
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
-      .then((dir) => {
+      .then(() => {
         assert.file([
           '.mvn/wrapper/maven-wrapper.properties',
           '.mvn/wrapper/MavenWrapperDownloader.java',
@@ -256,11 +241,11 @@ describe('Java BDK', () => {
   })
 
   it('Generate 2.0 java maven', () => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'bot-app',
@@ -270,7 +255,7 @@ describe('Java BDK', () => {
         artifactId: 'bot-application',
         basePackage: BASE_PACKAGE
       })
-      .then((dir) => {
+      .then(() => {
         assert.file([
           '.mvn/wrapper/maven-wrapper.properties',
           '.mvn/wrapper/MavenWrapperDownloader.java',

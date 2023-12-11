@@ -1,30 +1,30 @@
-const helpers = require('yeoman-test')
-const assert = require('yeoman-assert')
-const path = require('path')
-const fs = require('fs')
-const {assertKeyPair} = require('./test-utils')
-const axios = require('axios')
-jest.mock('axios')
-const { Readable } = require('stream')
+import helpers from 'yeoman-test'
+import assert from 'yeoman-assert'
+import fs from 'fs'
+import axios from 'axios'
+import { getGenerator, assertKeyPair } from './test-utils.js'
+import { Readable } from 'stream'
+import sinon from 'sinon'
 
-const SMALL_KEY_PAIR_LENGTH = 512;
+const SMALL_KEY_PAIR_LENGTH = 512
 
 describe('WDK error scenarios', () => {
-  axios.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
+  before(sinon.restore)
+  after(sinon.restore)
 
   it('WDK default version should be used when maven search query fails', () => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    sinon.stub(axios, 'get').rejects({errno: -3008, code: 'ENOTFOUND'})
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'workflow',
         type: 'project',
       })
-      .then((dir) => {
+      .then(() => {
         assert.file([
           'application.yaml',
           'workflow-bot-app.jar',
@@ -40,30 +40,24 @@ describe('WDK error scenarios', () => {
 })
 
 describe('Workflow bot', () => {
-  const currentDir = process.cwd()
+  beforeEach(() =>
+    sinon.stub(axios, 'get').resolves({"data": {"response": {"docs": [{"v": "1.6.3"}]}}})
+  )
 
-  beforeAll(() => {
-    axios.mockResolvedValue({"data": {"response": {"docs": [{"v": "1.6.3"}]}}});
-  })
-
-  afterAll(() => {
-    process.chdir(currentDir);
-    jest.resetAllMocks();
-  })
+  afterEach(sinon.restore)
 
   it('Generate core docker bot', () => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'workflow',
         type: 'docker-core',
       })
-      .then((dir) => {
+      .then(() => {
         assert.file([
           'symphony/application.yaml',
           'symphony/workflows/ping.swadl.yaml',
@@ -78,22 +72,19 @@ describe('Workflow bot', () => {
   })
 
   it('Generate core JAR bot', () => {
-    global.fetch = jest.fn(() => Promise.resolve({
-        body: Readable.toWeb(Readable.from(Buffer.from('abc', 'binary'))),
-    }));
+    sinon.stub(global, 'fetch').resolves({ body: Readable.toWeb(Readable.from(Buffer.from('abc', 'binary'))) })
 
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'workflow',
         type: 'jar',
       })
-      .then((dir) => {
+      .then(() => {
         assert.file([
           'application.yaml',
           'workflow-bot-app.jar',
@@ -106,18 +97,17 @@ describe('Workflow bot', () => {
   })
 
   it('Generate core project', () => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'workflow',
         type: 'project',
       })
-      .then((dir) => {
+      .then(() => {
         assert.file([
           'application.yaml',
           'workflow-bot-app.jar',
@@ -132,19 +122,18 @@ describe('Workflow bot', () => {
   })
 
   it('Generate studio docker bot', () => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'workflow',
         type: 'docker-studio',
         appId: 'wdk-studio',
       })
-      .then((dir) => {
+      .then(() => {
         assert.file([
           'application-prod.yaml',
           'data',
