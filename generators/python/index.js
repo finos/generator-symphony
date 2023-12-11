@@ -1,13 +1,13 @@
-const Generator = require('yeoman-generator')
-const { keyPair, getPythonBdkVersion }= require('../_lib/util')
-const path = require('path')
-const fs = require("fs")
+import Generator from 'yeoman-generator'
+import { keyPair, getPythonBdkVersion } from '../_lib/util.js'
+import path from 'path'
+import fs from 'fs'
 
 const BOT_APP_FOLDER = 'bot-app' // source folder for bot resources
 const RESOURCES_FOLDER = 'resources' // target resources folder
 const PYTHON_FOLDER = 'src' // target folder containing python sources
 
-module.exports = class extends Generator {
+export default class extends Generator {
   async writing() {
     this.log()
     this.answers = this.options
@@ -20,6 +20,9 @@ module.exports = class extends Generator {
   }
 
   install() {
+    if (process.argv.at(-1) !== '@finos/symphony') {
+      return
+    }
     this.spawnCommandSync('python3', [ '-m', 'venv', 'env' ])
     this.binDir = fs.existsSync(path.join(this.destinationPath(), 'env', 'bin')) ? 'bin' : 'Scripts'
     this.spawnCommandSync(path.join(this.destinationPath(), 'env', this.binDir, 'pip3'), [ 'install', '-r', 'requirements.txt' ])

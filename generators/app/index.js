@@ -1,14 +1,21 @@
-const Generator = require('yeoman-generator')
-const colors = require('colors')
-const packageJson = require('../../package.json')
-const fs = require('fs')
+import Generator from 'yeoman-generator'
+import colors from 'colors'
+import fs from 'fs'
+import { createRequire } from 'node:module';
+import java from '../java/index.js'
+import python from '../python/index.js'
+import extApp from '../ext-app/index.js'
+import extAppBdk from '../ext-app-bdk/index.js'
+import workflow from '../workflow/index.js'
 
-module.exports = class extends Generator {
+export default class extends Generator {
   constructor(args, opts) {
     super(args, opts, { customInstallTask: true })
   }
 
   initializing() {
+    const packageJson = JSON.parse(fs.readFileSync(new URL('../../package.json', import.meta.url)))
+
     this.log(` __   __     ___                 _
  \\ \\ / /__  / __|_  _ _ __  _ __| |_  ___ _ _ _  _
   \\ V / _ \\ \\__ \\ || | '  \\| '_ \\ ' \\/ _ \\ ' \\ || |
@@ -109,15 +116,23 @@ module.exports = class extends Generator {
     ])
 
     if (this.answers.language === 'java') {
-      this.composeWith(require.resolve('../java'), this.answers)
+      this._compose(java, '../java')
     } else if (this.answers.language === 'python') {
-      this.composeWith(require.resolve('../python'), this.answers)
+      this._compose(python, '../python')
     } else if (this.answers.application === 'workflow') {
-      this.composeWith(require.resolve('../workflow'), this.answers)
+      this._compose(workflow, '../workflow')
     } else if (this.answers.application === 'ext-app') {
-      this.composeWith(require.resolve('../ext-app'), this.answers)
+      this._compose(extApp, '../ext-app')
     } else if (this.answers.application === 'ext-app-bdk') {
-      this.composeWith(require.resolve('../ext-app-bdk'), this.answers)
+      this._compose(extAppBdk, '../ext-app-bdk')
     }
+  }
+
+  _compose(fn, path) {
+    const require = createRequire(import.meta.url)
+    return this.composeWith({
+      Generator: fn,
+      path: require.resolve(path)
+    }, this.answers)
   }
 }

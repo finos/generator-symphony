@@ -35,32 +35,6 @@ In case of a Java bot application, once the project is generated, the generator 
 
 _NOTE:_ The generation process will continue no matter what the build status is.  
 
-## Known issues
-
-If you are using node 16.0.0 and encounter the following error when trying to run `yo @finos/symphony` or `yo @finos/symphony 2.0`:
-```
-/usr/local/lib/node_modules/yo/node_modules/editions/edition-es5/index.js:317
-
-throw util_js_1.errtion(
-^
-
-Error: editions-autoloader-none-broadened: Unable to determine a suitable edition, even after broadening.
-at new Errlop (/usr/local/lib/node_modules/yo/node_modules/errlop/edition-es5/index.js:61:18)
-at Object.errtion (/usr/local/lib/node_modules/yo/node_modules/editions/edition-es5/util.js:23:14)
-at determineEdition (/usr/local/lib/node_modules/yo/node_modules/editions/edition-es5/index.js:317:21)
-at solicitEdition (/usr/local/lib/node_modules/yo/node_modules/editions/edition-es5/index.js:350:16)
-at Object.requirePackage (/usr/local/lib/node_modules/yo/node_modules/editions/edition-es5/index.js:364:9)
-at Object.<anonymous> (/usr/local/lib/node_modules/yo/node_modules/istextorbinary/index.cjs:4:38)
-at Module._compile (node:internal/modules/cjs/loader:1108:14)
-at Object.Module._extensions..js (node:internal/modules/cjs/loader:1137:10)
-at Module.load (node:internal/modules/cjs/loader:988:32)
-at Function.Module._load (node:internal/modules/cjs/loader:828:14)
-↳ Error: editions-autoloader-none-suitable: Unable to determine a suitable edition, as none were suitable.
-...
-```
-then please try to downgrade to node 15 or node 14 (seems to be linked with
-https://github.com/electron-userland/electron-builder/issues/5668).
-
 ## Contributing
 
 1. Fork it (<https://github.com/finos/generator-symphony/fork>)

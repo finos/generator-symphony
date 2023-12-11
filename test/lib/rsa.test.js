@@ -1,14 +1,17 @@
-const keyPair = require('../../generators/_lib/util').keyPair;
-const forge = require('node-forge')
+import { keyPair } from '../../generators/_lib/util.js'
+import forge from 'node-forge'
+import { expect } from 'chai';
 
-test('keyPair generates public and private keys', () => {
-  let generated = keyPair(4096);
+describe('RSA scenarios', () => {
+  it('keyPair generates public and private keys', () => {
+    let generated = keyPair(4096)
 
-  expect(generated.public).toMatch(/BEGIN RSA PUBLIC KEY/)
-  expect(generated.private).toMatch(/BEGIN RSA PRIVATE KEY/)
+    expect(generated.public).match(/BEGIN RSA PUBLIC KEY/)
+    expect(generated.private).match(/BEGIN RSA PRIVATE KEY/)
 
-  let forgePrivateKey = forge.pki.privateKeyFromPem(generated.private);
-  let forgePublicKey = forge.pki.setRsaPublicKey(forgePrivateKey.n, forgePrivateKey.e);
-  let publicKey = forge.pki.publicKeyToRSAPublicKeyPem(forgePublicKey).toString();
-  expect(generated.public.split("\n").join("")).toBe(publicKey.split("\n").join(""));
-});
+    let forgePrivateKey = forge.pki.privateKeyFromPem(generated.private)
+    let forgePublicKey = forge.pki.setRsaPublicKey(forgePrivateKey.n, forgePrivateKey.e)
+    let publicKey = forge.pki.publicKeyToRSAPublicKeyPem(forgePublicKey).toString()
+    expect(generated.public.split("\n").join("")).to.be.eq(publicKey.split("\n").join(""))
+  })
+})

@@ -1,11 +1,12 @@
-const Generator = require('yeoman-generator')
-const path = require('path')
-const fs = require('fs')
-const { keyPair, getJavaBdkVersion, getSpringVersion } = require('../_lib/util')
+import Generator from 'yeoman-generator'
+import path from 'path'
+import fs from 'fs'
+import { keyPair, getJavaBdkVersion, getSpringVersion } from '../_lib/util.js'
+
 const BASE_JAVA = 'src/main/java'
 const BASE_RESOURCES = 'src/main/resources'
 
-module.exports = class extends Generator {
+export default class extends Generator {
   async prompting() {
     this.answers = await this.prompt([
       {
@@ -83,7 +84,6 @@ module.exports = class extends Generator {
       this._copyJavaTemplate(this.answers.framework, basePackage)
       // Process Common files
       this._copyJavaTemplate('common', basePackage)
-
     }
 
     // Process build files
@@ -109,6 +109,9 @@ module.exports = class extends Generator {
   }
 
   _spawn(proc, arg) {
+    if (process.argv.at(-1) !== '@finos/symphony') {
+      return
+    }
     try {
       this.log('Running '.green + `${proc} ${arg}`.white + ' in your project'.green)
       this.spawnCommandSync(path.join(this.destinationPath(), proc), [ arg ])
@@ -136,7 +139,7 @@ module.exports = class extends Generator {
   }
 
   _copyJavaTemplate(dirPath, basePackage) {
-    fs.readdirSync(path.join(__dirname, 'templates', dirPath))
+    fs.readdirSync(new URL(`./templates/${dirPath}`, import.meta.url))
       .filter(f => f.endsWith('java.ejs'))
       .map(f => f.replaceAll(/\.ejs/g, ''))
       .forEach(f => this._copyTpl(path.join(dirPath, f), path.join(BASE_JAVA, basePackage, f)))

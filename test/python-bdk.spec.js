@@ -1,8 +1,10 @@
-const helpers = require('yeoman-test')
-const assert = require('yeoman-assert')
-const path = require('path')
-const fs = require('fs')
-const {assertKeyPair} = require('./test-utils')
+import helpers from 'yeoman-test'
+import assert from 'yeoman-assert'
+import path from 'path'
+import fs from 'fs'
+import axios from 'axios'
+import { getGenerator, assertKeyPair } from './test-utils.js'
+import sinon from 'sinon'
 
 const BASE_PYTHON = 'src'
 const BASE_RESOURCE = 'resources'
@@ -10,85 +12,70 @@ const BASE_RESOURCE = 'resources'
 const BASE_STATIC = BASE_RESOURCE + '/static'
 const BASE_SCRIPTS = BASE_STATIC + '/scripts'
 
-const SMALL_KEY_PAIR_LENGTH = 512;
-
-const axios = require("axios");
-jest.mock('axios');
+const SMALL_KEY_PAIR_LENGTH = 512
 
 describe('Python BDK error scenarios', () => {
-  const currentDir = process.cwd()
-
-  afterAll(() => {
-    process.chdir(currentDir);
-    jest.resetAllMocks();
-  })
+  beforeEach(sinon.restore)
+  afterEach(sinon.restore)
 
   it('Python BDK default version should be used when maven search query fails', () => {
-    axios.mockRejectedValueOnce({errno: -3008, code: 'ENOTFOUND'});
+    sinon.stub(axios, 'get').rejects({errno: -3008, code: 'ENOTFOUND'})
 
-    return helpers.run(path.join(__dirname, '../generators/app'))
-    .inTmpDir()
-    .withLocalConfig({
-      KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
-    })
-    .withPrompts({
-      host: 'acme.symphony.com',
-      username: 'test-bot',
-      application: 'bot-app',
-      language: 'python',
-      appId: 'app-id'
-    }).then((dir) => {
-      assertCommonFilesGenerated(dir);
-      assert.file([
-        path.join(BASE_PYTHON, 'activities.py'),
-        path.join(BASE_PYTHON, 'gif_activities.py'),
-        path.join(BASE_RESOURCE, 'gif.jinja2')]);
-    })
+    return helpers.run(getGenerator())
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
+      .withAnswers({
+        host: 'acme.symphony.com',
+        username: 'test-bot',
+        application: 'bot-app',
+        language: 'python',
+        appId: 'app-id'
+      }).then((dir) => {
+        assertCommonFilesGenerated(dir);
+        assert.file([
+          path.join(BASE_PYTHON, 'activities.py'),
+          path.join(BASE_PYTHON, 'gif_activities.py'),
+          path.join(BASE_RESOURCE, 'gif.jinja2')]);
+      })
   })
 
   it('Python BDK default version should be used when maven search does not return latest version', () => {
-    axios.mockResolvedValue(undefined);
+    sinon.stub(axios, 'get').resolves(undefined)
 
-    return helpers.run(path.join(__dirname, '../generators/app'))
-    .inTmpDir()
-    .withLocalConfig({
-      KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
-    })
-    .withPrompts({
-      host: 'acme.symphony.com',
-      username: 'test-bot',
-      application: 'bot-app',
-      language: 'python',
-      appId: 'app-id'
-    }).then((dir) => {
-      assertCommonFilesGenerated(dir);
-      assert.file([
-        path.join(BASE_PYTHON, 'activities.py'),
-        path.join(BASE_PYTHON, 'gif_activities.py'),
-        path.join(BASE_RESOURCE, 'gif.jinja2')]);
-    })
+    return helpers.run(getGenerator())
+      .withLocalConfig({
+        KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
+      })
+      .withAnswers({
+        host: 'acme.symphony.com',
+        username: 'test-bot',
+        application: 'bot-app',
+        language: 'python',
+        appId: 'app-id'
+      }).then((dir) => {
+        assertCommonFilesGenerated(dir);
+        assert.file([
+          path.join(BASE_PYTHON, 'activities.py'),
+          path.join(BASE_PYTHON, 'gif_activities.py'),
+          path.join(BASE_RESOURCE, 'gif.jinja2')]);
+      })
   })
 })
 
 describe('Python BDK', () => {
-  const currentDir = process.cwd()
+  before(() =>
+    sinon.stub(axios, 'get').resolves({"data": {"info": {"version": "2.3.0"}}})
+  )
 
-  beforeAll(() => {
-    axios.mockResolvedValue({"data": {"info": {"version": "2.3.0"}}});
-  })
-
-  afterAll(() => {
-    process.chdir(currentDir);
-    jest.resetAllMocks();
-  })
+  after(sinon.restore)
 
   it('Generate 2.0 python bot', () => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir()
+    return helpers.run(getGenerator())
       .withLocalConfig({
         KEY_PAIR_LENGTH: SMALL_KEY_PAIR_LENGTH
       })
-      .withPrompts({
+      .withAnswers({
         host: 'acme.symphony.com',
         username: 'test-bot',
         application: 'bot-app',

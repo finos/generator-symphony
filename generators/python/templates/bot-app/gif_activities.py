@@ -11,7 +11,7 @@ class GifSlashCommand(SlashCommandActivity):
     # Sends a form when sending @bot-name /gif
 
     def __init__(self, messages: MessageService):
-        super().__init__("/gif", False, self.display_gif_form)
+        super().__init__("/gif", True, self.display_gif_form)
         self._messages = messages
         self.template = Template(open('resources/gif.jinja2').read(), autoescape=True)
 

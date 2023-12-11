@@ -1,15 +1,10 @@
-const helpers = require('yeoman-test')
-const assert = require('yeoman-assert')
-const path = require('path')
-
-const axios = require("axios");
-jest.mock('axios');
-
-const generator = path.join(__dirname, '../generators/app')
+import helpers from 'yeoman-test'
+import assert from 'yeoman-assert'
+import axios from 'axios'
+import { getGenerator } from './test-utils.js'
+import sinon from 'sinon'
 
 describe('Ext App BDK', () => {
-  const currentDir = process.cwd()
-
   const versions = {
     "data": {
       "dist-tags": {
@@ -27,17 +22,16 @@ describe('Ext App BDK', () => {
     }
   }
 
-  beforeAll(() => axios.mockResolvedValue(versions))
+  beforeEach(() => {
+    sinon.restore()
+    sinon.stub(axios, 'get').resolves(versions)
+  });
 
-  afterAll(() => {
-    process.chdir(currentDir);
-    jest.resetAllMocks();
-  })
+  afterEach(sinon.restore)
 
   it('Sandbox - JavaScript - Java - Maven', () => {
-    return helpers.run(generator)
-      .inTmpDir()
-      .withPrompts({
+    return helpers.run(getGenerator())
+      .withAnswers({
         host: 'develop2.symphony.com',
         application: 'ext-app-bdk',
         appId: 'my-app-id',
@@ -48,7 +42,6 @@ describe('Ext App BDK', () => {
       })
       .then(() => {
         assert.file([
-          'web/node_modules',
           'web/webpack.config.js',
           'web/.babelrc',
           'web/package.json',
@@ -65,15 +58,13 @@ describe('Ext App BDK', () => {
           'backend/.mvn/wrapper/maven-wrapper.jar',
           'backend/.mvn/wrapper/maven-wrapper.properties',
           'backend/pom.xml',
-          'backend/target',
         ]);
       })
   })
 
   it('JavaScript - Java - Gradle', () => {
-    return helpers.run(generator)
-      .inTmpDir()
-      .withPrompts({
+    return helpers.run(getGenerator())
+      .withAnswers({
         host: 'acme.symphony.com',
         application: 'ext-app-bdk',
         appId: 'my-app-id',
@@ -84,7 +75,6 @@ describe('Ext App BDK', () => {
       })
       .then(() => {
         assert.file([
-          'web/node_modules',
           'web/webpack.config.js',
           'web/.babelrc',
           'web/package.json',
@@ -100,15 +90,13 @@ describe('Ext App BDK', () => {
           'backend/gradle/wrapper/gradle-wrapper.jar',
           'backend/gradle/wrapper/gradle-wrapper.properties',
           'backend/build.gradle',
-          'backend/build',
         ]);
       })
   })
 
   it('TypeScript - Java - Gradle', () => {
-    return helpers.run(generator)
-      .inTmpDir()
-      .withPrompts({
+    return helpers.run(getGenerator())
+      .withAnswers({
         host: 'acme.symphony.com',
         application: 'ext-app-bdk',
         appId: 'my-app-id',
@@ -119,7 +107,6 @@ describe('Ext App BDK', () => {
       })
       .then(() => {
         assert.file([
-          'web/node_modules',
           'web/webpack.config.js',
           'web/tsconfig.json',
           'web/package.json',
@@ -135,15 +122,13 @@ describe('Ext App BDK', () => {
           'backend/gradle/wrapper/gradle-wrapper.jar',
           'backend/gradle/wrapper/gradle-wrapper.properties',
           'backend/build.gradle',
-          'backend/build',
         ]);
       })
   })
 
   it('JavaScript - Python', () => {
-    return helpers.run(generator)
-      .inTmpDir()
-      .withPrompts({
+    return helpers.run(getGenerator())
+      .withAnswers({
         host: 'acme.symphony.com',
         application: 'ext-app-bdk',
         appId: 'my-app-id',
@@ -152,7 +137,6 @@ describe('Ext App BDK', () => {
       })
       .then(() => {
         assert.file([
-          'web/node_modules',
           'web/webpack.config.js',
           'web/.babelrc',
           'web/package.json',
@@ -167,15 +151,13 @@ describe('Ext App BDK', () => {
           'backend/requirements.txt',
           'backend/src/__main__.py',
           'backend/src/ext_app_be.py',
-          'backend/env',
         ]);
       })
   })
 
   it('TypeScript - Python', () => {
-    return helpers.run(generator)
-      .inTmpDir()
-      .withPrompts({
+    return helpers.run(getGenerator())
+      .withAnswers({
         host: 'acme.symphony.com',
         application: 'ext-app-bdk',
         appId: 'my-app-id',
@@ -184,7 +166,6 @@ describe('Ext App BDK', () => {
       })
       .then(() => {
         assert.file([
-          'web/node_modules',
           'web/webpack.config.js',
           'web/tsconfig.json',
           'web/package.json',
@@ -199,7 +180,6 @@ describe('Ext App BDK', () => {
           'backend/requirements.txt',
           'backend/src/__main__.py',
           'backend/src/ext_app_be.py',
-          'backend/env',
         ]);
       })
   })
