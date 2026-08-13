@@ -4,11 +4,11 @@ This file lists the maintainers of this repository.
 
 ## Current maintainers
 
-| GitHub Username | Name | Organization | Email |
-|----------------|------|--------------|-------|
-| @Yannick-Malins | Yannick | @SymphonyOSF | *please add email* |
-| @benoit-sy | Benoit Charbonnier | *please add organization* | *please add email* |
-| @vladokrsymphony | Vlado Kragujevski | *please add organization* | *please add email* |
+| GitHub Username | Name | Organization | Email (optional) |
+|----------------|------|--------------|------------------|
+| @Yannick-Malins | Yannick | @SymphonyOSF |  |
+| @benoit-sy | Benoit Charbonnier | *please add organization* |  |
+| @vladokrsymphony | Vlado Kragujevski | *please add organization* |  |
 
 For information about maintainer responsibilities and resources, see the [FINOS Maintainers Cheatsheet](https://community.finos.org/docs/finos-maintainers-cheatsheet).
 
